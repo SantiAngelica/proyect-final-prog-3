@@ -6,6 +6,7 @@ function App() {
   return (
     <>
       <h1>Welcome Back!</h1>
+      <h2>Football finder</h2>
     </>
   );
 }
