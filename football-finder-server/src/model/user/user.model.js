@@ -9,7 +9,7 @@ export const User = sequelize.define('users', {
         unique: true,
         allowNull: false
     },
-    nombre: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -22,19 +22,16 @@ export const User = sequelize.define('users', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    edad: {
+    age: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    position:{
-        type: DataTypes.ENUM('delantero','mediocampista','defensor','arquero'),
     },
     rol:{
         type: DataTypes.ENUM('player', 'admin', 'superadmin'),
         allowNull: false,
         defaultValue: 'player',
     },
-    zona: {
+    zone: {
         type: DataTypes.STRING,
         allowNull: false
     }

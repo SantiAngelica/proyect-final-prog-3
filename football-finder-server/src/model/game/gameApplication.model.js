@@ -1,22 +1,22 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../db.js'
 
-export const UserField = sequelize.define('user_fields', {
+export const GameApplication = sequelize.define('game_aplications', {
     id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         autoIncrement: true,
+        primaryKey: true,
         unique: true,
         allowNull: false
     },
-    field:{
-        type: DataTypes.ENUM('5','6','7','8','9','11'),
-        allowNull: false
-    },
-    user_id:{
+    id_user_applicant: {
         type: DataTypes.INTEGER,
         allowNull: false
-    }
-},{
+    },
+    id_game: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+}, {
     timestamps: false
 })
