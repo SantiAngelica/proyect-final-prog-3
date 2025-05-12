@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../db.js'
 
-export const GameApplication = sequelize.define('game_aplications', {
+export const Reservation = sequelize.define('reservations', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -9,7 +9,7 @@ export const GameApplication = sequelize.define('game_aplications', {
         unique: true,
         allowNull: false
     },
-    id_user_applicant: {
+    id_schedule: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
@@ -17,11 +17,18 @@ export const GameApplication = sequelize.define('game_aplications', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    state: {
-        type: DataTypes.ENUM('pendiente', 'aceptada', 'rechazada'),
-        defaultValue: 'pendiente',
+    id_field: {
+        type: DataTypes.INTEGER,
         allowNull: false
+    },
+    date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+    },
+    state: {
+        type: DataTypes.ENUM('pendiente', 'aceptada', 'finalizada'),
+        defaultValue: 'pendiente'
     }
-}, {
+},{
     timestamps: false
 })

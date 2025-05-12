@@ -17,6 +17,11 @@ export const GameInvitation = sequelize.define('game_invitations', {
     id_game: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    state: {
+      type: DataTypes.ENUM('pendiente', 'aceptada', 'rechazada'),
+      defaultValue: 'pendiente',
+      allowNull: false
     }
   }, {
     timestamps: false

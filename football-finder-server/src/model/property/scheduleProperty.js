@@ -1,27 +1,23 @@
 import { DataTypes } from 'sequelize'
 import { sequelize } from '../../db.js'
 
-export const GameApplication = sequelize.define('game_aplications', {
-    id: {
+export const ScheduleProperty = sequelize.define('schedule_properties', {
+    id: { 
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         unique: true,
         allowNull: false
     },
-    id_user_applicant: {
+    //FUNCIONA COMO UNA PLANILLA DE HORARIOS, UNA FILA POR CADA TURNO DE JUEGO EN CARA PREDIO, NO EN CADA CANCHA
+    id_property: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    id_game: {
+    schedule: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    state: {
-        type: DataTypes.ENUM('pendiente', 'aceptada', 'rechazada'),
-        defaultValue: 'pendiente',
-        allowNull: false
-    }
-}, {
+},{
     timestamps: false
 })

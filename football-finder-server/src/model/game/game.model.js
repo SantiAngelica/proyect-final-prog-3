@@ -13,18 +13,6 @@ export const Game = sequelize.define('games', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    id_property:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    date_time:{
-        type: DataTypes.DATE,
-        allowNull: false
-    },
-    field_type:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     missing_players:{
         type: DataTypes.INTEGER,
         allowNull: false

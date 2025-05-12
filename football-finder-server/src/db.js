@@ -1,6 +1,9 @@
-import {Sequelize} from 'sequelize'
+import { Sequelize } from 'sequelize'
 
 export const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: './football-finder.db'
+    storage: './football-finder.db',
+    dialectOptions: {
+        foreignKeys: true
+    }
 })

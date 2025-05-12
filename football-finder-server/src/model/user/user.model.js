@@ -19,7 +19,7 @@ export const User = sequelize.define('users', {
         unique: true
     },
     password: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     age: {
