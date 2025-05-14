@@ -1,39 +1,31 @@
 {
   "name": "football-finder-client",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.6",
+    "@vitejs/plugin-react": "^4.4.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.6",
+    "vite": "^6.3.5"
   },
   "dependencies": {
-    "@fontsource/montserrat": "^5.2.5",
-    "@fontsource/poppins": "^5.2.6",
-    "@tailwindcss/vite": "^4.1.6",
-    "bootstrap": "^5.3.6",
     "lucide-react": "^0.510.0",
-    "react": "^19.0.0",
-    "react-bootstrap": "^2.10.10",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
     "react-toastify": "^11.0.5"
   },
-  "devDependencies": {
-    "@eslint/js": "^9.21.0",
-    "@tailwindcss/postcss": "^4.1.6",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^9.21.0",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^15.15.0",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.6",
-    "vite": "^6.2.0"
-  }
+  "type": "module"  
 }
