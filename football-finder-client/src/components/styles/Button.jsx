@@ -1,10 +1,7 @@
-import { Send } from "lucide-react";
-
-const Button = () => {
+const Button = ({ children }) => {
   return (
-    <button className="bg-transparent border-b-2 border-blue-500 text-white flex items-center gap-2 px-4 py-2 relative group">
-      <span className="text-lg">Iniciar</span>
-      <Send size={22} strokeWidth={1.75} className="text-blue-500" />
+    <button className="bg-transparent border-2 border-blue-500 rounded rounded-xl px-4 hover:cursor-pointer text-white flex flex-row items-start text-start gap-2  py-1 relative group hover:border-blue-700 transition-all duration-300">
+      <span className="text-md text-start">{children}</span>
     </button>
   );
 };
