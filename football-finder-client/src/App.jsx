@@ -1,7 +1,17 @@
+import { BrowserRouter } from "react-router";
+import { Route, Routes } from "react-router";
+import Register from "./components/register/Register";
+import Login from "./components/login/Login";
+
 function App() {
   return (
     <>
-      <h1>Holaa</h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
