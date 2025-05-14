@@ -4,6 +4,9 @@ import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button from "../styles/Button";
 
+const inputStyle =
+  "text-sm w-full py-2 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
+
 const Login = ({ setIsLogged }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -64,63 +67,66 @@ const Login = ({ setIsLogged }) => {
   };
 
   return (
-    <div className="mt-5 mx-3 p-5 shadow-lg rounded-lg">
-      <div className="p-5 bg-white rounded-lg shadow-md">
-        <div className="mb-4">
-          <h5 className="text-xl font-semibold">
-            Bienvenidos a Football Finder
-          </h5>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <input
-              type="email"
-              className={`w-full p-3 border ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              } rounded-md`}
-              required
-              placeholder="Ingresar email"
-              onChange={handleEmailChange}
-              value={email}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">El email es requerido.</p>
-            )}
-          </div>
-          <div className="mb-4">
-            <input
-              type="password"
-              className={`w-full p-3 border ${
-                errors.password ? "border-red-500" : "border-gray-300"
-              } rounded-md`}
-              placeholder="Ingresar contraseña"
-              onChange={handlePasswordChange}
-              value={password}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm">El password es requerido.</p>
-            )}
-          </div>
-          <div className="flex justify-between items-center mb-4">
-            <div></div>
-            <div className="flex justify-end w-full md:w-auto">
+    <div className="flex h-screen w-screen">
+      {/* Imagen */}
+      <div className="hidden md:block w-1/2">
+        <img
+          src="/img 3.avif"
+          alt="Football"
+          className="object-cover w-full h-full"
+        />
+      </div>
+
+      {/* Formulario */}
+      <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
+        <div className="w-full h-auto flex flex-col max-w-md">
+          <h1 className="text-white text-3xl font-bold text-center">
+            Bienvenidos a <span className="text-blue-500">Football Finder</span>
+          </h1>
+
+          <form onSubmit={handleSubmit}>
+            <div>
+              <input
+                type="text"
+                name="email"
+                placeholder="Ingresar email"
+                className={inputStyle}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm">El email es requerido.</p>
+              )}
+
+              <input
+                type="password"
+                name="password"
+                placeholder="Ingresar contraseña"
+                className={inputStyle}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm">
+                  El password es requerido.
+                </p>
+              )}
+            </div>
+
+            <div className="flex justify-end">
               <Button />
             </div>
-          </div>
-          <div className="text-center mt-4">
-            <p>¿Aún no tienes una cuenta?</p>
-            <button
-              type="button"
-              onClick={handleNavigateToRegister}
-              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Registrarse
-            </button>
-          </div>
-        </form>
+
+            <div className="text-white text-center pt-6 border-t border-gray-700 mt-6">
+              <p className="mb-3">¿Aún no tienes una cuenta?</p>
+              <button
+                type="button"
+                onClick={handleNavigateToRegister}
+                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Registrarse
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
-
 export default Login;
