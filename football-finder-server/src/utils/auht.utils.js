@@ -14,8 +14,8 @@ export const comparePassword = async (pass, userPass) => {
     return await bcrypt.compare(pass, userPass)
 }
 
-export const generateToken = (email, role) => {
+export const generateToken = (email, role, id) => {
     console.log(role)
-    return jwt.sign({ email, role }, secretKey, { expiresIn: '1h' })
+    return jwt.sign({ email, role, id }, secretKey, { expiresIn: '1h' })
 }
 

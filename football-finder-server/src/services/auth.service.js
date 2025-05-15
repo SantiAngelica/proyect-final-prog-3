@@ -39,10 +39,12 @@ const register = async (req, res) => {
                 include: [
                     {
                         model: UserPosition,
+                        as: 'positions',
                         attributes: ['position'],
                     },
                     {
                         model: UserField,
+                        as: 'fieldsType',
                         attributes: ['field'],
                     }
                 ],
@@ -64,7 +66,7 @@ const login = async (req, res) => {
         const existingUser = await User.findOne({ where: { email: email } });
         if(!existingUser) return res.status(400).json({ message: "User doesent exists" });
         if(!comparePassword(password, existingUser.password)) return res.status(401).json({ message: "email or password incorrect" });
-        const token = generateToken(email, existingUser.rol)
+        const token = generateToken(email, existingUser.rol, existingUser.id)
         return res.json(token)
     } catch (error) {
         res.status(500).json({ message: error.message })

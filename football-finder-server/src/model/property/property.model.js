@@ -9,6 +9,10 @@ export const Property = sequelize.define('propertys', {
         unique: true,
         allowNull: false
     },
+    id_user_owner:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     name:{  
         type: DataTypes.STRING,
         allowNull: false

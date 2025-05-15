@@ -7,6 +7,8 @@ import userRouter from './routes/user.router.js'
 import gameRouter from './routes/game.router.js'
 import authRouter from './routes/auth.router.js'
 import propertyRouter from './routes/property.router.js'
+import participationsRouter from './routes/participations.router.js'
+
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -30,6 +32,7 @@ try {
     app.use('/api/games', gameRouter)
     app.use('/api/auths', authRouter)
     app.use('/api/properties', propertyRouter)
+    app.use('/api/participations', participationsRouter)
 
     app.listen(PORT, () => {
         console.log(`listening on port ${PORT}`)

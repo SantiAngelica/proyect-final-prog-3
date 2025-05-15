@@ -1,9 +1,5 @@
-import {
-    Property, PropertyTypeField, ScheduleProperty, Reservation,
-    Game,
-    User
-} from "../model/index.model.js";
-
+import { Property, PropertyTypeField, ScheduleProperty, Reservation, Game, User } from "../model/index.model.js";
+import { validateRoleAndId } from "../utils/validation.utils.js";
 import { Op } from "sequelize";
 
 const getPropertys = async (req, res) => {
@@ -12,12 +8,12 @@ const getPropertys = async (req, res) => {
             include: [
                 {
                     model: PropertyTypeField,
-                   
+                    as: 'fields',
                     attributes: ['id', 'field_type']
                 },
                 {
                     model: ScheduleProperty,
-                   
+                    as: 'schedules',
                     attributes: ['id', 'schedule']
                 }
             ]
@@ -30,48 +26,126 @@ const getPropertys = async (req, res) => {
     }
 }
 
-
-
 const getGamesByProperty = async (req, res) => {
     const { pid } = req.params
+    console.log(pid)
     try {
         const games = await User.findAll({
             include: [{
                 model: Game,
+                as:'createdGames',
                 attributes: ['missing_players'],
                 include: [{
                     model: Reservation,
+                    as: 'reservation',
                     where: {
-                        state: {[Op.in]: ["pendiente", "aceptada"]}
+                        state: { [Op.in]: ["pendiente", "aceptada"] }
                     },
                     attributes: ['date', 'state'],
                     include: [{
                         model: PropertyTypeField,
+                        as: 'fieldType',
                         where: {
                             id_property: pid
                         }
                     },
                     {
                         model: ScheduleProperty,
+                        as: 'schedule',
                         attributes: ['schedule']
                     }]
                 }]
             }],
-            attributes: ['id', 'nombre', 'email']
+            attributes: ['id', 'name', 'email']
         })
 
-        if(!games) return res.status(404).json({message: 'No games found in this property'})
+        if (!games) return res.status(404).json({ message: 'No games found in this property' })
 
-        return res.send(200).json(games)
+        return res.status(200).json(games)
     } catch (error) {
-        res.status(500).json(error)
+        console.log(error)
+        res.status(500).json({ message: "Internal server error", error })
+    }
+}
+
+const postProperty = async (req, res) => {
+    const {id_user_owner, name, adress, zone, schedule, fields_type} = req.body
+    try {
+        if(!id_user_owner || !name || !adress || !zone || schedule || !fields_type)
+            return res.status(400).json({ message: "Missing data" })
+        const newProperty = await Property.create({
+            id_user_owner,
+            name,
+            adress,
+            zone
+        })
+
+        const propertySchedules = schedule.map(sch => ({schedule: sch, id_property: newProperty.id}))
+        const propertyFields = fields_type.map(fty => ({field_type: fty, id_property: newProperty.id}))
+
+        await ScheduleProperty.bulkCreate(propertySchedules),
+        await PropertyTypeField.bulkCreate(propertyFields)
+        const propertyResponse = await Property.findByPk(newProperty.id, {
+                        include: [
+                            {
+                                model: ScheduleProperty,
+                                as: 'schedules',
+                                attributes: ['schedule'],
+                            },
+                            {
+                                model: PropertyTypeField,
+                                as: 'fields',
+                                attributes: ['field_type'],
+                            }
+                        ],
+                    });
+        res.status(201).json(propertyResponse)
+    } catch (error) {
+          return res.status(500).json({ message: "Internal server error", error });
+    }
+}
+
+const postAceptReservation = async (req, res) => {
+    const { rid } = req.params
+    try {
+        const reservation = await Reservation.findByPk(rid,{
+            include:[
+                {
+                    model: ScheduleProperty,
+                    as: 'schedule',
+                    attributes: [],
+                    include:[
+                        {
+                            model: Property,
+                            as: 'property',
+                            attributes: ['id_user_owner']
+                        }
+                    ]
+                }
+            ]
+        })
+        if (!reservation) return res.status(404).json({ message: "Reservation not found" });
+        if(!validateRoleAndId(req.user, reservation.dataValues.schedule.property.id_user_owner,
+            true, 'admin'
+        )) return res.status(403).json({ message: "Unauthorized" });
+        if (reservation.dataValues.state !== 'pendiente') 
+            return res.status(400).json({ message: "Reservation already accepted" });
+
+        reservation.update({
+            state: 'aceptada'
+        })
+
+
+        res.status(201).json(reservation)
+    } catch (error) {
+        return res.status(500).json({ message: "Internal server error", error });
     }
 }
 
 
 
-
 export default {
     getPropertys,
-    getGamesByProperty
+    getGamesByProperty,
+    postAceptReservation
 }

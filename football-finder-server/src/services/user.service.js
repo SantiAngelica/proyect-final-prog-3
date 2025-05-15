@@ -1,5 +1,6 @@
-import { User, UserField, UserComent, UserPosition, Game } from "../model/index.model.js";
+import { User, UserField, UserComent, UserPosition, Game, GameUser } from "../model/index.model.js";
 
+import { validateRoleAndId } from "../utils/validation.utils.js";
 
 
 
@@ -10,14 +11,17 @@ const getUsers = async (req, res) => {
                 include: [
                     {
                         model: UserPosition,
+                        as: 'positions',
                         attributes: ['position'],
                     },
                     {
                         model: UserComent,
+                        as: 'comments',
                         attributes: ['body'],
                     },
                     {
                         model: UserField,
+                        as: 'fieldsType',
                         attributes: ['field'],
                     }
                 ],
@@ -35,17 +39,20 @@ const getUserById = async (req, res) => {
         const user = await User.findByPk(id, {
             include: [
                 {
-                    model: UserPosition,
-                    attributes: ['position'],
-                },
-                {
-                    model: UserComent,
-                    attributes: ['body'],
-                },
-                {
-                    model: UserField,
-                    attributes: ['field'],
-                }
+                        model: UserPosition,
+                        as: 'positions',
+                        attributes: ['position'],
+                    },
+                    {
+                        model: UserComent,
+                        as: 'comments',
+                        attributes: ['body'],
+                    },
+                    {
+                        model: UserField,
+                        as: 'fieldsType',
+                        attributes: ['field'],
+                    }
             ],
         })
         if (!user) return res.status(404).json({ message: "User not found" })
@@ -55,13 +62,67 @@ const getUserById = async (req, res) => {
     }
 }
 
-const getGamesByUser = async (req, res) => {
+const getGamesByUserCreator = async (req, res) => {
     const {id} = req.params
     try {
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
+        const games = await Game.findAll({
+            where: {
+                id_user_creator: id
+            },
+            include: [
+                {
+                    model: GameUser,
+                    as: 'players',
+                    include: [
+                        {
+                            model: User,
+                            as: 'player',
+                            attributes: ['id', 'name', 'email']
+                        }
+                    ],
+                }
+            ],
+            attributes: ['id', 'missing_players']
+        })
+        if (games.length === 0) return res.status(404).json({ message: "No games found" })
+        res.status(200).json(games)
     } catch (error) {
-        
+         res.status(500).json({ message: error.message })
+    }
+}
+
+const getGamesByUserParticipant = async (req, res) => {
+    const {id} = req.params
+    try {
+        const user = await User.findByPk(id)
+        if (!user) return res.status(404).json({ message: "User not found" })
+
+        const games = await GameUser.findAll({
+            where: {
+                id_user: id
+            },
+            include: [
+                {
+                    model: Game,
+                    as:'game',
+                    include: [
+                        {
+                            model: User,
+                            as: 'userCreator',
+                            attributes: ['id', 'name', 'email']
+                        }
+                    ],
+                }
+            ],
+            attributes: []
+        })
+
+        if(games.length === 0) return res.status(404).json({ message: "No games found" })
+        return res.status(200).json(games)
+    } catch (error) {
+        res.status(500).json({ message: error.message })       
     }
 }
 
@@ -71,6 +132,9 @@ const deleteUser = async (req, res) => {
     try {
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
+        if(!validateRoleAndId(req.user, user.dataValues.id, false, 'admin'))
+            return res.send(401).json({message: 'Unauthorized'})
+
         await UserComent.destroy({ where: { user_id: id } })
         await UserField.destroy({ where: { user_id: id } })
         await UserPosition.destroy({ where: { user_id: id } })
@@ -92,6 +156,8 @@ const updateUser = async (req, res) => {
             !age || !zone || !user_positions || !user_fields) {
             return res.status(400).json({ message: "Missing data" })
         }
+         if(!validateRoleAndId(req.user, user.dataValues.id, false, 'admin'))
+            return res.send(401).json({message: 'Unauthorized'})
         await user.update({
             age,
             name,
@@ -136,13 +202,14 @@ const updateUserRol = async (req, res) => {
 }
 
 const postComent = async (req, res) => {
-    const { id } = req.params
+    const { rid, sid } = req.params
     try {
-        if (!await User.findByPk(id)) return res.status(404).json({ message: 'User none existent' })
+        if (!await User.findByPk(rid)) return res.status(404).json({ message: 'User none existent' })
         const { body } = req.body
         if (!body) return res.status(400).json({ message: 'Missing data' })
         UserComent.create({
-            user_id: id,
+            user_id: rid,
+            id_user_commenter: sid,
             body: body
         })
         res.status(200).json({ message: 'coment add!' })
@@ -173,5 +240,7 @@ export default {
     updateUser,
     updateUserRol,
     postComent,
-    deleteComent
+    deleteComent,
+    getGamesByUserCreator,
+    getGamesByUserParticipant
 }

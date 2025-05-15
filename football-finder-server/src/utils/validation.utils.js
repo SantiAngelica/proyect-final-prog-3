@@ -20,7 +20,7 @@ export const validateUser = (req) => {
         message: ''
     }
 
-    const {email, password} = req
+    const { email, password } = req
 
     if (!email || !validateEmail(email)) {
         result.error = true
@@ -31,4 +31,18 @@ export const validateUser = (req) => {
         result.message = 'invalid password'
     }
     return result
+}
+
+const roleOrder = {
+    superadmin: 3,
+    admin: 2,
+    player: 1
+}
+export const validateRoleAndId = (user, requiredId, onlyId, requiredRole) => {
+    if (onlyId) return user.id == requiredId
+
+    const hasrole = roleOrder[user.role] >= roleOrder[requiredRole]
+    const isowner = user.id == requiredId
+
+    return hasrole ||isowner
 }

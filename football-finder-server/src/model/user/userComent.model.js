@@ -9,8 +9,13 @@ export const UserComent = sequelize.define('user_coments', {
         unique: true,
         allowNull: false
     },
+    id_user_commenter:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     body:{
         type: DataTypes.TEXT,
+        allowNull: false
     },
     user_id:{
         type: DataTypes.INTEGER,
