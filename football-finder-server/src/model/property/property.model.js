@@ -17,7 +17,7 @@ export const Property = sequelize.define('propertys', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    address:{
+    adress:{
         type: DataTypes.STRING,
         allowNull: false
     },

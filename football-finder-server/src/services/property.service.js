@@ -33,7 +33,7 @@ const getGamesByProperty = async (req, res) => {
         const games = await User.findAll({
             include: [{
                 model: Game,
-                as:'createdGames',
+                as: 'createdGames',
                 attributes: ['missing_players'],
                 include: [{
                     model: Reservation,
@@ -69,10 +69,14 @@ const getGamesByProperty = async (req, res) => {
 }
 
 const postProperty = async (req, res) => {
-    const {id_user_owner, name, adress, zone, schedule, fields_type} = req.body
+    const { id_user_owner, name, adress, zone, schedule, fields_type } = req.body
     try {
-        if(!id_user_owner || !name || !adress || !zone || schedule || !fields_type)
+        if (!id_user_owner || !name || !adress || !zone || !schedule || !fields_type)
             return res.status(400).json({ message: "Missing data" })
+
+        const userOwner = await User.findByPk(id_user_owner)
+        if(!userOwner) return res.status(404).json({message: 'User not found'})
+        if(userOwner.dataValues.rol != 'admin') return res.status(403).json({message: 'Cant give a property to a user not admin'})
         const newProperty = await Property.create({
             id_user_owner,
             name,
@@ -80,41 +84,42 @@ const postProperty = async (req, res) => {
             zone
         })
 
-        const propertySchedules = schedule.map(sch => ({schedule: sch, id_property: newProperty.id}))
-        const propertyFields = fields_type.map(fty => ({field_type: fty, id_property: newProperty.id}))
+        const propertySchedules = schedule.map(sch => ({ schedule: sch, id_property: newProperty.id }))
+        const propertyFields = fields_type.map(fty => ({ field_type: fty, id_property: newProperty.id }))
 
         await ScheduleProperty.bulkCreate(propertySchedules),
-        await PropertyTypeField.bulkCreate(propertyFields)
+            await PropertyTypeField.bulkCreate(propertyFields)
         const propertyResponse = await Property.findByPk(newProperty.id, {
-                        include: [
-                            {
-                                model: ScheduleProperty,
-                                as: 'schedules',
-                                attributes: ['schedule'],
-                            },
-                            {
-                                model: PropertyTypeField,
-                                as: 'fields',
-                                attributes: ['field_type'],
-                            }
-                        ],
-                    });
+            include: [
+                {
+                    model: ScheduleProperty,
+                    as: 'schedules',
+                    attributes: ['schedule'],
+                },
+                {
+                    model: PropertyTypeField,
+                    as: 'fields',
+                    attributes: ['field_type'],
+                }
+            ],
+        });
         res.status(201).json(propertyResponse)
     } catch (error) {
-          return res.status(500).json({ message: "Internal server error", error });
+        console.log(error)
+        return res.status(500).json({ message: "Internal server error", error });
     }
 }
 
 const postAceptReservation = async (req, res) => {
     const { rid } = req.params
     try {
-        const reservation = await Reservation.findByPk(rid,{
-            include:[
+        const reservation = await Reservation.findByPk(rid, {
+            include: [
                 {
                     model: ScheduleProperty,
                     as: 'schedule',
                     attributes: [],
-                    include:[
+                    include: [
                         {
                             model: Property,
                             as: 'property',
@@ -125,10 +130,10 @@ const postAceptReservation = async (req, res) => {
             ]
         })
         if (!reservation) return res.status(404).json({ message: "Reservation not found" });
-        if(!validateRoleAndId(req.user, reservation.dataValues.schedule.property.id_user_owner,
+        if (!validateRoleAndId(req.user, reservation.dataValues.schedule.property.id_user_owner,
             true, 'admin'
         )) return res.status(403).json({ message: "Unauthorized" });
-        if (reservation.dataValues.state !== 'pendiente') 
+        if (reservation.dataValues.state !== 'pendiente')
             return res.status(400).json({ message: "Reservation already accepted" });
 
         reservation.update({
@@ -142,10 +147,30 @@ const postAceptReservation = async (req, res) => {
     }
 }
 
+const deleteProperty = async (req, res) => {
+    const { pid } = req.params
+    try {
+        const property = await Property.findByPk(pid)
+        if (!property) return res.status(404).json({ message: 'Property not found' })
+
+        if (!validateRoleAndId(req.user, property.dataValues.id_user_owner, false, 'superadmin'))
+            return res.status(403).json({ message: 'Unauthorized' })
+        await PropertyTypeField.destroy({ where: { id_property: pid } })
+        await ScheduleProperty.destroy({ where: { id_property: pid } })
+        await Property.destroy({ where: { id: pid } })
+
+        res.status(204).json({message: 'Propert destroy'})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
 
 
 export default {
     getPropertys,
     getGamesByProperty,
-    postAceptReservation
+    postAceptReservation,
+    postProperty,
+    deleteProperty
 }
