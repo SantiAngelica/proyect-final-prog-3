@@ -3,38 +3,32 @@ const inputStyle =
     "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
 
-
 const partidoForm = () => {
-    const [captain, setCaptain] = useState("")
-    const [player1, setPlayer1] = useState("")
-    const [player2, setPlayer2] = useState("")
-    const [player3, setPlayer3] = useState("")
-    const [player4, setPlayer4] = useState("")
+  const [nomPredio,setNomPredio] = useState("")
+  const [fecha,setFecha] = useState("")
+  const [horario,setHorario] = useState("")
+  const [tipoCancha,setTipoCancha] = useState("")
 
+  const handleNomPredioChange =(event) => {
+    setNomPredio(event.target.value)
+  }
+  const handleFechaChange = (event) => {
+    setFecha(event.target.value)
+  }
+  const handleHorarioChange = (event) => {
+    setHorario(event.target.value)
+  }
 
-    const handleCaptainChange = (event) => {
-        setCaptain(event.target.value)
-    }
-    const handlePlayer1change = (event) => {
-        setPlayer1(event.target.value)
-    }
-    const handlePlayer2change = (event) => {
-        setPlayer2(event.target.value)
-    }
-    const handlePlayer3change = (event) => {
-        setPlayer3(event.target.value)
-    }
-    const handlePlayer4change = (event) => {
-        setPlayer4(event.target.value)
-    }
+  const handleTipoCanchaChange = (event) => {
+    setTipoCancha(event.target.value)
+  }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const team = {
-            captain,
-            player1,
-            player2,
-            player3,
-            player4,
+        const game = {
+           nomPredio,
+           fecha,
+           horario,
+           tipoCancha
 
         }
         try {
@@ -43,7 +37,7 @@ const partidoForm = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(team)
+                body: JSON.stringify(game)
             });
 
             if (response.ok) {
@@ -62,41 +56,36 @@ const partidoForm = () => {
             <form onSubmit={handleSubmit}>
                 <div className=''>
                     <input type="text"
-                        name='capitan'
-                        value={capitan}
-                        placeholder='ingrese capitan del equipo'
-                        onChange={handleCaptainChange}
+                        name='nomPredio'
+                        value={nomPredio}
+                        placeholder='ingrese el nombre del predio'
+                        onChange={handleNomPredioChange}
                         className={inputStyle} />
 
                     <input type="text"
-                        name='jugadores'
-                        value={player1}
-                        onChange={handlePlayer1change}
-                        placeholder='ingrese nombre de jugador'
+                        name='fecha'
+                        value={fecha}
+                        onChange={handleFechaChange}
+                        placeholder='ingrese la fecha del partido (dd/mm/aa)'
                         className={inputStyle} />
 
                     <input type="text"
-                        name='jugadores'
-                        value={player2}
-                        onChange={handlePlayer2change}
-                        placeholder='ingrese nombre de jugador'
+                        name='horario'
+                        value={horario}
+                        onChange={handleHorarioChange}
+                        placeholder='ingrese el horario del partido'
                         className={inputStyle} />
 
                     <input type="text"
-                        name='jugadores'
-                        value={player3}
-                        onChange={handlePlayer3change}
-                        placeholder='ingrese nombre de jugador'
+                        name='tipoCancha'
+                        value={tipoCancha}
+                        onChange={handleTipoCanchaChange}
+                        placeholder='ingrese el tipo de cancha'
                         className={inputStyle} />
 
-                    <input type="text"
-                        name='jugadores'
-                        value={player4}
-                        onChange={handlePlayer4change}
-                        placeholder='ingrese nombre de jugador'
-                        className={inputStyle} />
+                    
                 </div>
-                <button onChange={handleSubmit}>crear equipo</button>
+                <button onChange={handleSubmit}>crear partido</button>
             </form>
         </div>
     )
