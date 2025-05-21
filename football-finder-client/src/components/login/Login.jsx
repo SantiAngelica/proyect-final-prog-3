@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button from "../styles/Button";
-import { Send } from "lucide-react";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -45,17 +44,17 @@ const Login = ({ setIsLogged }) => {
       setErrors({ ...errors, password: false });
     }
 
-    fetch("http://localhost:5173/api/auths/login", {
+    fetch("http://localhost:8080/api/auths/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     })
       .then((res) => res.json())
       .then((token) => {
-        localStorage.setItem("book-champions-token", token);
+        localStorage.setItem("football-finder-token", token);
         successToast("Inicio de sesión exitoso.");
         setIsLogged(true);
-        navigate("/libros");
+        navigate("/register");
       })
       .catch((err) => {
         errorToast("Error al iniciar sesión.");
@@ -114,7 +113,7 @@ const Login = ({ setIsLogged }) => {
             </div>
 
             <div className="flex justify-end">
-              <Button>Iniciar</Button>
+              <Button type="submit">Iniciar</Button>
             </div>
           </form>
           <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
