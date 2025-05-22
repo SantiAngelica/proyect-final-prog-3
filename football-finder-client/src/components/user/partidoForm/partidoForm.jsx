@@ -1,94 +1,104 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+
 const inputStyle =
-    "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
+  "text-xs text-gray-500 font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
+const PartidoForm = () => {
+  const [property_name, setPropertyName] = useState("");
+  const [date, setDate] = useState("");
+  const [schedule, setSchedule] = useState("");
+  const [field_type, setFieldType] = useState("");
 
-const partidoForm = () => {
-  const [nomPredio,setNomPredio] = useState("")
-  const [fecha,setFecha] = useState("")
-  const [horario,setHorario] = useState("")
-  const [tipoCancha,setTipoCancha] = useState("")
+  const handlePropertyNameChange = (event) => {
+    setPropertyName(event.target.value);
+  };
 
-  const handleNomPredioChange =(event) => {
-    setNomPredio(event.target.value)
-  }
-  const handleFechaChange = (event) => {
-    setFecha(event.target.value)
-  }
-  const handleHorarioChange = (event) => {
-    setHorario(event.target.value)
-  }
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
+  };
 
-  const handleTipoCanchaChange = (event) => {
-    setTipoCancha(event.target.value)
-  }
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const game = {
-           nomPredio,
-           fecha,
-           horario,
-           tipoCancha
+  const handleScheduleChange = (event) => {
+    setSchedule(event.target.value);
+  };
 
-        }
-        try {
-            const response = await fetch('http://localhost:8080/api/partidos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(game)
-            });
+  const handleFieldTypeChange = (event) => {
+    setFieldType(event.target.value);
+  };
 
-            if (response.ok) {
-                alert("partido guardado correctamente")
-            } else {
-                alert("error al guardar el partido")
-            }
-        } catch (error) {
-            console.error('error', error)
-            alert('error de conexion')
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        }
+    const game = {
+      property_name,
+      date,
+      schedule,
+      field_type
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/api/partidos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(game)
+      });
+
+      if (response.ok) {
+        alert("Game saved successfully");
+      } else {
+        alert("Error saving the game");
+      }
+    } catch (error) {
+      console.error('Connection error:', error);
+      alert('Connection error');
     }
-    return (
-        <div className='background-color:red'>
-            <form onSubmit={handleSubmit}>
-                <div className=''>
-                    <input type="text"
-                        name='nomPredio'
-                        value={nomPredio}
-                        placeholder='ingrese el nombre del predio'
-                        onChange={handleNomPredioChange}
-                        className={inputStyle} />
+  };
 
-                    <input type="text"
-                        name='fecha'
-                        value={fecha}
-                        onChange={handleFechaChange}
-                        placeholder='ingrese la fecha del partido (dd/mm/aa)'
-                        className={inputStyle} />
+  return (
+    <div className='background-color:red'>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input
+            type="text"
+            name="property_name"
+            value={property_name}
+            placeholder="Enter the property's name"
+            onChange={handlePropertyNameChange}
+            className={inputStyle}
+          />
 
-                    <input type="text"
-                        name='horario'
-                        value={horario}
-                        onChange={handleHorarioChange}
-                        placeholder='ingrese el horario del partido'
-                        className={inputStyle} />
+          <input
+            type="text"
+            name="date"
+            value={date}
+            onChange={handleDateChange}
+            placeholder="Enter the game date (dd/mm/yy)"
+            className={inputStyle}
+          />
 
-                    <input type="text"
-                        name='tipoCancha'
-                        value={tipoCancha}
-                        onChange={handleTipoCanchaChange}
-                        placeholder='ingrese el tipo de cancha'
-                        className={inputStyle} />
+          <input
+            type="text"
+            name="schedule"
+            value={schedule}
+            onChange={handleScheduleChange}
+            placeholder="Enter the game schedule"
+            className={inputStyle}
+          />
 
-                    
-                </div>
-                <button onChange={handleSubmit}>crear partido</button>
-            </form>
+          <input
+            type="text"
+            name="field_type"
+            value={field_type}
+            onChange={handleFieldTypeChange}
+            placeholder="Enter the field type"
+            className={inputStyle}
+          />
         </div>
-    )
-}
+        <button type="submit">Create Game</button>
+      </form>
+    </div>
+  );
+};
 
-export default partidoForm
+export default PartidoForm;
