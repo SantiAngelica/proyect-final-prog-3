@@ -28,8 +28,8 @@ const postInvitation = async (req, res) => {
 }
 
 const postApplication = async (req, res) => {
-    const {gameId, applicantId} = req.params
-
+    const {gameId} = req.params
+    const applicantId = req.user.id
     try {
         const applicant = await User.findByPk(applicantId)
         const game = await Game.findByPk(gameId)
@@ -56,7 +56,7 @@ const postApplication = async (req, res) => {
 }
 
 const getInvitationsByUserId = async (req, res) => {
-    const { uid } = req.params
+    const uid = req.user.id
     try {
         const invitations = await GameInvitation.findAll({
             where: {
@@ -84,7 +84,7 @@ const getInvitationsByUserId = async (req, res) => {
                                 include: [{
                                     model: Property,
                                     as:'property',
-                                    attributes: ['id','zone','address']
+                                    attributes: ['id','zone','adress']
                                 }]
                             },
                             {
@@ -107,7 +107,7 @@ const getInvitationsByUserId = async (req, res) => {
 }
 
 const getApplicationsByUserId = async (req, res) => {
-    const { uid } = req.params
+    const uid = req.user.id
     try {
         const applications = await Game.findAll({
             where: {
