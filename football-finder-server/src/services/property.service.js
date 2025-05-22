@@ -69,17 +69,20 @@ const getGamesByProperty = async (req, res) => {
 }
 
 const postProperty = async (req, res) => {
-    const { id_user_owner, name, adress, zone, schedule, fields_type } = req.body
+    const { name, adress, zone, schedule, fields_type } = req.body
     try {
-        if (!id_user_owner || !name || !adress || !zone || !schedule || !fields_type)
+        if (!name || !adress || !zone || !schedule || !fields_type)
             return res.status(400).json({ message: "Missing data" })
 
-        const userOwner = await User.findByPk(id_user_owner)
+        const userOwner = await User.findByPk(req.user.id)
         if(!userOwner) return res.status(404).json({message: 'User not found'})
-        if(userOwner.dataValues.rol != 'admin') return res.status(403).json({message: 'Cant give a property to a user not admin'})
+
+        const existingProperty = await Property.findOne({where: {name: name.toLowerCase()}})
+        if(existingProperty) return res.status(400).json({message: 'Property name already taken'})
+
         const newProperty = await Property.create({
-            id_user_owner,
-            name,
+            id_user_owner: req.user.id,
+            name: name.toLowerCase(),
             adress,
             zone
         })
@@ -114,23 +117,23 @@ const postAceptReservation = async (req, res) => {
     const { rid } = req.params
     try {
         const reservation = await Reservation.findByPk(rid, {
+            raw: false,
             include: [
                 {
                     model: ScheduleProperty,
                     as: 'schedule',
-                    attributes: [],
                     include: [
                         {
                             model: Property,
                             as: 'property',
-                            attributes: ['id_user_owner']
                         }
                     ]
                 }
             ]
         })
         if (!reservation) return res.status(404).json({ message: "Reservation not found" });
-        if (!validateRoleAndId(req.user, reservation.dataValues.schedule.property.id_user_owner,
+        console.log(reservation)
+        if (!validateRoleAndId(req.user, reservation.schedule.property.id_user_owner,
             true, 'admin'
         )) return res.status(403).json({ message: "Unauthorized" });
         if (reservation.dataValues.state !== 'pendiente')
@@ -143,9 +146,11 @@ const postAceptReservation = async (req, res) => {
 
         res.status(201).json(reservation)
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: "Internal server error", error });
     }
 }
+
 
 const deleteProperty = async (req, res) => {
     const { pid } = req.params

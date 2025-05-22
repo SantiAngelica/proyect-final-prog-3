@@ -5,7 +5,7 @@ import GameService from "../services/game.service.js";
 import { verifyToken, authorize } from "../middlewares/authorization.middlewares.js";
 
 
-router.get("/availables", verifyToken, authorize('player'), GameService.getAvailablesGames)
+router.get("/availables", GameService.getAvailablesGames)
 router.get("/:gid",verifyToken, authorize('player'), GameService.getGameById)
 
 

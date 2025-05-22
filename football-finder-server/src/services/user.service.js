@@ -202,14 +202,14 @@ const updateUserRol = async (req, res) => {
 }
 
 const postComent = async (req, res) => {
-    const { rid, sid } = req.params
+    const { rid } = req.params
     try {
         if (!await User.findByPk(rid)) return res.status(404).json({ message: 'User none existent' })
         const { body } = req.body
         if (!body) return res.status(400).json({ message: 'Missing data' })
         UserComent.create({
             user_id: rid,
-            id_user_commenter: sid,
+            id_user_commenter: req.user.id,
             body: body
         })
         res.status(200).json({ message: 'coment add!' })

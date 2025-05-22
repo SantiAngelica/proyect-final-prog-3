@@ -30,7 +30,7 @@ export const authorize = (role) => {
         
         const userRoleLevel = roleOrder[req.user.role];
         const requiredRoleLevel = roleOrder[role];
-
+        console.log(req.user)
          if (!userRoleLevel || !requiredRoleLevel)
             return res.status(403).json({ message: 'Unauthorized: unknown role' });
     

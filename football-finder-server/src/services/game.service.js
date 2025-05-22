@@ -1,4 +1,4 @@
-import { Game, Reservation, User,  } from "../model/index.model.js";
+import { Game, Property, PropertyTypeField, Reservation, ScheduleProperty, User,  } from "../model/index.model.js";
 import { validateNewGame } from "../utils/game.utils.js";
 import { sequelize } from "../model/index.model.js";
 import { validateRoleAndId } from "../utils/validation.utils.js";
@@ -17,8 +17,35 @@ const getAvailablesGames = async (req, res) => {
             include: [
                 {
                     model: User,
-                    as: 'userCreator'
+                    as: 'userCreator',
+                    attributes: ['id', 'name', 'email']
+                },
+                {
+                    model: Reservation,
+                    as: 'reservation',
+                    where: {
+                        state: 'aceptada'
+                    },
+                    attributes: ['id', 'date', 'state'],
+                    include:[
+                        {
+                            model: ScheduleProperty,
+                            as: 'schedule',
+                            attributes: ['schedule']
+                        },
+                        {
+                            model: PropertyTypeField,
+                            as: 'fieldType',
+                            attributes: ['field_type'],
+                            include:[
+                                {
+                                    model: Property,
+                                    as: 'property'
+                                }
+                            ]
+                        }
 
+                    ]
                 }
             ],
             attributes: ['id', 'missing_players']
@@ -47,23 +74,23 @@ const getGameById = async (req, res) => {
 
 const postGame = async (req, res) => {
     //date debe ser en formato YYYY-MM-DD
-    const { uid, scheduleid, field_type_id, date, missing_players } = req.body;
-    if (!uid || !scheduleid || !field_type_id || !missing_players || !date)
+    const { property_name, schedule, field_type, date, missing_players } = req.body;
+    if (!property_name|| !schedule || !field_type || !missing_players || !date)
         return res.status(400).json({ message: "Missing data" })
     const t = await sequelize.transaction()
     try {
-        const validation = await validateNewGame(uid, scheduleid, field_type_id, date);
+        const validation = await validateNewGame(req.user.id, schedule, field_type, date, property_name);
         if (validation.error) return res.status(validation.status).json({ message: validation.message });
 
 
         const newGame = await Game.create({
-            id_user_creator: uid,
+            id_user_creator: validation.data.user.id,
             missing_players
         }, { transaction: t });
 
         const newReservation = await Reservation.create({
-            id_schedule: scheduleid,
-            id_field: field_type_id,
+            id_schedule: validation.data.schedule.id,
+            id_field: validation.data.field.id,
             id_game: newGame.id,
             date: date
         }, { transaction: t });
