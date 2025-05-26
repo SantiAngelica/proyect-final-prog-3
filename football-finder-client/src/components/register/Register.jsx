@@ -8,8 +8,10 @@ import {
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button from "../styles/Button";
 
-const inputStyle =
-  "text-xs text-gray-500 font-bold w-full py-3 mb-4 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none";
+const inputStyleBase =
+  "text-xs text-gray-500 font-bold w-full py-3 mb-4 border-b-2 bg-transparent outline-none";
+const errorInputStyle = "border-red-500"; // 🔄 Estilo adicional para error
+const normalInputStyle = "border-gray-500 focus:border-blue-500"; // 🔄 Normal
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -20,20 +22,42 @@ const Register = () => {
   const [positions, setPositions] = useState([]);
   const [fields, setFields] = useState([]);
 
+  const [errors, setErrors] = useState({
+    name: false,
+    email: false,
+    password: false,
+  });
+
   const navigate = useNavigate();
+
+  const handleNameChange = (e) => setName(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleAgeChange = (e) => setAge(e.target.value);
+  const handleZoneChange = (e) => setZone(e.target.value);
+  const handlePositionsChange = (e) => setPositions(e.target.value.split(","));
+  const handleFieldsChange = (e) => setFields(e.target.value.split(","));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateString(name, 1, 50)) {
+    const newErrors = {
+      name: !validateString(name, 1, 50),
+      email: !validateEmail(email),
+      password: !validatePassword(password, 8, 20, true, true),
+    };
+
+    setErrors(newErrors);
+
+    if (newErrors.name) {
       errorToast("Nombre inválido");
       return;
     }
-    if (!validateEmail(email)) {
+    if (newErrors.email) {
       errorToast("Email inválido");
       return;
     }
-    if (!validatePassword(password, 8, 20, true, true)) {
+    if (newErrors.password) {
       errorToast("Contraseña inválida");
       return;
     }
@@ -57,7 +81,7 @@ const Register = () => {
 
       if (!res.ok) {
         const data = await res.json();
-        console.error("Error en registro:", data.message); // Ver mensaje
+        console.error("Error en registro:", data.message);
         throw new Error(data.message || "Error al registrar");
       }
 
@@ -69,7 +93,7 @@ const Register = () => {
   };
 
   const handleNavigateToLogin = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -85,56 +109,68 @@ const Register = () => {
       <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
         <form onSubmit={handleSubmit} className="w-full max-w-md text-white">
           <h2 className="text-2xl font-bold mb-6">Registrarse</h2>
+
           <input
             type="text"
             placeholder="Nombre"
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={inputStyle}
+            onChange={handleNameChange}
+            className={`${inputStyleBase} ${
+              errors.name ? errorInputStyle : normalInputStyle
+            }`}
           />
+
           <input
             type="text"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={inputStyle}
+            onChange={handleEmailChange}
+            className={`${inputStyleBase} ${
+              errors.email ? errorInputStyle : normalInputStyle
+            }`}
           />
+
           <input
             type="password"
             placeholder="Contraseña"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className={inputStyle}
+            onChange={handlePasswordChange}
+            className={`${inputStyleBase} ${
+              errors.password ? errorInputStyle : normalInputStyle
+            }`}
           />
+
           <input
             type="number"
             placeholder="Edad"
             value={age}
-            onChange={(e) => setAge(e.target.value)}
-            className={inputStyle}
+            onChange={handleAgeChange}
+            className={`${inputStyleBase} ${normalInputStyle}`}
           />
           <input
             type="text"
             placeholder="Zona"
             value={zone}
-            onChange={(e) => setZone(e.target.value)}
-            className={inputStyle}
+            onChange={handleZoneChange}
+            className={`${inputStyleBase} ${normalInputStyle}`}
           />
           <input
             type="text"
             placeholder="Posiciones (ej: Arquero, Defensor)"
             value={positions}
-            onChange={(e) => setPositions(e.target.value.split(","))}
-            className={inputStyle}
+            onChange={handlePositionsChange}
+            className={`${inputStyleBase} ${normalInputStyle}`}
           />
           <input
             type="text"
             placeholder="Canchas preferidas (ej: 5, 11)"
             value={fields}
-            onChange={(e) => setFields(e.target.value.split(","))}
-            className={inputStyle}
+            onChange={handleFieldsChange}
+            className={`${inputStyleBase} ${normalInputStyle}`}
           />
+
           <Button type="submit">Registrarse</Button>
+
           <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
             <p className="text-xs font-light mb-3">¿Ya tienes una cuenta?</p>
             <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
