@@ -1,16 +1,45 @@
+import React, { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Route, Routes } from "react-router-dom";
-import Register from "./components/register/Register";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+import MainLayout from "./components/mainLayout/MainLayout";
+
 import Login from "./components/login/Login";
+import Register from "./components/register/Register";
+
+import Protected from "./components/protected/Protected";
+
+import NotFound from "./components/notFound/NotFound";
+
+import AdminDashboard from "./components/admin/dashboard/AdminDashboard";
+import SuperAdminDashboard from "./components/superAdmin/dashboard/SuperDashboard";
+import UserDashboard from "./components/user/dashboard/UserDashboard";
 
 function App() {
+  const [isLogged, setIsLogged] = useState(false);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="d-flex flex-column align-items-center">
+      <ToastContainer />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+
+          <Route element={<MainLayout />}>
+            <Route element={<Protected />}>
+              <Route path="/admin/*" element={<AdminDashboard />} />
+              <Route path="/superadmin/*" element={<SuperAdminDashboard />} />
+              <Route path="/user/*" element={<UserDashboard />} />
+            </Route>
+          </Route>
+
+          <Route path="/login" element={<Login setIsLogged={setIsLogged} />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

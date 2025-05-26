@@ -23,43 +23,51 @@ const Login = ({ setIsLogged }) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!validateEmail(email)) {
       setErrors({ ...errors, email: true });
       emailRef.current.focus();
-      errorToast("Email invalido");
+      errorToast("Email inválido");
       return;
     } else {
       setErrors({ ...errors, email: false });
     }
 
-    if (!validatePassword(password, 1)) {
+    if (!validatePassword(password)) {
       setErrors({ ...errors, password: true });
-      errorToast("La contraseña es requerida");
+      errorToast(
+        "La contraseña es inválida. Debe tener al menos 8 caracteres, una mayúscula y un número."
+      );
       passwordRef.current.focus();
       return;
     } else {
       setErrors({ ...errors, password: false });
     }
 
-    fetch("http://localhost:8080/api/auths/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then((token) => {
-        localStorage.setItem("football-finder-token", token);
-        successToast("Inicio de sesión exitoso.");
-        setIsLogged(true);
-        navigate("/register");
-      })
-      .catch((err) => {
-        errorToast("Error al iniciar sesión.");
-        return;
+    try {
+      const res = await fetch("http://localhost:8080/api/auths/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorToast(data.message || "Error al iniciar sesión");
+        return;
+      }
+
+      localStorage.setItem("football-finder-token", data.token);
+      successToast("Inicio de sesión exitoso.");
+      setIsLogged(true);
+      navigate("/register");
+    } catch (err) {
+      console.error("Error al conectar con el servidor:", err);
+      errorToast("Error al conectar con el servidor.");
+    }
   };
 
   const handleNavigateToRegister = () => {
@@ -129,4 +137,5 @@ const Login = ({ setIsLogged }) => {
     </div>
   );
 };
+
 export default Login;
