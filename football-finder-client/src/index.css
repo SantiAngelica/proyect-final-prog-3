@@ -1,5 +1,31 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@import "tailwindcss";
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+::selection {
+  background-color: #f0f0f0;
+  color: #090909;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 9999s ease-out, color 9999s ease-out;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #767676;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
