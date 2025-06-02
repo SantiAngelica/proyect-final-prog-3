@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "../../styles/Button";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -57,7 +58,7 @@ const PartidoForm = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "red", padding: "1rem" }}>
+    <div style={{ backgroundColor: "black", padding: "1rem" }}>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -104,12 +105,12 @@ const PartidoForm = () => {
           min={1}
         />
 
-        <button
+        <Button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Create Game
-        </button>
+          Crear partido
+        </Button>
       </form>
     </div>
   );

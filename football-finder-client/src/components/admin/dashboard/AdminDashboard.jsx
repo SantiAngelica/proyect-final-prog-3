@@ -1,7 +1,11 @@
-import React from "react";
+import NavBar from "../../navbar/NavBar";
+import { Routes, Route } from "react-router-dom";
 
 const AdminDashboard = () => {
-  return <div>AdminDashboard</div>;
+  return
+  <>
+   
+  </>;
 };
 
 export default AdminDashboard;

@@ -66,7 +66,8 @@ const Login = ({ setIsLogged }) => {
       setIsLogged(true);
 
       // Redirección según rol
-      if (userRole === "superAdmin") navigate("/superadmin");
+      console.log(userRole)
+      if (userRole === "superadmin") navigate("/superadmin");
       else if (userRole === "admin") navigate("/admin");
       else navigate("/user");
     } catch (err) {
