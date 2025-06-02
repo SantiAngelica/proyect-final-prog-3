@@ -10,8 +10,8 @@ const NotFound = () => {
   };
 
   return (
-    <div>
-      <div>Uppppps! La página que buscas no existe!</div>
+    <div className="bg-black flex flex-col items-center justify-center h-screen">
+      <div className="text-white mb-6">¡La página que buscas no existe!</div>
       <Button onClick={handleClick}>Volver al inicio</Button>
     </div>
   );

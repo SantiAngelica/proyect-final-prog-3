@@ -10,8 +10,8 @@ import Button from "../styles/Button";
 
 const inputStyleBase =
   "text-xs text-gray-500 font-bold w-full py-3 mb-4 border-b-2 bg-transparent outline-none";
-const errorInputStyle = "border-red-500"; // 🔄 Estilo adicional para error
-const normalInputStyle = "border-gray-500 focus:border-blue-500"; // 🔄 Normal
+const errorInputStyle = "border-red-500";
+const normalInputStyle = "border-gray-500 focus:border-blue-500";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -108,7 +108,7 @@ const Register = () => {
 
       <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
         <form onSubmit={handleSubmit} className="w-full max-w-md text-white">
-          <h2 className="text-2xl font-bold mb-6">Registrarse</h2>
+          <h2 className="text-2xl font-bold mb-4">Registrarse</h2>
 
           <input
             type="text"
@@ -166,7 +166,7 @@ const Register = () => {
             placeholder="Canchas preferidas (ej: 5, 11)"
             value={fields}
             onChange={handleFieldsChange}
-            className={`${inputStyleBase} ${normalInputStyle}`}
+            className={`${inputStyleBase} ${normalInputStyle} mb-6`}
           />
 
           <Button type="submit">Registrarse</Button>

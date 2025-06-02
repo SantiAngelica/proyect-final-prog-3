@@ -13,7 +13,7 @@ import Protected from "./components/protected/Protected";
 import NotFound from "./components/notFound/NotFound";
 
 import AdminDashboard from "./components/admin/dashboard/AdminDashboard";
-import SuperAdminDashboard from "./components/superAdmin/dashboard/SuperDashboard";
+import SuperDashboard from "./components/superAdmin/dashboard/SuperDashboard";
 import UserDashboard from "./components/user/dashboard/UserDashboard";
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route element={<Protected />}>
               <Route path="/admin/*" element={<AdminDashboard />} />
-              <Route path="/superadmin/*" element={<SuperAdminDashboard />} />
+              <Route path="/superadmin/*" element={<SuperDashboard />} />
               <Route path="/user/*" element={<UserDashboard />} />
             </Route>
           </Route>

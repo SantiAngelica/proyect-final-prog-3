@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button from "../styles/Button";
+import { jwtDecode } from "jwt-decode";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -31,19 +32,15 @@ const Login = ({ setIsLogged }) => {
       emailRef.current.focus();
       errorToast("Email inválido");
       return;
-    } else {
-      setErrors({ ...errors, email: false });
     }
 
     if (!validatePassword(password)) {
       setErrors({ ...errors, password: true });
+      passwordRef.current.focus();
       errorToast(
         "La contraseña es inválida. Debe tener al menos 8 caracteres, una mayúscula y un número."
       );
-      passwordRef.current.focus();
       return;
-    } else {
-      setErrors({ ...errors, password: false });
     }
 
     try {
@@ -53,17 +50,25 @@ const Login = ({ setIsLogged }) => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const token = await res.json();
 
       if (!res.ok) {
-        errorToast(data.message || "Error al iniciar sesión");
+        errorToast(token.message || "Error al iniciar sesión");
         return;
       }
 
-      localStorage.setItem("football-finder-token", data.token);
+      localStorage.setItem("football-finder-token", token);
+
+      const decoded = jwtDecode(token); // Se decodifica el token
+      const userRole = decoded.role;
+
       successToast("Inicio de sesión exitoso.");
       setIsLogged(true);
-      navigate("/register");
+
+      // Redirección según rol
+      if (userRole === "superAdmin") navigate("/superadmin");
+      else if (userRole === "admin") navigate("/admin");
+      else navigate("/user");
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
       errorToast("Error al conectar con el servidor.");

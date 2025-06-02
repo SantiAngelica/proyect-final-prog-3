@@ -1,7 +1,7 @@
 import React from "react";
 
 const UserDashboard = () => {
-  return <div>UserDashboard</div>;
+  return <div className="text-black">UserDashboard</div>;
 };
 
 export default UserDashboard;
