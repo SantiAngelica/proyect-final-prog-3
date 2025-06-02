@@ -15,9 +15,7 @@ export const AuthenticationContextProvider = ({ children }) => {
   const handleUserLogin = (token) => {
     localStorage.setItem("football-finder-token", token);
     setToken(token);
-    console.log(token)
   };
-
 
   // Función para cerrar sesión: elimina el token y actualiza el estado
   const handleUserLogout = () => {

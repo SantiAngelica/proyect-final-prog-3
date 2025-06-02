@@ -13,10 +13,8 @@ import Protected from "./components/protected/Protected";
 import NotFound from "./components/notFound/NotFound";
 
 import AdminDashboard from "./components/admin/dashboard/AdminDashboard";
-import SuperAdminDashboard from "./components/superAdmin/dashboard/SuperDashboard.jsx";
+import SuperDashboard from "./components/superAdmin/dashboard/SuperDashboard";
 import UserDashboard from "./components/user/dashboard/UserDashboard";
-
-
 
 function App() {
   const [isLogged, setIsLogged] = useState(false);
@@ -24,7 +22,6 @@ function App() {
   return (
     <div className="d-flex flex-column align-items-center">
       <ToastContainer />
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
@@ -32,7 +29,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route element={<Protected />}>
               <Route path="/admin/*" element={<AdminDashboard />} />
-              <Route path="/superadmin/*" element={<SuperAdminDashboard />} />
+              <Route path="/superadmin/*" element={<SuperDashboard />} />
               <Route path="/user/*" element={<UserDashboard />} />
             </Route>
           </Route>
