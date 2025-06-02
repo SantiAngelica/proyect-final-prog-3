@@ -11,34 +11,60 @@ const UserItem = ({ user }) => {
     }
 
     const handleClickRol = async () => {
-        if(!token){
+        if (!token) {
             errorToast('No token found, please Log in')
         }
-        if (role != 'player' || role != 'admin') {
+        if (role != 'player' && role != 'admin') {
             errorToast('Invalid role')
             return
         }
-        fetch(`http://localhost:8080/api/users/${user.id}`, {
+        fetch(`http://localhost:8080/api/users/rolechange/${user.id}`, {
             method: 'PUT',
             headers: {
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
-            }
-        }).then((res)=>{
-            if(!res.ok){
+            },
+            body: JSON.stringify({
+                role: role
+            })
+        }).then((res) => {
+            if (!res.ok) {
                 errorToast('Failed')
+                return
             }
             return res.json
         })
-        .then((data) => {
-            successToast('Rol updated!')
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+            .then((data) => {
+                successToast('Rol updated!')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
 
     }
 
-    
+    const handleClickDlt = async () => {
+        fetch(`http://localhost:8080/api/users/${user.id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    errorToast('Failed')
+                    return
+                }
+                successToast('User Deleted!')
+                return res.json
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+    }
+
 
     return (
         <StyledWrapper>
@@ -46,9 +72,9 @@ const UserItem = ({ user }) => {
                 <span>{user.name}</span>
                 <input className="job" value={role} onChange={handleChange} />
 
-                <button> Cambiar rol
+                <button onClick={handleClickRol}> Cambiar rol
                 </button>
-                <button className='delete'> Borrar
+                <button className='delete' onClick={handleClickDlt}> Borrar
                 </button>
             </div>
         </StyledWrapper>

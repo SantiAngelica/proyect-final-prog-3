@@ -26,10 +26,7 @@
     "lucide-react": "^0.510.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-<<<<<<< HEAD
     "react-icons": "^5.5.0",
-=======
->>>>>>> 1f86d76c62aca4d997fdb84e9ff36b2fbe4237b6
     "react-router-dom": "^7.6.0",
     "react-toastify": "^11.0.5",
     "styled-components": "^6.1.18"

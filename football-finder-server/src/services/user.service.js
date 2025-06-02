@@ -188,10 +188,10 @@ const updateUserRol = async (req, res) => {
     try {
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
-        const { rol } = req.body
-        if (!rol) return res.status(400).json({ message: 'Missing data' })
+        const { role } = req.body
+        if (!role) return res.status(400).json({ message: 'Missing data' })
         await User.update({
-            rol,
+            rol: role,
         },{where: {id: id}})
 
         res.status(200).json({message: 'Rol updated!'})
