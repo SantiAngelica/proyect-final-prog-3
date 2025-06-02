@@ -4,26 +4,26 @@ import NavBar from "../../navbar/NavBar";
 
 import MisPartidos from "../misPartidos/MisPartidos.jsx";
 import PartidoForm from "../partidoForm/partidoForm.jsx";
-import CanchaList from "../canchaList/CanchaList.jsx";
-import CanchaDetail from "../canchaDetail/CanchaDetail.jsx";
+import PropertyList from "../PropertyList/PropertyList.jsx";
+// import CanchaDetail from "../canchaDetail/CanchaDetail.jsx";
 
 const UserDashboard = () => {
   return (
     <>
       <NavBar
         links={[
-          { item: "Crear Partido", url: "/dashboard/crear" },
-          { item: "Historial", url: "/dashboard/historial" },
-          { item: "Lista de canchas", url: "/dashboard/canchas" },
-          { item: "Detalles de cancha", url: "/dashboard/detalles" },
+          { item: "Create Game", url: "/user/create" },
+          { item: "Game Record", url: "/user/record" },
+          { item: "Property list", url: "/user/properties" },
+          { item: "Fields Details", url: "/user/details" },
         ]}
       />
 
       <Routes>
-        <Route path="crear" element={<PartidoForm />} />
-        <Route path="historial" element={<MisPartidos />} />
-        <Route path="canchas" element={<CanchaList />} />
-        <Route path="detalles" element={<CanchaDetail />} />
+        <Route path="create" element={<PartidoForm />} />
+        <Route path="record" element={<MisPartidos />} />
+        <Route path="properties" element={<PropertyList />} />
+        {/* <Route path="detalles" element={<CanchaDetail />} /> */}
       </Routes>
     </>
   );

@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useContext } from "react";
+import { AuthenticationContext } from "../../services/auth.context.jsx";
+import { errorToast, successToast } from "../../toast/NotificationToast.jsx"
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -12,11 +15,13 @@ const PartidoForm = () => {
 
   const handleChange = (setter) => (e) => setter(e.target.value);
 
+  const { token } = useContext(AuthenticationContext)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!propertyName || !schedule || !fieldType || !missingPlayers || !date) {
-      alert("Please fill in all fields");
+      errorToast("Please fill in all fields");
       return;
     }
 
@@ -28,7 +33,6 @@ const PartidoForm = () => {
       missing_players: Number(missingPlayers),
     };
 
-    const token = localStorage.getItem("token");
 
     try {
       const response = await fetch("http://localhost:8080/api/games", {
@@ -41,7 +45,7 @@ const PartidoForm = () => {
       });
 
       if (response.ok) {
-        alert("Game created successfully");
+        successToast("Game created successfully");
         setPropertyName("");
         setSchedule("");
         setFieldType("");
@@ -49,10 +53,10 @@ const PartidoForm = () => {
         setMissingPlayers("");
       } else {
         const err = await response.json();
-        alert("Error creating game: " + (err.message || "Unknown error"));
+        errorToast("Error creating game: " + (err.message || "Unknown error"));
       }
     } catch (error) {
-      alert("Connection error: " + error.message);
+      errorToast("Connection error: " + error.message);
     }
   };
 
@@ -72,7 +76,7 @@ const PartidoForm = () => {
           type="text"
           name="schedule"
           value={schedule}
-          placeholder="Schedule (e.g. 18:00-20:00)"
+          placeholder="Schedule (e.g. 18 - 20 - 22)"
           onChange={handleChange(setSchedule)}
           className={inputStyle}
         />
@@ -81,7 +85,7 @@ const PartidoForm = () => {
           type="text"
           name="field_type"
           value={fieldType}
-          placeholder="Field Type (e.g. fútbol 5)"
+          placeholder="Field Type (e.g. 5 - 7 - 9)"
           onChange={handleChange(setFieldType)}
           className={inputStyle}
         />

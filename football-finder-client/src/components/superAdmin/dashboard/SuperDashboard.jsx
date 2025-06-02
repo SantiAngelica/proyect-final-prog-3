@@ -18,7 +18,7 @@ const SuperDashboard = () => {
       <Routes>
         <Route index element={<ListaUsuarios/>}></Route>
         <Route path="properties" element={<ListaPredios/>}/>
-        <Route path="Games" element={<ListaGames/>}/>
+        <Route path="games" element={<ListaGames/>}/>
       </Routes>
     </>
   )
