@@ -16,6 +16,7 @@ router.post("/newproperty",verifyToken, authorize('admin') ,PropertyService.post
 router.post("/:rid/acepted",verifyToken, authorize('admin'), PropertyService.postAceptReservation)
 
 
+
 router.delete("/:pid", verifyToken, authorize('admin'),PropertyService.deleteProperty)
 
 

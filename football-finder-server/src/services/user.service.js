@@ -12,17 +12,17 @@ const getUsers = async (req, res) => {
                     {
                         model: UserPosition,
                         as: 'positions',
-                        attributes: ['position'],
+                        attributes: ['position', 'id'],
                     },
                     {
                         model: UserComent,
                         as: 'comments',
-                        attributes: ['body'],
+                        attributes: ['body', 'id'],
                     },
                     {
                         model: UserField,
                         as: 'fieldsType',
-                        attributes: ['field'],
+                        attributes: ['field', 'id'],
                     }
                 ],
             }

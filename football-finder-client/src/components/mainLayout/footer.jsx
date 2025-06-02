@@ -1,4 +1,5 @@
 import React from "react";
+import { FaCopyright } from 'react-icons/fa'
 
 const Footer = () => {
   return (

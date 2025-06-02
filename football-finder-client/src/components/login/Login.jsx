@@ -15,6 +15,8 @@ const Login = ({ setIsLogged }) => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
+
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -59,11 +61,11 @@ const Login = ({ setIsLogged }) => {
         errorToast(data.message || "Error al iniciar sesión");
         return;
       }
-
-      localStorage.setItem("football-finder-token", data.token);
+  
+      localStorage.setItem("football-finder-token", data);
       successToast("Inicio de sesión exitoso.");
       setIsLogged(true);
-      navigate("/register");
+      navigate("/registers");
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
       errorToast("Error al conectar con el servidor.");

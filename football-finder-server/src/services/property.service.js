@@ -172,10 +172,11 @@ const deleteProperty = async (req, res) => {
 }
 
 
+
 export default {
     getPropertys,
     getGamesByProperty,
     postAceptReservation,
     postProperty,
-    deleteProperty
+    deleteProperty,
 }
