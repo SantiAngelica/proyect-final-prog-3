@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -18,15 +18,9 @@ import SuperDashboard from "./components/superAdmin/dashboard/SuperDashboard";
 import UserDashboard from "./components/user/dashboard/UserDashboard";
 
 function App() {
-  const [username, setUsername] = useState(localStorage.getItem("username"));
-
-  useEffect(() => {
-    const onStorageChange = () => {
-      setUsername(localStorage.getItem("username"));
-    };
-    window.addEventListener("storage", onStorageChange);
-    return () => window.removeEventListener("storage", onStorageChange);
-  }, []);
+  const [isLogged, setIsLogged] = useState(
+    () => !!localStorage.getItem("football-finder-token")
+  );
 
   return (
     <div className="d-flex flex-column align-items-center">
@@ -36,40 +30,13 @@ function App() {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route element={<MainLayout />}>
             <Route element={<Protected />}>
-              <Route
-                path="/admin/*"
-                element={
-                  <AdminDashboard
-                    username={username}
-                    setUsername={setUsername}
-                  />
-                }
-              />
-              <Route
-                path="/superadmin/*"
-                element={
-                  <SuperDashboard
-                    username={username}
-                    setUsername={setUsername}
-                  />
-                }
-              />
-              <Route
-                path="/user/*"
-                element={
-                  <UserDashboard
-                    username={username}
-                    setUsername={setUsername}
-                  />
-                }
-              />
+              <Route path="/admin/*" element={<AdminDashboard />} />
+              <Route path="/superadmin/*" element={<SuperDashboard />} />
+              <Route path="/user/*" element={<UserDashboard />} />
             </Route>
           </Route>
-          <Route
-            path="/home"
-            element={<Home username={username} setUsername={setUsername} />}
-          />
-          <Route path="/login" element={<Login setUsername={setUsername} />} />
+          <Route path="/home" element={<Home isLogged={isLogged} />} />
+          <Route path="/login" element={<Login setIsLogged={setIsLogged} />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
