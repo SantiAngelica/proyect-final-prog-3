@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import {
   validateEmail,
@@ -7,11 +7,10 @@ import {
 } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button from "../styles/Button";
+import Button1 from "../styles/Button1";
 
-const inputStyleBase =
-  "text-xs text-gray-500 font-bold w-full py-3 mb-4 border-b-2 bg-transparent outline-none";
-const errorInputStyle = "border-red-500";
-const normalInputStyle = "border-gray-500 focus:border-blue-500";
+const inputStyle =
+  "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +20,9 @@ const Register = () => {
   const [zone, setZone] = useState("");
   const [positions, setPositions] = useState([]);
   const [fields, setFields] = useState([]);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const nameRef = useRef(null);
 
   const [errors, setErrors] = useState({
     name: false,
@@ -50,14 +52,17 @@ const Register = () => {
     setErrors(newErrors);
 
     if (newErrors.name) {
+      nameRef.current.focus();
       errorToast("Nombre inválido");
       return;
     }
     if (newErrors.email) {
+      emailRef.current.focus();
       errorToast("Email inválido");
       return;
     }
     if (newErrors.password) {
+      passwordRef.current.focus();
       errorToast("Contraseña inválida");
       return;
     }
@@ -108,16 +113,17 @@ const Register = () => {
 
       <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
         <form onSubmit={handleSubmit} className="w-full max-w-md text-white">
-          <h2 className="text-2xl font-bold mb-4">Registrarse</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            ¡Crea una cuenta en un minuto!
+          </h2>
 
           <input
             type="text"
             placeholder="Nombre"
             value={name}
             onChange={handleNameChange}
-            className={`${inputStyleBase} ${
-              errors.name ? errorInputStyle : normalInputStyle
-            }`}
+            className={inputStyle}
+            ref={nameRef}
           />
 
           <input
@@ -125,9 +131,8 @@ const Register = () => {
             placeholder="Email"
             value={email}
             onChange={handleEmailChange}
-            className={`${inputStyleBase} ${
-              errors.email ? errorInputStyle : normalInputStyle
-            }`}
+            className={inputStyle}
+            ref={emailRef}
           />
 
           <input
@@ -135,45 +140,36 @@ const Register = () => {
             placeholder="Contraseña"
             value={password}
             onChange={handlePasswordChange}
-            className={`${inputStyleBase} ${
-              errors.password ? errorInputStyle : normalInputStyle
-            }`}
+            className={inputStyle}
+            ref={passwordRef}
           />
-
           <input
             type="number"
             placeholder="Edad"
             value={age}
             onChange={handleAgeChange}
-            className={`${inputStyleBase} ${normalInputStyle}`}
+            className={inputStyle}
           />
           <input
             type="text"
             placeholder="Zona"
             value={zone}
             onChange={handleZoneChange}
-            className={`${inputStyleBase} ${normalInputStyle}`}
+            className={inputStyle}
           />
           <input
             type="text"
             placeholder="Posiciones (ej: Arquero, Defensor)"
             value={positions}
             onChange={handlePositionsChange}
-            className={`${inputStyleBase} ${normalInputStyle}`}
-          />
-          <input
-            type="text"
-            placeholder="Canchas preferidas (ej: 5, 11)"
-            value={fields}
-            onChange={handleFieldsChange}
-            className={`${inputStyleBase} ${normalInputStyle} mb-6`}
+            className={inputStyle}
           />
 
-          <Button type="submit">Registrarse</Button>
+          <Button1 type="submit">Registrarse</Button1>
 
           <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
             <p className="text-xs font-light mb-3">¿Ya tienes una cuenta?</p>
-            <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
+            <Button1 onClick={handleNavigateToLogin}>Iniciar Sesión</Button1>
           </div>
         </form>
       </div>

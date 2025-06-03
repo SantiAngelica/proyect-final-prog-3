@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button from "../styles/Button";
+import Button1 from "../styles/Button1";
 import { jwtDecode } from "jwt-decode";
 
 const inputStyle =
@@ -66,7 +67,7 @@ const Login = ({ setIsLogged }) => {
       setIsLogged(true);
 
       // Redirección según rol
-      console.log(userRole)
+      console.log(userRole);
       if (userRole === "superadmin") navigate("/superadmin");
       else if (userRole === "admin") navigate("/admin");
       else navigate("/user");
@@ -92,16 +93,15 @@ const Login = ({ setIsLogged }) => {
 
       <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
         <div className="w-full h-auto flex flex-col  max-w-md">
-          <h1 className="text-white text-2xl font-bold text-start mb-6">
-            Bienvenidos a<br />
-            <span className="text-5xl bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
-              Football Finder
+          <h1 className="text-white text-md font-bold text-start">
+            <p className="mb-2"> Bienvenidos a</p>
+            <span className="text-5xl  flex flex-row mb-4">
+              <p className="bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
+                Football
+              </p>
+              <p className="font-normal text-white">Finder</p>
             </span>
           </h1>
-
-          <h2 className="text-white text-md font-bold text-start mb-3">
-            Iniciar sesión
-          </h2>
 
           <form onSubmit={handleSubmit}>
             <div>
@@ -127,16 +127,16 @@ const Login = ({ setIsLogged }) => {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit">Iniciar</Button>
+              <Button1 type="submit">Iniciar Sesión</Button1>
             </div>
           </form>
           <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
             <p className="text-xs font-light mb-3">
               ¿Aún no tienes una cuenta?
             </p>
-            <Button type="button" onClick={handleNavigateToRegister}>
+            <Button1 type="button" onClick={handleNavigateToRegister}>
               Registrarse
-            </Button>
+            </Button1>
           </div>
         </div>
       </div>
