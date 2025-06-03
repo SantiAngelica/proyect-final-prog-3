@@ -57,6 +57,7 @@ const UserItem = ({ user }) => {
                     return
                 }
                 successToast('User Deleted!')
+                window.location.reload()
                 return res.json
             })
             .catch((err) => {

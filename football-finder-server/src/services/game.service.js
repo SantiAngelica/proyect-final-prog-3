@@ -1,4 +1,4 @@
-import { Game, Property, PropertyTypeField, Reservation, ScheduleProperty, User,  } from "../model/index.model.js";
+import { Game, Property, PropertyTypeField, Reservation, ScheduleProperty, User, GameApplication, GameInvitation, GameUser } from "../model/index.model.js";
 import { validateNewGame } from "../utils/game.utils.js";
 import { sequelize } from "../model/index.model.js";
 import { validateRoleAndId } from "../utils/validation.utils.js";
@@ -27,7 +27,7 @@ const getAvailablesGames = async (req, res) => {
                         state: 'aceptada'
                     },
                     attributes: ['id', 'date', 'state'],
-                    include:[
+                    include: [
                         {
                             model: ScheduleProperty,
                             as: 'schedule',
@@ -37,7 +37,7 @@ const getAvailablesGames = async (req, res) => {
                             model: PropertyTypeField,
                             as: 'fieldType',
                             attributes: ['field_type'],
-                            include:[
+                            include: [
                                 {
                                     model: Property,
                                     as: 'property'
@@ -75,7 +75,7 @@ const getGameById = async (req, res) => {
 const postGame = async (req, res) => {
     //date debe ser en formato YYYY-MM-DD
     const { property_name, schedule, field_type, date, missing_players } = req.body;
-    if (!property_name|| !schedule || !field_type || !missing_players || !date)
+    if (!property_name || !schedule || !field_type || !missing_players || !date)
         return res.status(400).json({ message: "Missing data" })
     const t = await sequelize.transaction()
     try {
@@ -109,21 +109,32 @@ const postGame = async (req, res) => {
 }
 
 const deleteGame = async (req, res) => {
-    const { id } = req.params;
+    const { gid } = req.params;
     const t = await sequelize.transaction();
     try {
-        const game = await Game.findByPk(id, { transaction: t });
+        const game = await Game.findByPk(gid, { transaction: t });
         if (!game) return res.status(404).json({ message: "Game not found" });
 
-        if(!validateRoleAndId(req.user, game.dataValues.id_user_creator, false, 'admin'))
+        if (!validateRoleAndId(req.user, game.dataValues.id_user_creator, false, 'admin'))
             return res.status(401).json({ message: "Unauthorized" });
+        await GameApplication.destroy({
+            where: { id_game: gid },
+            transaction: t
+        });
 
+        await GameInvitation.destroy({
+            where: { id_game: gid },
+            transaction: t
+        });
 
-        await game.destroy({ transaction: t });
+        await GameUser.destroy({
+            where: { id_game: gid },
+            transaction: t
+        });
 
         const reservation = await Reservation.findOne({
             where: {
-                id_game: id
+                id_game: gid
             },
             transaction: t
         });
@@ -131,9 +142,13 @@ const deleteGame = async (req, res) => {
             await reservation.destroy({ transaction: t });
         }
 
+        await game.destroy({ transaction: t });
+
+
         await t.commit()
         return res.status(200).json({ message: "Game deleted successfully" });
     } catch (error) {
+        console.log(error)
         await t.rollback()
         return res.status(500).json({ message: "Internal server error", error });
     }

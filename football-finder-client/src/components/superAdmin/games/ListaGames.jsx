@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useContext } from 'react'
 import { AuthenticationContext } from '../../services/auth.context.jsx';
+import GameItem from './GameItem.jsx';
 
 function ListaGames() {
   const [games, setGames] = useState([])
@@ -40,7 +41,11 @@ function ListaGames() {
 
   return (
     <div className='games-container'>
-
+      {games.map(game => (
+        <div key={game.id} >
+          <GameItem game={game} />
+        </div>
+      ))}
     </div>
   )
 }
