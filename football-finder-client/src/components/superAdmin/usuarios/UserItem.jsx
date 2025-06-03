@@ -3,7 +3,12 @@ import styled from "styled-components";
 import { errorToast, successToast } from "../../toast/NotificationToast";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import Button1 from "../../styles/Button1.jsx";
-import Button from "../../styles/Button.jsx";
+import RedButton from "../../styles/RedButton.jsx";
+import {
+  CardContainer,
+  TittleCard,
+  SubTittleCard,
+} from "../../styles/Cards.jsx";
 
 const UserItem = ({ user }) => {
   const [role, setRole] = useState(user.rol);
@@ -68,17 +73,13 @@ const UserItem = ({ user }) => {
   };
 
   return (
-    <div className="flex flex-col items-center border border-gray-300 p-4 rounded-lg shadow-md">
-      <span className="text-lg font-semibold mb-1">{user.name}</span>
-      <input
-        className="font-semibold text-center text-blue-500 bg-gray-200 p-1 rounded-md mb-6"
-        value={role}
-        onChange={handleChange}
-      />
+    <div className={CardContainer}>
+      <span className={TittleCard}>{user.name}</span>
+      <input className={SubTittleCard} value={role} onChange={handleChange} />
 
       <div className="flex flex-col items-center gap-2">
         <Button1 onClick={handleClickRol}> Cambiar rol</Button1>
-        <Button onClick={handleClickDlt}> Borrar</Button>
+        <RedButton onClick={handleClickDlt}>Borrar usuario</RedButton>
       </div>
     </div>
   );
