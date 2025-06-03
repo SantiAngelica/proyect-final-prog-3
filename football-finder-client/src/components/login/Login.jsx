@@ -91,7 +91,7 @@ const Login = ({ setIsLogged }) => {
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover z-[-1]  grayscale brightness-[0.3]"
         >
-          <source src="/video1.mp4" type="video/mp4" />
+          <source src="/video 1.mp4" type="video/mp4" />
         </video>
       </div>
 
