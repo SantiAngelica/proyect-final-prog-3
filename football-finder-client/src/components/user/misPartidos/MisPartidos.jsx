@@ -40,7 +40,7 @@ const MisPartidos = ({ userId }) => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="p-4">
+    <div className="w-full h-full">
       <h2 className="text-xl font-bold mb-4">Historial de partidos</h2>
       {games.length === 0 ? (
         <p>No hay partidos registrados</p>

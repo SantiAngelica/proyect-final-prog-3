@@ -168,8 +168,9 @@ const Register = () => {
             onChange={handlePositionsChange}
             className={inputStyle}
           />
-
-          <Button1 type="submit">Registrarse</Button1>
+          <div className="flex justify-end">
+            <Button1 type="submit">Registrarse</Button1>
+          </div>
 
           <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
             <p className="text-xs font-light mb-3">¿Ya tienes una cuenta?</p>

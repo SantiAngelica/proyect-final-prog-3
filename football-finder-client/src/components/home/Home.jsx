@@ -1,6 +1,7 @@
 import Button from "../styles/Button";
 import Button1 from "../styles/Button1";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -11,6 +12,26 @@ const Home = () => {
 
   const handleNavigateToRegister = () => {
     navigate("/register");
+  };
+
+  const handleStart = () => {
+    const token = localStorage.getItem("football-finder-token");
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const userRole = decoded.role;
+
+        if (userRole === "superadmin") navigate("/superadmin");
+        else if (userRole === "admin") navigate("/admin");
+        else navigate("/user");
+      } catch (err) {
+        console.error("Token inválido o expirado:", err);
+        navigate("/login");
+      }
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -57,7 +78,7 @@ const Home = () => {
           canchas y viví el fútbol de manera simple, rápida y desde cualquier
           dispositivo.
         </p>
-        <Button1 onClick={handleNavigateToLogin}>Comenzar</Button1>
+        <Button1 onClick={handleStart}>Comenzar</Button1>
       </div>
     </div>
   );
