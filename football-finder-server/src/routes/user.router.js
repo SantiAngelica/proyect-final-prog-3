@@ -4,7 +4,7 @@ import UserService from "../services/user.service.js";
 import { verifyToken, authorize } from "../middlewares/authorization.middlewares.js";
 
 router.get("/",verifyToken, authorize('player') ,UserService.getUsers)
-router.get("/:id", verifyToken, authorize('player'),UserService.getUserById)
+router.get("/profile", verifyToken, authorize('player'),UserService.getUserById)
 router.get("/:id/my-games", verifyToken, authorize('player'),UserService.getGamesByUserCreator)
 router.get("/:id/play-in", verifyToken, authorize('player'),UserService.getGamesByUserParticipant)
 
@@ -19,7 +19,7 @@ router.delete("/comment/:cid",verifyToken, authorize('admin'),UserService.delete
 
 
 //si el rol es player, verificar que sea el mismo jugador que se esta actualizando
-router.put("/:id", verifyToken, authorize('player'),UserService.updateUser)
+router.put("/update", verifyToken, authorize('player'),UserService.updateUser)
 
 
 router.put('/rolechange/:id', verifyToken, authorize('superadmin'),UserService.updateUserRol)

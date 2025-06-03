@@ -64,7 +64,7 @@ const Login = ({ setIsLogged }) => {
       const userRole = decoded.role;
 
       successToast("Inicio de sesión exitoso.");
-      setIsLogged(true);
+
 
       // Redirección según rol
       console.log(userRole);

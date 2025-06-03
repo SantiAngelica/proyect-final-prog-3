@@ -3,7 +3,6 @@ import { User, UserField, UserComent, UserPosition, Game, GameUser } from "../mo
 import { validateRoleAndId } from "../utils/validation.utils.js";
 
 
-
 const getUsers = async (req, res) => {
     try {
         const users = await User.findAll(
@@ -34,7 +33,7 @@ const getUsers = async (req, res) => {
 }
 
 const getUserById = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.user
     try {
         const user = await User.findByPk(id, {
             include: [
@@ -127,8 +126,7 @@ const getGamesByUserParticipant = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-    const { id } = req.params
-    console.log("first")
+    const { id } = req.user
     try {
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
@@ -138,6 +136,7 @@ const deleteUser = async (req, res) => {
         await UserComent.destroy({ where: { user_id: id } })
         await UserField.destroy({ where: { user_id: id } })
         await UserPosition.destroy({ where: { user_id: id } })
+        
         await User.destroy({ where: { id: id } })
         res.status(204).json({message: 'User deleted!'})
     } catch (error) {
@@ -147,7 +146,7 @@ const deleteUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.user
     try {
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
