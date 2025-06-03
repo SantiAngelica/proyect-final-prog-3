@@ -1,4 +1,4 @@
-import React from 'react';
+
 import styled from 'styled-components';
 import { useContext } from 'react';
 import { AuthenticationContext } from '../../services/auth.context.jsx';
@@ -30,7 +30,7 @@ const GameItem = ({ game }) => {
             });
     }
 
-
+    console.log(game)
 
     return (
         <StyledWrapper>
@@ -71,7 +71,7 @@ const StyledWrapper = styled.div`
     height: 20px;
     width: 100%;
     border-radius: 6px;
-    background: rgba(255,255,255,0.9);
+
 
   }
 
@@ -79,7 +79,7 @@ const StyledWrapper = styled.div`
   .content-1 {
 
     border-radius: 12px;
-    background: rgba(255,255,255,0.9);
+ 
 
     margin: auto;
     display: flex;

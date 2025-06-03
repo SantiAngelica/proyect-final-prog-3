@@ -21,6 +21,19 @@ function UpdateForm() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!token) {
+      setError('No se encontró el token. Por favor inicia sesión.');
+      setLoading(false);
+      return;
+    }
+    setName('');
+    setEmail('');
+    setAge('');
+    setZone('');
+    setPositions([]);
+    setFieldsType([]);
+    setLoading(true);
+    setError(null);
     fetch(`http://localhost:8080/api/users/profile`, {
       headers: {
         'Content-Type': 'application/json',
@@ -42,7 +55,7 @@ function UpdateForm() {
       setFieldsType(data.fieldsType.map(field => field.field));
       setLoading(false);
     })
-  }, [uid]);
+  }, [token]);
 
   if (loading) return <p>Cargando datos del usuario...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
@@ -67,8 +80,9 @@ function UpdateForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!name || !email || !age || !zone || positions.length === 0 || fieldsType.length === 0) {
+    if (!name || !email || !age || !zone || positions.length === 0 || fieldsType.length === 0) {
       errorToast('Por favor, completa todos los campos');
+      return
     }
     const updatedProfile = {
       name,
@@ -87,18 +101,19 @@ function UpdateForm() {
       },
       body: JSON.stringify(updatedProfile)
     })
-    .then(res => { 
-      if (!res.ok) {
-        errorToast('Error al actualizar el perfil');
-      }
-      return res.json();
-    }).then(data => {
+      .then(res => {
+        if (!res.ok) {
+          errorToast('Error al actualizar el perfil');
+          return
+        }
+        return res.json();
+      }).then(data => {
         setName(data.name);
         setEmail(data.email);
         setAge(data.age);
         setZone(data.zone);
         successToast('Perfil actualizado correctamente');
-    })
+      })
   }
   return (
     <div>

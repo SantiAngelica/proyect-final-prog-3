@@ -5,8 +5,8 @@ import { verifyToken, authorize } from "../middlewares/authorization.middlewares
 
 router.get("/",verifyToken, authorize('player') ,UserService.getUsers)
 router.get("/profile", verifyToken, authorize('player'),UserService.getUserById)
-router.get("/:id/my-games", verifyToken, authorize('player'),UserService.getGamesByUserCreator)
-router.get("/:id/play-in", verifyToken, authorize('player'),UserService.getGamesByUserParticipant)
+router.get("/my-games", verifyToken, authorize('player'),UserService.getGamesByUserCreator)
+router.get("/play-in", verifyToken, authorize('player'),UserService.getGamesByUserParticipant)
 
 
 router.post("/comment/:rid/:sid", verifyToken, authorize('player'),UserService.postComent)

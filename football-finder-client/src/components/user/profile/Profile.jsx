@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AuthenticationContext } from '../../services/auth.context.jsx'
+import UpcomingGames from './UpcomingGames.jsx'
 import { errorToast } from '../../toast/NotificationToast.jsx'
+
 
 const Profile = () => {
   const {token} = useContext(AuthenticationContext)
@@ -29,7 +31,7 @@ const Profile = () => {
       setError('Error al obtener el perfil del usuario')
       setLoading(false)
     })
-  }, [])
+  }, [token])
 
 
   if (loading) return <p>Cargando datos del usuario...</p>;
@@ -51,6 +53,9 @@ const Profile = () => {
       </div>
       <div className="mt-4">
         <button className="text-red-500 hover:underline">Borrar perfil</button>
+      </div>
+      <div className="mt-4">
+        <UpcomingGames />
       </div>
     </div>
   )

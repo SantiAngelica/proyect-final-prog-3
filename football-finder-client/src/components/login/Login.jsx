@@ -59,7 +59,7 @@ const Login = ({ setIsLogged }) => {
       }
 
       localStorage.setItem("football-finder-token", token);
-
+      
       const decoded = jwtDecode(token); // Se decodifica el token
       const userRole = decoded.role;
 
@@ -71,6 +71,7 @@ const Login = ({ setIsLogged }) => {
       if (userRole === "superadmin") navigate("/superadmin");
       else if (userRole === "admin") navigate("/admin");
       else navigate("/user");
+      window.location.reload()
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
       errorToast("Error al conectar con el servidor.");
