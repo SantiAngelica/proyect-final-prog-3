@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthenticationContext } from "../../services/auth.context";
 
 const ListaPredios = () => {
   const [predios, setPredios] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const {token} = useContext(AuthenticationContext)
   useEffect(() => {
     const fetchPredios = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/properties");
+        const res = await fetch("http://localhost:8080/api/properties",{
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+        });
         if (!res.ok) throw new Error("No se pudieron cargar los predios");
 
         const data = await res.json();
@@ -32,14 +38,12 @@ const ListaPredios = () => {
       ) : (
         <ul className="space-y-3">
           {predios.map((predio) => (
-            <li
+            <div
               key={predio.id}
               className="border p-4 rounded shadow-sm bg-white"
             >
-              <p><strong>Nombre:</strong> {predio.name}</p>
-              <p><strong>Dirección:</strong> {predio.address}</p>
-              <p><strong>Teléfono:</strong> {predio.phone}</p>
-            </li>
+              
+            </div>
           ))}
         </ul>
       )}

@@ -19,7 +19,6 @@ const getPropertys = async (req, res) => {
             ]
         });
         if (propertys.length === 0) return res.status(404).json({ message: "No propertys found" });
-        console.log(propertys)
         return res.status(200).json(propertys);
     } catch (error) {
         console.log(error)

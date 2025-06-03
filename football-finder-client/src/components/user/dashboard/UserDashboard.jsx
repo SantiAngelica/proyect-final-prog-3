@@ -14,15 +14,15 @@ const UserDashboard = () => {
         links={[
           { item: "Create Game", url: "/user/create" },
           { item: "Game Record", url: "/user/record" },
-          { item: "Property list", url: "/user/properties" },
+          { item: "Property list", url: "/user" },
           { item: "Fields Details", url: "/user/details" },
         ]}
       />
 
       <Routes>
+        <Route index  element={<PropertyList />} />
         <Route path="create" element={<PartidoForm />} />
         <Route path="record" element={<MisPartidos />} />
-        <Route path="properties" element={<PropertyList />} />
         {/* <Route path="detalles" element={<CanchaDetail />} /> */}
       </Routes>
     </>
