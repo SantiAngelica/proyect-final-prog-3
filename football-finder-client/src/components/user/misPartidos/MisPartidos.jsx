@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 const MisPartidos = ({ userId }) => {
   const [games, setGames] = useState([]);
@@ -6,10 +6,10 @@ const MisPartidos = ({ userId }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("football-finder-token");
 
     if (!token) {
-      setError('No token found. Please log in.');
+      setError("No token found. Please log in.");
       setLoading(false);
       return;
     }
@@ -21,7 +21,7 @@ const MisPartidos = ({ userId }) => {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Failed to fetch games');
+          throw new Error("Failed to fetch games");
         }
         return res.json();
       })
@@ -31,19 +31,19 @@ const MisPartidos = ({ userId }) => {
       })
       .catch((err) => {
         console.error(err);
-        setError('Error loading game history.');
+        setError("Error loading game history.");
         setLoading(false);
       });
   }, [userId]);
 
-  if (loading) return <p>Loading game history...</p>;
+  if (loading) return <p>Cargando historial de partidos...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Game History</h2>
+      <h2 className="text-xl font-bold mb-4">Historial de partidos</h2>
       {games.length === 0 ? (
-        <p>No games registered</p>
+        <p>No hay partidos registrados</p>
       ) : (
         <ul className="space-y-2">
           {games.map((game) => (

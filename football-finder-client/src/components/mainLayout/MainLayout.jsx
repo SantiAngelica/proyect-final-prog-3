@@ -3,7 +3,7 @@ import Footer from "./Footer";
 
 const MainLayout = () => {
   return (
-    <div>
+    <div className="bg-black text-white w-screen h-auto flex flex-col items-center">
       <Outlet />
       <Footer />
     </div>
