@@ -39,7 +39,7 @@ const Home = () => {
       </nav>
 
       <div className="flex flex-col items-center justify-center text-center px-6 flex-grow z-10 max-w-4xl">
-        <h1 className="text-5xl font-extrabold mb-6">
+        <h1 className="text-5xl font-extrabold mb-4">
           Jugá{" "}
           <span className="bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
             donde
@@ -48,8 +48,9 @@ const Home = () => {
           <span className="bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
             cuando
           </span>{" "}
-          quieras. El fútbol está a un click.
+          quieras.
         </h1>
+        <h2 className="text-4xl font-semibold mb-6">Tu partido en un click.</h2>
         <p className="text-md text-gray-300 mb-8">
           Encontrá partidos cerca de tu ubicación, organizá tu propio encuentro
           o sumate a uno existente. Conectá con jugadores como vos, reservá

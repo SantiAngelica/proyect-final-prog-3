@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
-import Button from "../styles/Button";
 import Button1 from "../styles/Button1";
 import { jwtDecode } from "jwt-decode";
 
@@ -91,7 +90,7 @@ const Login = ({ setIsLogged }) => {
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover z-[-1]  grayscale brightness-[0.3]"
         >
-          <source src="/video 1.mp4" type="video/mp4" />
+          <source src="/video1.mp4" type="video/mp4" />
         </video>
       </div>
 
