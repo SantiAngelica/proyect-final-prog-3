@@ -20,7 +20,7 @@ const Home = () => {
         loop
         muted
         playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-10 blur-sm grayscale brightness-[0.3]"
+        className="absolute top-0 left-0 w-full h-full object-cover z-10 grayscale brightness-[0.3]"
       >
         <source src="/video-fondo.mp4" type="video/mp4" />
       </video>
@@ -38,7 +38,6 @@ const Home = () => {
         </div>
       </nav>
 
-      {/* Contenido central */}
       <div className="flex flex-col items-center justify-center text-center px-6 flex-grow z-10 max-w-4xl">
         <h1 className="text-5xl font-extrabold mb-6">
           Jugá{" "}

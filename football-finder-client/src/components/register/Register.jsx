@@ -104,11 +104,15 @@ const Register = () => {
   return (
     <div className="flex h-screen w-screen">
       <div className="hidden md:block w-1/2">
-        <img
-          src="/img 3.avif"
-          alt="Football"
-          className="object-cover w-full h-full"
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover z-[-1]  grayscale brightness-[0.3]"
+        >
+          <source src="/video1.mp4" type="video/mp4" />
+        </video>
       </div>
 
       <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
