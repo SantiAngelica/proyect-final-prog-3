@@ -48,7 +48,6 @@ const getAvailablesGames = async (req, res) => {
                     ]
                 }
             ],
-            attributes: ['id', 'missing_players']
         });
         if (games.length === 0) return res.status(404).json({ message: "No games availables" });
         return res.status(200).json(games);

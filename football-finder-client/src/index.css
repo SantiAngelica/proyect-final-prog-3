@@ -84,3 +84,10 @@ select:-webkit-autofill {
   width: 80%;
   margin: 0 auto;
 }
+
+.participations-container{
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+  align-items: center;
+}

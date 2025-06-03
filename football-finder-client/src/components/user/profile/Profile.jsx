@@ -3,12 +3,7 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast } from "../../toast/NotificationToast.jsx";
 import RedButton from "../../styles/RedButton.jsx";
 import Button1 from "../../styles/Button1.jsx";
-import {
-  CardContainer,
-  TittleCard,
-  SubTittleCard,
-  DatosCard,
-} from "../../styles/Cards.jsx";
+import { CardContainer, TittleCard, DatosCard } from "../../styles/Cards.jsx";
 
 const Profile = () => {
   const { token } = useContext(AuthenticationContext);
@@ -83,6 +78,9 @@ const Profile = () => {
         <div className="mt-4">
           <RedButton>Borrar perfil</RedButton>
         </div>
+      </div>
+      <div className="mt-4">
+        <UpcomingGames />
       </div>
     </div>
   );

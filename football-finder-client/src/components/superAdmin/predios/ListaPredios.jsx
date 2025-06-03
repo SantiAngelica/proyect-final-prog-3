@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
+import PropertyItem from "./PropertyItem";
 
 const ListaPredios = () => {
   const [predios, setPredios] = useState([]);
@@ -28,6 +29,7 @@ const ListaPredios = () => {
     fetchPredios();
   }, []);
 
+
   if (loading) return <p>Cargando predios...</p>;
 
   return (
@@ -42,7 +44,7 @@ const ListaPredios = () => {
               key={predio.id}
               className="border p-4 rounded shadow-sm bg-white"
             >
-              
+              <PropertyItem property={predio} />
             </div>
           ))}
         </ul>
