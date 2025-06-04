@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
-import { errorToast, successToast } from "../../toast/NotificationToast.jsx"
+import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
+import Button1 from "../../styles/Button1.jsx";
+import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -15,7 +17,7 @@ const PartidoForm = () => {
 
   const handleChange = (setter) => (e) => setter(e.target.value);
 
-  const { token } = useContext(AuthenticationContext)
+  const { token } = useContext(AuthenticationContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +34,6 @@ const PartidoForm = () => {
       date,
       missing_players: Number(missingPlayers),
     };
-
 
     try {
       const response = await fetch("http://localhost:8080/api/games", {
@@ -61,60 +62,58 @@ const PartidoForm = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "red", padding: "1rem" }}>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="property_name"
-          value={propertyName}
-          placeholder="Property Name"
-          onChange={handleChange(setPropertyName)}
-          className={inputStyle}
-        />
+    <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={CardContainer}>
+        <h2 className={TittleCard}>Crear partido</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="property_name"
+            value={propertyName}
+            placeholder="Nombre de la propiedad"
+            onChange={handleChange(setPropertyName)}
+            className={inputStyle}
+          />
 
-        <input
-          type="text"
-          name="schedule"
-          value={schedule}
-          placeholder="Schedule (e.g. 18 - 20 - 22)"
-          onChange={handleChange(setSchedule)}
-          className={inputStyle}
-        />
+          <input
+            type="text"
+            name="schedule"
+            value={schedule}
+            placeholder="Horario (por ejemplo: 18 - 20 - 22)"
+            onChange={handleChange(setSchedule)}
+            className={inputStyle}
+          />
 
-        <input
-          type="text"
-          name="field_type"
-          value={fieldType}
-          placeholder="Field Type (e.g. 5 - 7 - 9)"
-          onChange={handleChange(setFieldType)}
-          className={inputStyle}
-        />
+          <input
+            type="text"
+            name="field_type"
+            value={fieldType}
+            placeholder="Tipo de cancha (ej: 5 - 7 - 9)"
+            onChange={handleChange(setFieldType)}
+            className={inputStyle}
+          />
 
-        <input
-          type="date"
-          name="date"
-          value={date}
-          onChange={handleChange(setDate)}
-          className={inputStyle}
-        />
+          <input
+            type="date"
+            name="Fecha"
+            value={date}
+            onChange={handleChange(setDate)}
+            className={inputStyle}
+          />
 
-        <input
-          type="number"
-          name="missing_players"
-          value={missingPlayers}
-          placeholder="Missing Players"
-          onChange={handleChange(setMissingPlayers)}
-          className={inputStyle}
-          min={1}
-        />
+          <input
+            type="text"
+            name="missing_players"
+            value={missingPlayers}
+            placeholder="Jugadores faltantes"
+            onChange={handleChange(setMissingPlayers)}
+            className={inputStyle}
+            min={1}
+          />
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Create Game
-        </button>
-      </form>
+          <Button1 type="submit">Crear partido</Button1>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,83 +1,62 @@
-import React from 'react'
-import styled from 'styled-components';
-import { useState } from 'react';
+import React, { useState } from "react";
 
 function FieldListForm({ fields, onAddFields, onRemoveField }) {
-    const [newField, setNewField] = useState('');
+  const [newField, setNewField] = useState("");
 
-    const handleAdd = () => {
-        const trimmed = newField.trim();
-        if (trimmed !== '') {
-            onAddFields(trimmed);
-            setNewField('');
-        }
-    };
+  const handleAdd = () => {
+    const trimmed = newField.trim();
+    if (trimmed !== "") {
+      onAddFields(trimmed);
+      setNewField("");
+    }
+  };
 
-    const handleRemove = (pos) => {
-        onRemoveField(pos);
-    };
-    return (
-        <StyledWrapper>
-            <div className="flex gap-2 mb-2">
-                <input
-                    type="text"
-                    value={newField}
-                    onChange={(e) => setNewField(e.target.value)}
-                    placeholder="Nueva cancha"
-                    className="border rounded px-2 py-1"
-                />
-                <button
-                    type="button"
-                    onClick={handleAdd}
-                    className="bg-blue-500 text-white rounded px-2 py-1"
-                >
-                    Agregar
-                </button>
-            </div>
-            <ul className="list-size">
-                {fields.map((field, index) => (
-                    <li key={index} className="item-list">
-                        <button className="item-list-button" onClick={() => handleRemove(field)}>{field}</button>
-                    </li>
-                ))}
+  const handleRemove = (field) => {
+    onRemoveField(field);
+  };
 
-            </ul>
-        </StyledWrapper>
-    );
+  const inputStyle =
+    "text-xs text-white font-bold w-1/2 py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
+  return (
+    <div>
+      <div className="flex flex-row gap-4">
+        <input
+          type="text"
+          value={newField}
+          onChange={(e) => setNewField(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAdd();
+            }
+          }}
+          placeholder="Nueva cancha"
+          className={inputStyle}
+        />
+        <button
+          className="text-blue-500 text-sm hover:underline hover:cursor-pointer p-1"
+          type="button"
+          onClick={handleAdd}
+        >
+          Agregar cancha
+        </button>
+      </div>
+
+      <ul className="min-h-[48px] flex flex-wrap gap-2 items-start">
+        {fields.map((field, index) => (
+          <li key={index} className="text-xs">
+            <button
+              onClick={() => handleRemove(field)}
+              className="bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 hover:cursor-pointer transition-colors"
+            >
+              {field} <span className="ml-1 font-bold">✕</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-const StyledWrapper = styled.div`
 
-.list-size {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-
-    margin-top: 0.25rem;
-  }
-
-  .list-size .item-list {
-    list-style: none;
-  }
-
-  .list-size .item-list-button {
-    cursor: pointer;
-
-    padding: 0.5rem;
-    background-color: var(--zinc-800);
-
-    font-size: 0.75rem;
-    color: var(--light);
-
-    border: 2px solid var(--zinc-800);
-    border-radius: 0.25rem;
-
-    transition: all 0.3s ease-in-out;
-  }
-
-  .item-list-button:hover {
-    border: 2px solid red
-  }
-`
-
-export default FieldListForm
+export default FieldListForm;

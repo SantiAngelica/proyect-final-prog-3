@@ -1,36 +1,41 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import { SubTittleCard, TittleCard } from "../../styles/Cards";
 
 const PropertyItem = ({ property }) => {
-    console.log(property)
-    return (
-        <StyledWrapper>
-            <div className="card">
-                <div className="title">
-                    <span>{property.name}</span>
-                    <span>{property.zone}</span>
-                    <span>{property.adress}</span>
-                </div>
-                <div className="size">
-                    <span>Schedule:</span>
-                    <ul className="list-size">
-                        {property.schedules.map(sch => (
-                            <li className="item-list item-list-button" key={sch.id} >{sch.schedule}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="size">
-                    <span>Fields:</span>
-                    <ul className="list-size">
-                        {property.fields.map(fld => (
-                            <li className="item-list item-list-button" key={fld.id} >{fld.field_type}</li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        </StyledWrapper>
-    );
-}
+  console.log(property);
+  return (
+    <StyledWrapper>
+      <div className="card w-full">
+        <div className="title">
+          <span className={TittleCard}>{property.name}</span>
+          <span className={SubTittleCard}>{property.zone}</span>
+          <span className="">Dirección: {property.adress}</span>
+        </div>
+        <div className="size">
+          <span>Schedule:</span>
+          <ul className="list-size">
+            {property.schedules.map((sch) => (
+              <li className="item-list item-list-button" key={sch.id}>
+                {sch.schedule}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="size">
+          <span>Fields:</span>
+          <ul className="list-size">
+            {property.fields.map((fld) => (
+              <li className="item-list item-list-button" key={fld.id}>
+                {fld.field_type}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </StyledWrapper>
+  );
+};
 
 const StyledWrapper = styled.div`
   .card {
@@ -55,8 +60,6 @@ const StyledWrapper = styled.div`
     border-radius: 1rem;
   }
 
-
-
   .title {
     overflow: clip;
 
@@ -68,8 +71,8 @@ const StyledWrapper = styled.div`
     text-transform: capitalize;
     text-wrap: nowrap;
     text-overflow: ellipsis;
-    display:flex;
-    flex-direction: column
+    display: flex;
+    flex-direction: column;
   }
 
   .size {
@@ -151,6 +154,7 @@ const StyledWrapper = styled.div`
 
   .cart-button .cart-icon {
     width: 1rem;
-  }`;
+  }
+`;
 
 export default PropertyItem;

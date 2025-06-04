@@ -7,7 +7,7 @@ import Profile from "../profile/Profile.jsx";
 import UpdateForm from "../profile/UpdateForm.jsx";
 import GamesAvlb from "../gamesAvlb/GamesAvlb.jsx";
 import Participations from "../participations/Participations.jsx";
-import MyGames from "../myGames/MyGames.jsx"; 
+import MyGames from "../myGames/MyGames.jsx";
 import UsersList from "../myGames/UsersList.jsx";
 
 const UserDashboard = () => {
@@ -15,18 +15,18 @@ const UserDashboard = () => {
     <>
       <NavBar
         links={[
-          { item: "Perfil", url: "/user"},
           { item: "Crear juego", url: "/user/create-game" },
           { item: "Lista de propiedades", url: "/user/properties" },
-          { item: "Lista de partidos", url: '/user/availables-games'},
-          { item: "Invitaciones y Aplicaciones", url: '/user/participations'},
-          { item: "Mis juegos", url: '/user/my-games'},
+          { item: "Lista de partidos", url: "/user/availables-games" },
+          { item: "Invitaciones y Aplicaciones", url: "/user/participations" },
+          { item: "Mis juegos", url: "/user/my-games" },
+          { item: "Mi perfil", url: "/user" },
         ]}
       />
 
       <Routes>
-        <Route index element={<Profile/>} />
-        <Route path="update/:uid" element={<UpdateForm/>} />
+        <Route index element={<Profile />} />
+        <Route path="update/:uid" element={<UpdateForm />} />
         <Route path="create-game" element={<PartidoForm />} />
         <Route path="properties" element={<PropertyList />} />
         <Route path="availables-games" element={<GamesAvlb />} />

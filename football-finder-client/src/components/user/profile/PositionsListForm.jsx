@@ -1,16 +1,13 @@
-import React from 'react'
-import styled from 'styled-components';
-import { useState } from 'react';
-
+import React, { useState } from "react";
 
 function PositionsListForm({ positions, onAddPosition, onRemovePosition }) {
-  const [newPosition, setNewPosition] = useState('');
+  const [newPosition, setNewPosition] = useState("");
 
   const handleAdd = () => {
     const trimmed = newPosition.trim();
-    if (trimmed !== '') {
+    if (trimmed !== "") {
       onAddPosition(trimmed);
-      setNewPosition('');
+      setNewPosition("");
     }
   };
 
@@ -18,69 +15,48 @@ function PositionsListForm({ positions, onAddPosition, onRemovePosition }) {
     onRemovePosition(pos);
   };
 
+  const inputStyle =
+    "text-xs text-white font-bold py-3 w-1/2 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
   return (
-    <StyledWrapper>
-      <div className="flex gap-2 mb-2">
+    <div>
+      <div className="flex flex-row gap-4">
         <input
           type="text"
           value={newPosition}
           onChange={(e) => setNewPosition(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAdd();
+            }
+          }}
           placeholder="Nueva posición"
-          className="border rounded px-2 py-1"
+          className={inputStyle}
         />
         <button
+          className="text-blue-500 text-sm hover:underline hover:cursor-pointer"
           type="button"
           onClick={handleAdd}
-          className="bg-blue-500 text-white rounded px-2 py-1"
         >
-          Agregar
+          Agregar posición
         </button>
       </div>
 
-      <ul className="list-size">
+      <ul className="min-h-[48px] flex flex-wrap gap-2 items-start">
         {positions.map((position, index) => (
-          <li key={index} className="item-list flex justify-between items-center">
-            <button  className="item-list-button" onClick={() => handleRemove(position)}> {position}</button>
+          <li key={index} className="text-xs">
+            <button
+              onClick={() => handleRemove(position)}
+              className="bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 hover:cursor-pointer transition-colors"
+            >
+              {position} <span className="ml-1 font-bold">✕</span>
+            </button>
           </li>
         ))}
       </ul>
-    </StyledWrapper>
-  )
+    </div>
+  );
 }
 
-
-const StyledWrapper = styled.div`
-
-.list-size {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-
-    margin-top: 0.25rem;
-  }
-
-  .list-size .item-list {
-    list-style: none;
-  }
-
-  .list-size .item-list-button {
-    cursor: pointer;
-
-    padding: 0.5rem;
-    background-color: var(--zinc-800);
-
-    font-size: 0.75rem;
-    color: var(--light);
-
-    border: 2px solid var(--zinc-800);
-    border-radius: 0.25rem;
-
-    transition: all 0.3s ease-in-out;
-  }
-
-  .item-list-button:hover {
-    border: 2px solid red
-  }
-`
-export default PositionsListForm
+export default PositionsListForm;

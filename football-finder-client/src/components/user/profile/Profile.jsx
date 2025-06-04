@@ -1,9 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast } from "../../toast/NotificationToast.jsx";
+import UpcomingGames from "../profile/UpcomingGames";
 import RedButton from "../../styles/RedButton.jsx";
 import Button1 from "../../styles/Button1.jsx";
-import { CardContainer, TittleCard, DatosCard } from "../../styles/Cards.jsx";
+import {
+  CardContainer,
+  TittleCard,
+  inputStyle,
+  colorStrong,
+} from "../../styles/Cards.jsx";
 
 const Profile = () => {
   const { token } = useContext(AuthenticationContext);
@@ -37,39 +43,45 @@ const Profile = () => {
       });
   }, []);
 
-  const colorStrong = "font-normal pr-2";
-
-  if (loading) return <p>Cargando datos del usuario...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+        <p>Cargando datos del usuario...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+        <p className="text-red-500">{error}</p>;
+      </div>
+    );
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full">
       <div className={CardContainer}>
         <h2 className={TittleCard}>Perfil de Usuario</h2>
-        <div className="profile-info">
-          <p className={DatosCard}>
+
+        <div className="flex flex-col items-start w-full">
+          <p className={inputStyle}>
             {" "}
             <strong className={colorStrong}>Nombre:</strong> {user.name}
           </p>
-          <p className={DatosCard}>
+          <p className={inputStyle}>
             <strong className={colorStrong}>Email:</strong> {user.email}
           </p>
-          <p className={DatosCard}>
+          <p className={inputStyle}>
             <strong className={colorStrong}>Edad:</strong> {user.age}
           </p>
-          <p className={DatosCard}>
+
+          <p className={inputStyle}>
             <strong className={colorStrong}>Zona:</strong> {user.zone}
           </p>
-          <p className={DatosCard}>
+          <p className={inputStyle}>
             <strong className={colorStrong}>Posiciones:</strong>{" "}
             {user.positions.map((pos) => pos.position).join(", ")}
           </p>
-          <p className={DatosCard}>
+          <p className={inputStyle}>
             <strong className={colorStrong}>Canchas:</strong>{" "}
             {user.fieldsType.map((field) => field.field).join(", ")}
-          </p>
-          <p className={DatosCard}>
-            <strong className={colorStrong}>Comentarios:</strong>{" "}
-            {user.comments.map((field) => field.field).join(", ")}
           </p>
         </div>
         <Button1 className="mt-4">

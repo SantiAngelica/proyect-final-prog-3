@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Button from "../styles/Button";
 import Button1 from "../styles/Button1";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,20 @@ import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("football-finder-token");
+    if (token) {
+      try {
+        jwtDecode(token);
+        setIsLogged(true);
+      } catch (err) {
+        console.error("Token inválido:", err);
+        setIsLogged(false);
+      }
+    }
+  }, []);
 
   const handleNavigateToLogin = () => {
     navigate("/login");
@@ -53,10 +68,13 @@ const Home = () => {
           </p>
           <p className="text-xl ">Finder</p>
         </div>
-        <div className="flex flex-row gap-6">
-          <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
-          <Button1 onClick={handleNavigateToRegister}>Registrarse</Button1>
-        </div>
+
+        {!isLogged && (
+          <div className="flex flex-row gap-6">
+            <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
+            <Button1 onClick={handleNavigateToRegister}>Registrarse</Button1>
+          </div>
+        )}
       </nav>
 
       <div className="flex flex-col items-center justify-center text-center px-6 flex-grow z-10 max-w-4xl">

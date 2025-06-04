@@ -6,7 +6,6 @@ import {
   validateString,
 } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
-import Button from "../styles/Button";
 import Button1 from "../styles/Button1";
 
 const inputStyle =
@@ -148,7 +147,7 @@ const Register = () => {
             ref={passwordRef}
           />
           <input
-            type="number"
+            type="text"
             placeholder="Edad"
             value={age}
             onChange={handleAgeChange}
