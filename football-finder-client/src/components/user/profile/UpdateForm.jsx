@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
 import { useNavigate } from "react-router-dom";
+import RedButton from "../../styles/RedButton.jsx";
 
 import PositionListForm from "./PositionsListForm.jsx";
 import FieldListForm from "./FieldListForm.jsx";
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
-import Button1 from "../../styles/Button1.jsx";
+import Button from "../../styles/Button.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 
 function UpdateForm() {
@@ -137,7 +138,7 @@ function UpdateForm() {
         setAge(data.age);
         setZone(data.zone);
         successToast("Perfil actualizado correctamente");
-        navigate("/user");
+        navigate("/user/profile");
       });
   };
   return (
@@ -195,12 +196,10 @@ function UpdateForm() {
               onRemoveField={onRemoveField}
             />
           </div>
-          <Button1
-            type="submit"
-            className="bg-blue-500 text-white rounded px-2 py-1"
-          >
-            Guardar cambios
-          </Button1>
+          <Button type="submit">Guardar cambios</Button>
+          <div className="mt-4">
+            <RedButton>Borrar perfil</RedButton>
+          </div>
         </form>
       </div>
     </div>

@@ -88,9 +88,6 @@ const Profile = () => {
         <Button1 className="mt-4">
           <a href={`/user/update/${user.id}`}>Actualizar perfil</a>
         </Button1>
-        <div className="mt-4">
-          <RedButton>Borrar perfil</RedButton>
-        </div>
       </div>
       <div className="mt-4">
         <UpcomingGames />
