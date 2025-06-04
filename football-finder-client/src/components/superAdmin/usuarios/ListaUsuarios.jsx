@@ -37,6 +37,10 @@ function ListaUsuarios() {
       });
   }, []);
 
+  const onUserDelete = (userId) => {
+    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
+  }
+
   if (loading) return <p>Loading users...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -44,7 +48,7 @@ function ListaUsuarios() {
     <div className="user-container">
       {users.map((user) => (
         <div key={user.id}>
-          <UserItem user={user} />
+          <UserItem user={user} onUserDelete={onUserDelete}/>
         </div>
       ))}
     </div>

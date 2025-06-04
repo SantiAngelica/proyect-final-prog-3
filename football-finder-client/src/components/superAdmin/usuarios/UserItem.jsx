@@ -10,7 +10,7 @@ import {
   SubTittleCard,
 } from "../../styles/Cards.jsx";
 
-const UserItem = ({ user }) => {
+const UserItem = ({ user, onUserDelete }) => {
   const [role, setRole] = useState(user.rol);
   const { token } = useContext(AuthenticationContext);
   const handleChange = (e) => {
@@ -37,16 +37,17 @@ const UserItem = ({ user }) => {
     })
       .then((res) => {
         if (!res.ok) {
-          errorToast("Failed");
-          return;
+          throw new Error("Failed");
         }
         return res.json;
       })
       .then((data) => {
         successToast("Rol updated!");
+        onUserDelete(user.id);
       })
       .catch((err) => {
         console.log(err);
+        errorToast(err);
       });
   };
 
@@ -60,15 +61,14 @@ const UserItem = ({ user }) => {
     })
       .then((res) => {
         if (!res.ok) {
-          errorToast("Failed");
-          return;
+          throw new Error("Failed");
         }
         successToast("User Deleted!");
-        window.location.reload();
         return res.json;
       })
       .catch((err) => {
         console.log(err);
+        errorToast(err)
       });
   };
 

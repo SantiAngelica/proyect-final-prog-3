@@ -168,6 +168,13 @@ const Register = () => {
             onChange={handlePositionsChange}
             className={inputStyle}
           />
+          <input
+            type="text"
+            placeholder="Canchas (ej: 5, 7)"
+            value={fields}
+            onChange={handleFieldsChange}
+            className={inputStyle}
+          />
           <div className="flex justify-end">
             <Button1 type="submit">Registrarse</Button1>
           </div>

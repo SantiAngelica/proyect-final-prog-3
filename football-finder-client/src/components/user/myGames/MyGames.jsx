@@ -5,9 +5,12 @@ import { errorToast } from "../../toast/NotificationToast";
 import { ContainerStyle } from "../../styles/Container";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards";
 import Button1 from "../../styles/Button1";
+import AppItem from "./AppItem";
 
 function MyGames() {
   const [games, setGames] = useState([]);
+  const [applications, setApplications] = useState([]);
+  const [usersInGame, setUsersInGame] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthenticationContext);
@@ -21,22 +24,36 @@ function MyGames() {
     })
       .then((res) => {
         if (!res.ok) {
-          console.log("teta");
           errorToast("Error al cargar los juegos");
-          setError(false);
-          return;
+          setError(true);
+          return null;
         }
         return res.json();
       })
       .then((data) => {
-        if (data) setGames(data);
+        if (data) {
+          setGames(data)
+          const allApplications = data.flatMap(game => game.gameApplications);
+          const pendingApplications = allApplications.filter(app => app.state.trim().toLowerCase() === 'pendiente');
+          setApplications(pendingApplications);
+          const allUsersInGame = data.flatMap(game => game.players);
+          setUsersInGame(allUsersInGame);
+        }
         setLoading(false);
       })
       .catch((err) => {
         setError(true);
         errorToast("Error al cargar los juegos");
       });
-  });
+  }, []);
+
+
+  const onAcceptApplication = (applicationId, user) => {
+    setApplications((prevApplications) =>
+      prevApplications.filter((app) => app.id !== applicationId)
+    );
+    setUsersInGame((prevUsers) => [...prevUsers, { player: user }]);
+  }
 
   if (loading)
     return (
@@ -50,6 +67,7 @@ function MyGames() {
         <p className="text-red-500">{error}</p>;
       </div>
     );
+
 
   return (
     <div className={ContainerStyle}>
@@ -88,9 +106,25 @@ function MyGames() {
               <Button1>
                 <a href={`/user/users-list/${game.id}`}>Invitar jugadores</a>
               </Button1>
+              {usersInGame.length > 0 && <h2 className={TittleCard}>Jugadores confirmados:</h2>}
+              
+              <ul className="flex flex-col gap-2">
+                {usersInGame.map((user) => (
+                  <li key={user.id} className={inputStyle}>
+                    {user.player.name} ({user.player.email})
+                  </li>
+                ))}
+              </ul>
+              <h2 className={TittleCard}>Postulaciones pendientes:</h2>
+              <ul className="flex flex-col gap-2">
+                {applications.map((application) => (
+                  <AppItem key={application.id} application={application} onAcceptApplication={onAcceptApplication} />
+                ))}
+              </ul>
             </li>
           ))}
         </ul>
+
       </div>
     </div>
   );

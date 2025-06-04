@@ -1,5 +1,5 @@
 import {
-    User, UserField, UserComent, UserPosition, Game, GameUser, Reservation, PropertyTypeField, ScheduleProperty, Property
+    User, UserField, UserComent, UserPosition, Game, GameUser, Reservation, PropertyTypeField, ScheduleProperty, Property, GameApplication
 
 } from "../model/index.model.js";
 
@@ -105,6 +105,16 @@ const getGamesByUserCreator = async (req, res) => {
                             attributes: ['id', 'name', 'email']
                         }
                     ],
+                },
+                {
+                    model: GameApplication,
+                    as: 'gameApplications',
+                    include: [
+                        {
+                            model: User,
+                            as: 'userApplicant'
+                        }
+                    ]
                 }
             ],
             attributes: ['id', 'missing_players']
@@ -169,8 +179,9 @@ const getGamesByUserParticipant = async (req, res) => {
 }
 
 const deleteUser = async (req, res) => {
-    const { id } = req.user
+    const { id } = req.params
     try {
+        console.log("el id:",id)
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
         if (!validateRoleAndId(req.user, user.dataValues.id, false, 'admin'))
