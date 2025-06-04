@@ -16,10 +16,10 @@ const UserDashboard = () => {
       <NavBar
         links={[
           { item: "Crear juego", url: "/user/create-game" },
-          { item: "Lista de propiedades", url: "/user/properties" },
           { item: "Lista de partidos", url: "/user/availables-games" },
           { item: "Invitaciones y Aplicaciones", url: "/user/participations" },
-          { item: "Mis juegos", url: "/user/my-games" },
+          { item: "Mis partidos", url: "/user/my-games" },
+          { item: "Lista de propiedades", url: "/user/properties" },
           { item: "Mi perfil", url: "/user" },
         ]}
       />

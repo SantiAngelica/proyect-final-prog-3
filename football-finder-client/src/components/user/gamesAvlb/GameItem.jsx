@@ -1,107 +1,68 @@
-import styled from 'styled-components';
-import { useContext } from 'react';
-import { AuthenticationContext } from '../../services/auth.context.jsx';
-import { errorToast, successToast } from '../../toast/NotificationToast.jsx';
-
+import { useContext } from "react";
+import { AuthenticationContext } from "../../services/auth.context.jsx";
+import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
+import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
+import Button1 from "../../styles/Button1.jsx";
 
 const GameItem = ({ game }) => {
-  const { token } = useContext(AuthenticationContext)
+  const { token } = useContext(AuthenticationContext);
 
   const handleApply = async () => {
     fetch(`http://localhost:8080/api/participations/application/${game.id}`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
-          errorToast('Error al aplicar para el juego');
+          throw new Error("Error al aplicar para el juego");
         }
         return response.json();
       })
-      .then(data => {
-        successToast('Postulacion enviada correctamente');
+      .then(() => {
+        successToast("Postulación enviada correctamente");
       })
-      .catch(error => {
+      .catch((error) => {
         errorToast(error.message);
-      })
-  }
+      });
+  };
 
   return (
-    <StyledWrapper>
-      <div className="card">
-        <label className="info">
-          <span className="info-1">{game.userCreator.name}</span>
-          <span className="info-1">{game.reservation.fieldType.property.name}</span>
-        </label>
-        <div className="content-1">
-          <span className='info-1'>Date:{game.reservation.date} - {game.reservation.schedule.schedule}hs</span>
-          <span className='info-1'>Zone:{game.reservation.fieldType.property.zone}</span>
-          <span className='info-1'>Adress:{game.reservation.fieldType.property.adress}</span>
-        </div>
-        <button className='delete' onClick={handleApply}>Aplicar</button>
-      </div>
-    </StyledWrapper>
+    <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-full max-w-2xl">
+      <h2 className={TittleCard}>Partidos disponibles</h2>
+      <ul className="flex flex-col w-full gap-3 ">
+        <li className="border-2 border-gray-500 p-4 rounded-lg">
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Creador: </strong>
+            {game.userCreator.name}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Predio: </strong>
+            {game.reservation.fieldType.property.name}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Fecha: </strong>
+            {game.reservation.date}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Hora: </strong>
+            {game.reservation.schedule.schedule} hs
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Zona: </strong>
+            {game.reservation.fieldType.property.zone}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Dirección: </strong>
+            {game.reservation.fieldType.property.adress}
+          </li>
+          <Button1 onClick={handleApply}>Aplicar</Button1>
+        </li>
+      </ul>
+    </div>
   );
-}
-
-const StyledWrapper = styled.div`
-  .card {
-    border-radius: 44px;
-    background: lightgrey;
-    background:  #3405a3;
-    padding: 20px;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-
-  .info {
-    display: inline-block;
-    vertical-align: top;
-    padding: 10px;
-  }
-
-  .info-1{
-    display: inline-block;
-    height: 20px;
-    width: 100%;
-    border-radius: 6px;
-
-
-  }
-
-
-  .content-1 {
-
-    border-radius: 12px;
- 
-
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 10px;
-  }
-    button {
-   padding: 8px 25px;
-   display: block;
-   margin: auto;
-   border-radius: 8px;
-   border: none;
-   margin-top: 30px;
-
-   color: white;
-   font-weight: 600;
-  }
-.delete {
-   background: blue
-  }
-   
-  button:hover {
-   cursor: pointer;
-  }
-`
+};
 
 export default GameItem;

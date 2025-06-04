@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "../../styles/Button";
 
 function FieldListForm({ fields, onAddFields, onRemoveField }) {
   const [newField, setNewField] = useState("");
@@ -20,7 +21,7 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
 
   return (
     <div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row items-center gap-4">
         <input
           type="text"
           value={newField}
@@ -34,13 +35,9 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
           placeholder="Nueva cancha"
           className={inputStyle}
         />
-        <button
-          className="text-blue-500 text-sm hover:underline hover:cursor-pointer p-1"
-          type="button"
-          onClick={handleAdd}
-        >
-          Agregar cancha
-        </button>
+        <Button type="button" onClick={handleAdd}>
+          Agregar
+        </Button>
       </div>
 
       <ul className="min-h-[48px] flex flex-wrap gap-2 items-start">

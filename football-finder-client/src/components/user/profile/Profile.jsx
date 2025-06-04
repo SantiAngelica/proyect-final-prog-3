@@ -4,6 +4,7 @@ import { errorToast } from "../../toast/NotificationToast.jsx";
 import UpcomingGames from "../profile/UpcomingGames";
 import RedButton from "../../styles/RedButton.jsx";
 import Button1 from "../../styles/Button1.jsx";
+import { ContainerStyle } from "../../styles/Container.jsx";
 import {
   CardContainer,
   TittleCard,
@@ -45,18 +46,18 @@ const Profile = () => {
 
   if (loading)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={ContainerStyle}>
         <p>Cargando datos del usuario...</p>
       </div>
     );
   if (error)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={ContainerStyle}>
         <p className="text-red-500">{error}</p>
       </div>
     );
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full">
+    <div className={ContainerStyle}>
       <div className={CardContainer}>
         <h2 className={TittleCard}>Perfil de Usuario</h2>
 

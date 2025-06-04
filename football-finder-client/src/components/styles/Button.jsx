@@ -4,7 +4,7 @@ const Button = ({ children, onClick, type = "button", ...props }) => {
       onClick={onClick}
       type={type}
       {...props}
-      className="bg-transparent border-2 border-blue-500 rounded-xl px-4 hover:cursor-pointer text-white flex flex-row items-start text-start gap-2 py-1 relative group hover:border-blue-700 transition-all duration-300"
+      className="cursor-pointer bg-transparent hover:bg-blue-600 border-2 border-blue-500 hover:border-blue-700 text-blue-500 hover:text-white rounded-xl px-5 py-1 flex items-center justify-center gap-2 transition-all duration-300"
     >
       <span className="text-md text-start">{children}</span>
     </button>

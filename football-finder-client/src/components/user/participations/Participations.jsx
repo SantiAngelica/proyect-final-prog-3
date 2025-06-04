@@ -5,6 +5,7 @@ import { errorToast } from "../../toast/NotificationToast";
 import InvItem from "./InvItem.jsx";
 import AppItem from "./AppItem.jsx";
 import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
+import { ContainerStyle } from "../../styles/Container.jsx";
 
 function Participations() {
   const { token } = useContext(AuthenticationContext);
@@ -70,27 +71,27 @@ function Participations() {
 
   if (loadingApp || loadingInv)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={ContainerStyle}>
         <p>Cargando participaciones del usuario...</p>
       </div>
     );
   if (error)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={ContainerStyle}>
         <p className="text-red-500">{error}</p>
       </div>
     );
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full">
+    <div className={ContainerStyle}>
       <div className={CardContainer}>
+        <h2 className={TittleCard}>Postulaciones</h2>
         {applications.length > 0 && (
-          <ul className="flex flex-col items-start justify-start w-full">
-            <h2 className={TittleCard}>Postulaciones:</h2>
+          <ul className="flex flex-col items-start justify-start w-full gap-6">
             {applications.map((app) => (
               <li
                 key={app.id}
-                className="flex flex-col items-start justify-start w-full"
+                className="flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
               >
                 <AppItem app={app} />
               </li>
@@ -98,12 +99,12 @@ function Participations() {
           </ul>
         )}
       </div>
-      <div className="invitations">
+      <div className="w-full max-w-4xl mt-8">
         {invitations.length > 0 && (
-          <ul className="invitations__list">
-            <h1 className="invitations__title mb-5">Invitaciones:</h1>
+          <ul className="flex flex-col gap-6">
+            <h1 className="text-xl font-bold text-white mb-4">Invitaciones</h1>
             {invitations.map((inv) => (
-              <li key={inv.id} className="invitation__item">
+              <li key={inv.id}>
                 <InvItem inv={inv} onAccept={handleInvitationAccepted} />
               </li>
             ))}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "../../styles/Button";
 
 function PositionsListForm({ positions, onAddPosition, onRemovePosition }) {
   const [newPosition, setNewPosition] = useState("");
@@ -20,7 +21,7 @@ function PositionsListForm({ positions, onAddPosition, onRemovePosition }) {
 
   return (
     <div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row items-center gap-4">
         <input
           type="text"
           value={newPosition}
@@ -34,13 +35,9 @@ function PositionsListForm({ positions, onAddPosition, onRemovePosition }) {
           placeholder="Nueva posición"
           className={inputStyle}
         />
-        <button
-          className="text-blue-500 text-sm hover:underline hover:cursor-pointer"
-          type="button"
-          onClick={handleAdd}
-        >
-          Agregar posición
-        </button>
+        <Button type="button" onClick={handleAdd}>
+          Agregar
+        </Button>
       </div>
 
       <ul className="min-h-[48px] flex flex-wrap gap-2 items-start">

@@ -8,6 +8,7 @@ import PositionListForm from "./PositionsListForm.jsx";
 import FieldListForm from "./FieldListForm.jsx";
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import Button1 from "../../styles/Button1.jsx";
+import { ContainerStyle } from "../../styles/Container.jsx";
 
 function UpdateForm() {
   const navigate = useNavigate();
@@ -65,13 +66,13 @@ function UpdateForm() {
 
   if (loading)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={ContainerStyle}>
         <p>Cargando datos del usuario...</p>
       </div>
     );
   if (error)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <div className={ContainerStyle}>
         <p className="text-red-500">{error}</p>
       </div>
     );
@@ -140,7 +141,7 @@ function UpdateForm() {
       });
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full">
+    <div className={ContainerStyle}>
       <div className={CardContainer}>
         <h2 className={TittleCard}>Actualizar Perfil</h2>
         <form className="w-full" onSubmit={handleSubmit}>

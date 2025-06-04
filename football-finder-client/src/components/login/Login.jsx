@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button1 from "../styles/Button1";
+import Button from "../styles/Button";
 import { jwtDecode } from "jwt-decode";
 
 const inputStyle =
@@ -50,27 +51,25 @@ const Login = ({ setIsLogged }) => {
         body: JSON.stringify({ email, password }),
       });
 
-      const token = await res.json();
-
       if (!res.ok) {
-        errorToast(token.message || "Error al iniciar sesión");
+        const errorData = await res.json();
+        errorToast(errorData.message || "Error al iniciar sesión");
         return;
       }
 
+      const token = await res.json();
       localStorage.setItem("football-finder-token", token);
-      
-      const decoded = jwtDecode(token); // Se decodifica el token
+
+      const decoded = jwtDecode(token);
       const userRole = decoded.role;
 
       successToast("Inicio de sesión exitoso.");
 
-
-      // Redirección según rol
-      console.log(userRole);
       if (userRole === "superadmin") navigate("/superadmin");
       else if (userRole === "admin") navigate("/admin");
       else navigate("/user");
-      window.location.reload()
+
+      window.location.reload();
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
       errorToast("Error al conectar con el servidor.");
@@ -89,17 +88,17 @@ const Login = ({ setIsLogged }) => {
           loop
           muted
           playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-[-1]  grayscale brightness-[0.3]"
+          className="absolute top-0 left-0 w-full h-full object-cover z-[-1] grayscale brightness-[0.3]"
         >
           <source src="/video1.mp4" type="video/mp4" />
         </video>
       </div>
 
       <div className="w-full md:w-1/2 bg-black flex items-center justify-center">
-        <div className="w-full h-auto flex flex-col  max-w-md">
+        <div className="w-full h-auto flex flex-col max-w-md">
           <h1 className="text-white text-md font-bold text-start">
             <p className="mb-2"> Bienvenidos a</p>
-            <span className="text-5xl  flex flex-row mb-4">
+            <span className="text-5xl flex flex-row mb-4">
               <p className="bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
                 Football
               </p>
@@ -138,9 +137,9 @@ const Login = ({ setIsLogged }) => {
             <p className="text-xs font-light mb-3">
               ¿Aún no tienes una cuenta?
             </p>
-            <Button1 type="button" onClick={handleNavigateToRegister}>
+            <Button type="button" onClick={handleNavigateToRegister}>
               Registrarse
-            </Button1>
+            </Button>
           </div>
         </div>
       </div>

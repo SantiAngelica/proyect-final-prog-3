@@ -3,10 +3,8 @@ import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
 import Button1 from "../../styles/Button1.jsx";
-import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
-
-const inputStyle =
-  "text-xs text-gray-500 font-bold w-full py-3 mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
+import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
+import { ContainerStyle } from "../../styles/Container.jsx";
 
 const PartidoForm = () => {
   const [propertyName, setPropertyName] = useState("");
@@ -62,7 +60,7 @@ const PartidoForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full">
+    <div className={ContainerStyle}>
       <div className={CardContainer}>
         <h2 className={TittleCard}>Crear partido</h2>
         <form onSubmit={handleSubmit}>

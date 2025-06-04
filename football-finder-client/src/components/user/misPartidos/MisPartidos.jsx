@@ -49,7 +49,7 @@ const MisPartidos = ({ userId }) => {
           {games.map((game) => (
             <li key={game.id} className="border p-3 rounded shadow">
               <div className="font-semibold">{game.property_name}</div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-red">
                 {new Date(game.date).toLocaleDateString()} — {game.schedule}
               </div>
             </li>

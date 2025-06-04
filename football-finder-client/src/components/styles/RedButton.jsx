@@ -4,7 +4,7 @@ const RedButton = ({ children, onClick, type = "button", ...props }) => {
       onClick={onClick}
       type={type}
       {...props}
-      className="bg-red-500 hover:bg-red-900 border-2-transparent border- rounded-xl px-4 hover:cursor-pointer text-white flex flex-row items-start text-start gap-2 py-1 relative group hover:border-blue-700 transition-all duration-300"
+      className="cursor-pointer bg-red-600 hover:bg-red-700 border-2 border-red-600 hover:border-red-800 text-white rounded-xl px-5 py-1 flex items-center justify-center gap-2 transition-all duration-300"
     >
       <span className="text-md text-start">{children}</span>
     </button>

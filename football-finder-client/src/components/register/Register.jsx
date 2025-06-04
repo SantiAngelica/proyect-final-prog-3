@@ -7,6 +7,7 @@ import {
 } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button1 from "../styles/Button1";
+import Button from "../styles/Button";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -173,7 +174,7 @@ const Register = () => {
 
           <div className="text-white text-start pt-3 border-t border-gray-800 mt-6">
             <p className="text-xs font-light mb-3">¿Ya tienes una cuenta?</p>
-            <Button1 onClick={handleNavigateToLogin}>Iniciar Sesión</Button1>
+            <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
           </div>
         </form>
       </div>

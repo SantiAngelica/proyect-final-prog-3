@@ -1,47 +1,44 @@
-import React, { useEffect, useState } from "react";
-import Button from "../styles/Button";
-import Button1 from "../styles/Button1";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Button from "../styles/Button";
+import Button1 from "../styles/Button1";
+import { AuthenticationContext } from "../services/auth.context";
+import { isTokenValid } from "../services/auth/auth.helpers";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { token } = useContext(AuthenticationContext);
   const [isLogged, setIsLogged] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("football-finder-token");
-    if (token) {
-      try {
-        jwtDecode(token);
-        setIsLogged(true);
-      } catch (err) {
-        console.error("Token inválido:", err);
-        setIsLogged(false);
-      }
-    }
-  }, []);
-
-  const handleNavigateToLogin = () => {
-    navigate("/login");
-  };
-
-  const handleNavigateToRegister = () => {
-    navigate("/register");
-  };
-
-  const handleStart = () => {
-    const token = localStorage.getItem("football-finder-token");
-
-    if (token) {
+    if (token && isTokenValid(token)) {
+      setIsLogged(true);
       try {
         const decoded = jwtDecode(token);
-        const userRole = decoded.role;
-
-        if (userRole === "superadmin") navigate("/superadmin");
-        else if (userRole === "admin") navigate("/admin");
-        else navigate("/user");
+        console.log("Token decodificado:", decoded);
+        setUsername(decoded.name || "Usuario");
       } catch (err) {
-        console.error("Token inválido o expirado:", err);
+        console.error("Error decodificando token:", err);
+      }
+    } else {
+      setIsLogged(false);
+      setUsername("");
+    }
+  }, [token]);
+
+  const handleNavigateToLogin = () => navigate("/login");
+  const handleNavigateToRegister = () => navigate("/register");
+
+  const handleStart = () => {
+    if (token && isTokenValid(token)) {
+      try {
+        const { role } = jwtDecode(token);
+        if (role === "superadmin") navigate("/superadmin");
+        else if (role === "admin") navigate("/admin");
+        else navigate("/user");
+      } catch {
         navigate("/login");
       }
     } else {
@@ -66,15 +63,21 @@ const Home = () => {
           <p className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
             Football
           </p>
-          <p className="text-xl ">Finder</p>
+          <p className="text-xl">Finder</p>
         </div>
 
-        {!isLogged && (
-          <div className="flex flex-row gap-6">
-            <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
-            <Button1 onClick={handleNavigateToRegister}>Registrarse</Button1>
-          </div>
-        )}
+        <div className="flex flex-row gap-6 items-center">
+          {isLogged ? (
+            <p className="text-sm text-gray-200">
+              ¡Hola, <span className="font-semibold">{username}</span>!
+            </p>
+          ) : (
+            <>
+              <Button onClick={handleNavigateToLogin}>Iniciar Sesión</Button>
+              <Button1 onClick={handleNavigateToRegister}>Registrarse</Button1>
+            </>
+          )}
+        </div>
       </nav>
 
       <div className="flex flex-col items-center justify-center text-center px-6 flex-grow z-10 max-w-4xl">
