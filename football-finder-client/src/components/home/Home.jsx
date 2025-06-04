@@ -58,7 +58,7 @@ const Home = () => {
         <source src="/video-fondo.mp4" type="video/mp4" />
       </video>
 
-      <nav className="h-[80px] w-full flex items-center justify-between px-12 z-10">
+      <nav className="h-[60px] w-full flex items-center justify-between px-12 z-10">
         <div className="flex flex-row">
           <p className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
             Football
@@ -68,8 +68,12 @@ const Home = () => {
 
         <div className="flex flex-row gap-6 items-center">
           {isLogged ? (
-            <p className="text-sm text-gray-200">
-              ¡Hola, <span className="font-semibold">{username}</span>!
+            <p className="text-sm text-gray-200 px-12">
+              Hola,{" "}
+              <span className="font-semibold text-2xl text-blue-400">
+                {username}
+              </span>{" "}
+              !
             </p>
           ) : (
             <>

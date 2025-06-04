@@ -6,7 +6,7 @@ const NavBar = ({ links = [] }) => {
 
   return (
     <nav className="fixed top-0 w-screen h-[60px] z-50 flex items-center justify-between px-12 text-white backdrop-blur-md bg-black/30 border-b border-white/10 shadow-md">
-      <div className="flex flex-row items-center px-12">
+      <div className="flex flex-row items-center">
         <Link to="/" className="flex">
           <p className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-900 bg-clip-text text-transparent">
             Football
@@ -15,7 +15,7 @@ const NavBar = ({ links = [] }) => {
         </Link>
       </div>
 
-      <div className="flex items-center px-24">
+      <div className="flex items-center px-12">
         <ul className="flex gap-11">
           {links.map((link) => {
             const isActive = location.pathname === link.url;

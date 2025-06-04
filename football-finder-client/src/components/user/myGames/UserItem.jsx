@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
-import Button1 from "../../styles/Button1";
+import Button from "../../styles/Button";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards";
 
 function UserItem({ user }) {
@@ -57,9 +57,9 @@ function UserItem({ user }) {
         <strong className={colorStrong}>Zona:</strong>
         {user.zone}
       </p>
-      <Button1 className="text-blue-500 hover:underline" onClick={handleInvite}>
+      <Button className="text-blue-500 hover:underline" onClick={handleInvite}>
         Invitar
-      </Button1>
+      </Button>
     </div>
   );
 }
