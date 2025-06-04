@@ -54,23 +54,9 @@ const register = async (req, res) => {
       user_id: newUser.id,
     }));
     await UserField.bulkCreate(userFields);
+    const token = generateToken(email, newUser.rol, newUser.id, newUser.name);
 
-    const userResponse = await User.findByPk(newUser.id, {
-      include: [
-        {
-          model: UserPosition,
-          as: "positions",
-          attributes: ["position"],
-        },
-        {
-          model: UserField,
-          as: "fieldsType",
-          attributes: ["field"],
-        },
-      ],
-    });
-
-    res.status(201).json(userResponse);
+    res.status(201).json(token);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

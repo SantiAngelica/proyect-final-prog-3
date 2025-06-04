@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
+
 import {
   validateEmail,
   validatePassword,
@@ -8,7 +9,7 @@ import {
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button1 from "../styles/Button1";
 import Button from "../styles/Button";
-
+import { jwtDecode } from "jwt-decode";
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
 
@@ -89,9 +90,16 @@ const Register = () => {
         console.error("Error en registro:", data.message);
         throw new Error(data.message || "Error al registrar");
       }
+      const token = await res.json();
+      localStorage.setItem("football-finder-token", token);
 
-      successToast("Registro exitoso, iniciá sesión.");
-      navigate("/");
+      const decoded = jwtDecode(token);
+      const userRole = decoded.role;
+      
+      successToast("Registro exitoso");
+      if (userRole === "superadmin") navigate("/superadmin");
+      else if (userRole === "admin") navigate("/admin");
+      else navigate("/user");
     } catch (err) {
       errorToast(err.message);
     }
