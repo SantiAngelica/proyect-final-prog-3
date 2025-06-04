@@ -38,7 +38,7 @@ function MyGames() {
   if (loading)
     return (
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
-        <p>Cargando mis juegos...</p>;
+        <p>Cargando mis juegos...</p>
       </div>
     );
   if (error)

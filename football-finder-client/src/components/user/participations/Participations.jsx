@@ -77,7 +77,7 @@ function Participations() {
   if (error)
     return (
       <div className="flex flex-col items-center justify-center min-h-screen w-full">
-        <p className="text-red-500">{error}</p>;
+        <p className="text-red-500">{error}</p>
       </div>
     );
 
