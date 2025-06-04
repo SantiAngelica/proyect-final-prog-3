@@ -18,7 +18,7 @@ const Home = () => {
       try {
         const decoded = jwtDecode(token);
         console.log("Token decodificado:", decoded);
-        setUsername(decoded.name || "Usuario");
+        setUsername(decoded.username || "Usuario");
       } catch (err) {
         console.error("Error decodificando token:", err);
       }

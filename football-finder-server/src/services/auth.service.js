@@ -89,7 +89,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "User doesent exists" });
     if (!comparePassword(password, existingUser.password))
       return res.status(401).json({ message: "email or password incorrect" });
-    const token = generateToken(email, existingUser.rol, existingUser.id);
+    const token = generateToken(email, existingUser.rol, existingUser.id, existingUser.name);
     return res.json(token);
   } catch (error) {
     res.status(500).json({ message: error.message });

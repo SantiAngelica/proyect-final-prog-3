@@ -13,6 +13,6 @@ export const comparePassword = async (pass, userPass) => {
   return await bcrypt.compare(pass, userPass);
 };
 
-export const generateToken = (email, role, id) => {
-  return jwt.sign({ email, role, id }, secretKey, { expiresIn: "1h" });
+export const generateToken = (email, role, id, username) => {
+  return jwt.sign({ email, role, id, username }, secretKey, { expiresIn: "1h" });
 };
