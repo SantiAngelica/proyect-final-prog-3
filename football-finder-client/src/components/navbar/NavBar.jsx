@@ -6,10 +6,10 @@ import { useContext } from "react";
 const NavBar = ({ links = [] }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {handleUserLogout} = useContext(AuthenticationContext)
+  const { handleUserLogout } = useContext(AuthenticationContext);
   const handleLogout = () => {
     handleUserLogout();
-  }
+  };
 
   return (
     <nav className="fixed top-0 w-screen h-[60px] z-50 flex items-center justify-between px-12 text-white backdrop-blur-md bg-black/30 border-b border-white/10 shadow-md">
@@ -23,7 +23,7 @@ const NavBar = ({ links = [] }) => {
       </div>
 
       <div className="flex items-center px-12">
-        <ul className="flex gap-11">
+        <ul className="flex gap-11 items-center">
           {links.map((link) => {
             const isActive = location.pathname === link.url;
             return (
@@ -32,7 +32,7 @@ const NavBar = ({ links = [] }) => {
                   to={link.url}
                   className={`relative text-sm font-semibold transition-colors duration-300 
     ${isActive ? "text-blue-400" : "hover:text-white"} 
-    after:absolute after:left-0 after:top-1/3 after:translate-y-1/2 after:rounded-full
+    after:absolute after:left-0 after:top-4 after:translate-y-1/2 after:rounded-full
     after:h-[2px] after:bg-blue-400 after:w-0 hover:after:w-full 
     after:transition-all after:duration-500`}
                 >
@@ -42,7 +42,10 @@ const NavBar = ({ links = [] }) => {
             );
           })}
           <li>
-            <MdLogout onClick={handleLogout}/>
+            <MdLogout
+              className="text-2xl cursor-pointer"
+              onClick={handleLogout}
+            />
           </li>
         </ul>
       </div>

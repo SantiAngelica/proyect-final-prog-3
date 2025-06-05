@@ -109,12 +109,17 @@ function MyGames() {
                   <a href={`/user/users-list/${game.id}`}>Invitar jugadores</a>
                 </Button1>
                 {usersInGame.length > 0 && (
-                  <h2 className={TittleCard}>Jugadores confirmados:</h2>
+                  <h2 className="text-lg text-blue-400 font-semibold mb-1 mt-6">
+                    Jugadores confirmados:
+                  </h2>
                 )}
 
                 <ul className="flex flex-col gap-2">
                   {usersInGame.map((user) => (
-                    <li key={user.id} className={inputStyle}>
+                    <li
+                      key={user.id}
+                      className="text-xs text-white font-bold w-full py-3  mb-2 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none"
+                    >
                       {user.player.name}{" "}
                       <strong className={colorStrong}>
                         ({user.player.email})
