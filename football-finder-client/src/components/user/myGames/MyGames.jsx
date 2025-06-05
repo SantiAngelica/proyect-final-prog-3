@@ -73,7 +73,9 @@ function MyGames() {
     <div className={ContainerStyle}>
       {loading && <p>Cargando juegos...</p>}
       {error && <p>Error al cargar los juegos.</p>}
-      {games.length === 0 && !loading ? <p>No tienes juegos creados.</p> :
+      {games.length === 0 && !loading ? (
+        <p>No tienes juegos creados.</p>
+      ) : (
         <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 h-1/2">
           <h2 className={TittleCard}>Mis partidos</h2>
           <ul className="flex flex-col w-full gap-12">
@@ -106,11 +108,18 @@ function MyGames() {
                 <Button1>
                   <a href={`/user/users-list/${game.id}`}>Invitar jugadores</a>
                 </Button1>
-                {usersInGame.length > 0 && <h2 className={TittleCard}>Jugadores confirmados:</h2>}
+                {usersInGame.length > 0 && (
+                  <h2 className="text-lg text-blue-400 font-semibold mb-1 mt-6">
+                    Jugadores confirmados:
+                  </h2>
+                )}
 
                 <ul className="flex flex-col gap-2">
                   {usersInGame.map((user) => (
-                    <li key={user.id} className={inputStyle}>
+                    <li
+                      key={user.id}
+                      className="text-xs text-white font-bold w-full py-3  mb-2 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none"
+                    >
                       {user.player.name}{" "}
                       <strong className={colorStrong}>
                         ({user.player.email})
@@ -118,7 +127,11 @@ function MyGames() {
                     </li>
                   ))}
                 </ul>
-                {applications.length > 0 && <h2 className={TittleCard}>Postulaciones pendientes:</h2>}
+                {applications.length > 0 && (
+                  <h2 className="text-lg text-blue-400 font-semibold mb-1">
+                    Postulaciones pendientes:
+                  </h2>
+                )}
                 <ul className="flex flex-col gap-2">
                   {applications.map((application) => (
                     <AppItem
@@ -131,10 +144,8 @@ function MyGames() {
               </li>
             ))}
           </ul>
-
         </div>
-      }
-
+      )}
     </div>
   );
 }
