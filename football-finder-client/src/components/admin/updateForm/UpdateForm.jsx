@@ -57,7 +57,7 @@ function UpdateForm() {
         setName(data.name);
         setAdress(data.adress);
         setZone(data.zone);
-        console.log(data)
+
         setSchedules(data.schedules.map((sch) => sch.schedule));
         setFieldsType(data.fields.map((field) => field.field_type));
         setLoading(false);
@@ -138,6 +138,28 @@ function UpdateForm() {
         navigate("/admin");
       });
   };
+
+  const handleDelete = () => {
+    fetch(`http://localhost:8080/api/properties/${pid}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          errorToast("Error al eliminar la propiedad");
+          return;
+        }
+        successToast("Propiedad eliminada correctamente");
+        navigate("/admin");
+      })
+      .catch((error) => {
+        console.error(error);
+        errorToast("Error al eliminar la propiedad");
+      });
+  }
   return (
     <div className={ContainerStyle}>
       <div className={CardContainer}>
@@ -186,7 +208,7 @@ function UpdateForm() {
           </div>
           <Button type="submit">Guardar cambios</Button>
           <div className="mt-4">
-            <RedButton>Borrar perfil</RedButton>
+            <RedButton onClick={handleDelete}>Borrar propiedad</RedButton>
           </div>
         </form>
       </div>

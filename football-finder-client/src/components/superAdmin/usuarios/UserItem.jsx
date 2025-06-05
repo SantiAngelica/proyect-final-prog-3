@@ -44,7 +44,7 @@ const UserItem = ({ user, onUserDelete }) => {
       })
       .then((data) => {
         successToast("Rol updated!");
-        onUserDelete(user.id);
+
       })
       .catch((err) => {
         console.log(err);
@@ -65,6 +65,7 @@ const UserItem = ({ user, onUserDelete }) => {
           throw new Error("Failed");
         }
         successToast("User Deleted!");
+        onUserDelete(user.id);
         return res.json;
       })
       .catch((err) => {

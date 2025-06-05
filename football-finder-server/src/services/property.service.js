@@ -104,14 +104,14 @@ const getGamesByProperty = async (req, res) => {
 const postProperty = async (req, res) => {
     const { name, adress, zone, schedule, fields_type } = req.body
     try {
-        if (!name || !adress || !zone || !schedule || !fields_type)
-            return res.status(400).json({ message: "Missing data" })
+        if (!name || !adress || !zone || schedule.length < 1 || fields_type.length < 1)
+            return res.status(400).json({ message: "Falta Informacion" })
 
         const userOwner = await User.findByPk(req.user.id)
         if (!userOwner) return res.status(404).json({ message: 'User not found' })
 
         const existingProperty = await Property.findOne({ where: { name: name.toLowerCase() } })
-        if (existingProperty) return res.status(400).json({ message: 'Property name already taken' })
+        if (existingProperty) return res.status(400).json({ message: 'Nombre de la propiedad ya tomado' })
 
         const newProperty = await Property.create({
             id_user_owner: req.user.id,

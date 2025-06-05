@@ -4,7 +4,15 @@ export const validateString = (str, minLength, maxLength) => {
 
   return true;
 };
+export const validarDireccion = (direccion) => {
+  if (!direccion || typeof direccion !== "string") {
+    return false;
+  }
 
+  const direccionRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+\s+\d+.*$/;
+
+  return direccionRegex.test(direccion.trim());
+}
 export const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);

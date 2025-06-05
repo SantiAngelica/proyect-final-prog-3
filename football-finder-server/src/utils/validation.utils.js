@@ -40,7 +40,7 @@ const roleOrder = {
 }
 export const validateRoleAndId = (user, requiredId, onlyId, requiredRole) => {
     if (onlyId) return user.id == requiredId
-    console.log(user)
+  
     const hasrole = roleOrder[user.role] >= roleOrder[requiredRole]
     const isowner = user.id == requiredId
 
