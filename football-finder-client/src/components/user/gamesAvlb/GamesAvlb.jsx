@@ -26,6 +26,11 @@ function GamesAvlb() {
     })
       .then((res) => {
         if (!res.ok) {
+          if (res.status == 404) {
+            return res.json().then((data) => {
+              throw new Error("No hay juegos disponibles");
+            });
+          }
           throw new Error("Failed to fetch games");
         }
         return res.json();
@@ -39,7 +44,7 @@ function GamesAvlb() {
       })
       .catch((err) => {
         console.error(err);
-        setError("Error loading games.");
+        setError(err.message || "Error loading games.");
         setLoading(false);
       });
   }, [token]);

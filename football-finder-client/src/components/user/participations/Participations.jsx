@@ -84,35 +84,41 @@ function Participations() {
 
   return (
     <div className={ContainerStyle}>
-      <div className={CardContainer}>
-        <h2 className={TittleCard}>Postulaciones</h2>
-        {applications.length > 0 && (
-          <ul className="flex flex-col items-start justify-start w-full gap-6">
-            {applications.map((app) => (
-              <li
-                key={app.id}
-                className="flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
-              >
-                <AppItem app={app} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="w-full max-w-4xl mt-8">
-        {invitations.length > 0 && (
-          <ul className="flex flex-col gap-6">
-            <h1 className="text-xl font-bold text-white mb-4">Invitaciones</h1>
-            {invitations.map((inv) => (
-              <li key={inv.id}>
-                <InvItem inv={inv} onAccept={handleInvitationAccepted} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      {applications.length === 0 && invitations.length === 0 ?
+        <p className="text-white text-lg">No tienes postulaciones ni invitaciones</p>
+        :
+        <div className={CardContainer}>
+
+          {applications.length > 0 && (
+            <ul className="flex flex-col items-start justify-start w-full gap-6">
+              <h2 className={TittleCard}>Postulaciones</h2>
+              {applications.map((app) => (
+                <li
+                  key={app.id}
+                  className="flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
+                >
+                  <AppItem app={app} />
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="w-full max-w-4xl mt-8">
+            {invitations.length > 0 && (
+              <ul className="flex flex-col gap-6">
+                <h1 className="text-xl font-bold text-white mb-4">Invitaciones</h1>
+                {invitations.map((inv) => (
+                  <li key={inv.id}>
+                    <InvItem inv={inv} onAccept={handleInvitationAccepted} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+        </div>
+      }
     </div>
-  );
+  );s
 }
 
 export default Participations;

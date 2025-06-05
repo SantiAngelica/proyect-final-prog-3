@@ -24,12 +24,15 @@ function UserItem({ user }) {
     )
       .then((res) => {
         if (!res.ok) {
-          errorToast("Error al enviar la invitacion");
+          return res.json().then((data) => {
+            throw new Error(data.message || "Error al obtener los partidos");
+          });
         }
         successToast("Invitacion enviada!");
       })
       .catch((err) => {
         console.log(err);
+        errorToast(err.message || "Error al enviar la invitacion");
       });
   };
   return (

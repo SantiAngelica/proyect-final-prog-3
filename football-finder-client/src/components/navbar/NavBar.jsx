@@ -1,8 +1,15 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { MdLogout } from "react-icons/md";
+import { AuthenticationContext } from "../services/auth.context";
+import { useContext } from "react";
 
 const NavBar = ({ links = [] }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {handleUserLogout} = useContext(AuthenticationContext)
+  const handleLogout = () => {
+    handleUserLogout();
+  }
 
   return (
     <nav className="fixed top-0 w-screen h-[60px] z-50 flex items-center justify-between px-12 text-white backdrop-blur-md bg-black/30 border-b border-white/10 shadow-md">
@@ -34,6 +41,9 @@ const NavBar = ({ links = [] }) => {
               </li>
             );
           })}
+          <li>
+            <MdLogout onClick={handleLogout}/>
+          </li>
         </ul>
       </div>
     </nav>

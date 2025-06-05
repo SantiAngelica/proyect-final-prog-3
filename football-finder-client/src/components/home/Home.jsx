@@ -14,6 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     if (token && isTokenValid(token)) {
+
       setIsLogged(true);
       try {
         const decoded = jwtDecode(token);

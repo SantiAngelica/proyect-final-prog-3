@@ -21,6 +21,7 @@ export const AuthenticationContextProvider = ({ children }) => {
   const handleUserLogout = () => {
     localStorage.removeItem("football-finder-token");
     setToken(null);
+
   };
 
   // Provee el contexto a los componentes hijos
