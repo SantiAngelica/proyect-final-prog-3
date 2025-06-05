@@ -8,6 +8,7 @@ import {
   CardContainer,
   TittleCard,
   SubTittleCard,
+  inputStyle,
 } from "../../styles/Cards.jsx";
 
 const UserItem = ({ user, onUserDelete }) => {
@@ -68,17 +69,17 @@ const UserItem = ({ user, onUserDelete }) => {
       })
       .catch((err) => {
         console.log(err);
-        errorToast(err)
+        errorToast(err);
       });
   };
 
   return (
-    <div className={CardContainer}>
+    <div className="flex flex-col items-start justify-start w-full">
       <span className={TittleCard}>{user.name}</span>
-      <input className={SubTittleCard} value={role} onChange={handleChange} />
+      <input className={inputStyle} value={role} onChange={handleChange} />
 
-      <div className="flex flex-col items-center gap-2">
-        <Button1 onClick={handleClickRol}> Cambiar rol</Button1>
+      <div className="flex flex-col items-start gap-4">
+        <Button1 onClick={handleClickRol}>Cambiar rol</Button1>
         <RedButton onClick={handleClickDlt}>Borrar usuario</RedButton>
       </div>
     </div>

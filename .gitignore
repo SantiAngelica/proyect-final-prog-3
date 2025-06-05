@@ -2,3 +2,4 @@ node_modules/
 football-finder-server/node_modules/
 football-finder-client/node_modules/
 football-finder-server/DBbackup/
+football-finder-server/football-finder-server.db
