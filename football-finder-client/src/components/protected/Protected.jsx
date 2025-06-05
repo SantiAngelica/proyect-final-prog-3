@@ -6,7 +6,7 @@ import { AuthenticationContext } from "../services/auth.context";
 const Protected = () => {
   const { token } = useContext(AuthenticationContext);
   if (!isTokenValid(token)) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/home" replace />;
   } else {
     return <Outlet />;
   }

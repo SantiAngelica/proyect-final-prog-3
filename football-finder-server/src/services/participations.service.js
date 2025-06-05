@@ -9,10 +9,17 @@ const postInvitation = async (req, res) => {
     try {
         const reciever = await User.findByPk(recieverId)
         const game = await Game.findByPk(gameId)
-        if (!reciever) return res.status(404).json({ message: 'User not found' })
-        if (!game) return res.status(404).json({ message: 'Game not found' })
+        const exisitingInv = await GameInvitation.findOne({
+            where: {
+                id_user_reciever: recieverId,
+                id_game: gameId
+            }
+        })
+        if (!reciever) return res.status(404).json({ message: 'Usuario no encontrado' })
+        if (!game) return res.status(404).json({ message: 'Juego no encontrado' })
+        if (exisitingInv) return res.status(400).json({ message: 'Ya lo has invitado a tu partido' })
         if (game.dataValues.id_user_creator == recieverId) {
-            return res.status(400).json({ message: 'You cannot invite yourself to your own game' })
+            return res.status(400).json({ message: 'No puedes invitarte a tu partido' })
         }
         if (!validateRoleAndId(req.user, game.dataValues.id_user_creator, true))
             return res.status(401).json({ message: "Unauthorized" });
@@ -34,15 +41,16 @@ const postApplication = async (req, res) => {
     try {
         const applicant = await User.findByPk(applicantId)
         const game = await Game.findByPk(gameId)
-        const existingApp = await GameApplication.findAll({
-            where:{
+        const existingApp = await GameApplication.findOne({
+            where: {
                 id_user_applicant: applicantId,
                 id_game: gameId
             }
         })
         if (!applicant) return res.status(404).json({ message: 'User not found' })
         if (!game) return res.status(404).json({ message: 'Game not found' })
-        if (existingApp) return res.status(400).json({message: 'You alredy applied to this game'})
+        console.log(existingApp)
+        if (existingApp) return res.status(400).json({ message: 'You alredy applied to this game' })
         if (game.dataValues.id_user_creator == applicantId) {
             return res.status(400).json({ message: 'You cannot apply to your own game' })
         }

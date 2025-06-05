@@ -39,31 +39,33 @@ const GameItem = ({ game }) => {
       <h2 className={TittleCard}>Partidos disponibles</h2>
       <ul className="flex flex-col w-full gap-3 ">
         <li className="border-2 border-gray-500 p-4 rounded-lg">
-          <li className={inputStyle}>
-            <strong className={colorStrong}>Creador: </strong>
-            {game.userCreator.name}
-          </li>
-          <li className={inputStyle}>
-            <strong className={colorStrong}>Predio: </strong>
-            {game.reservation.fieldType.property.name}
-          </li>
-          <li className={inputStyle}>
-            <strong className={colorStrong}>Fecha: </strong>
-            {game.reservation.date}
-          </li>
-          <li className={inputStyle}>
-            <strong className={colorStrong}>Hora: </strong>
-            {game.reservation.schedule.schedule} hs
-          </li>
-          <li className={inputStyle}>
-            <strong className={colorStrong}>Zona: </strong>
-            {game.reservation.fieldType.property.zone}
-          </li>
-          <li className={inputStyle}>
-            <strong className={colorStrong}>Dirección: </strong>
-            {game.reservation.fieldType.property.adress}
-          </li>
-          <Button1 onClick={handleApply}>Postularse</Button1>
+          <ul>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Creador: </strong>
+              {game.userCreator.name}
+            </li>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Predio: </strong>
+              {game.reservation.fieldType.property.name}
+            </li>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Fecha: </strong>
+              {game.reservation.date}
+            </li>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Hora: </strong>
+              {game.reservation.schedule.schedule} hs
+            </li>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Zona: </strong>
+              {game.reservation.fieldType.property.zone}
+            </li>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Dirección: </strong>
+              {game.reservation.fieldType.property.adress}
+            </li>
+            <Button1 onClick={handleApply}>Postularse</Button1>
+          </ul>
         </li>
       </ul>
     </div>

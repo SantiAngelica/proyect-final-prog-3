@@ -17,6 +17,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [hasGames, setHasGames] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/users/profile", {
@@ -58,9 +59,12 @@ const Profile = () => {
     );
   return (
     <div className={ContainerStyle}>
-      <div className="w-full mb-6">
-        <UpcomingGames />
-      </div>
+      {!hasGames && (
+        <div className="w-full mb-6">
+          <UpcomingGames />
+        </div>
+      )}
+
       <div className={CardContainer}>
         <h2 className={TittleCard}>Perfil de Usuario</h2>
 

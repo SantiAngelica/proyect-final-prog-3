@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router";
 import { validateEmail, validatePassword } from "../auth/auth.services";
 import { errorToast, successToast } from "../toast/NotificationToast";
 import Button1 from "../styles/Button1";
 import Button from "../styles/Button";
 import { jwtDecode } from "jwt-decode";
+import { AuthenticationContext } from "../services/auth.context";
 
 const inputStyle =
   "text-xs text-gray-500 font-bold w-full py-3  mb-6 border-b-2 border-gray-500 focus:border-blue-500 bg-transparent outline-none appearance-none rounded-none";
@@ -16,6 +17,7 @@ const Login = ({ setIsLogged }) => {
   const navigate = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const {handleUserLogin} = useContext(AuthenticationContext);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -58,7 +60,7 @@ const Login = ({ setIsLogged }) => {
       }
 
       const token = await res.json();
-      localStorage.setItem("football-finder-token", token);
+      handleUserLogin(token);
 
       const decoded = jwtDecode(token);
       const userRole = decoded.role;
@@ -69,7 +71,6 @@ const Login = ({ setIsLogged }) => {
       else if (userRole === "admin") navigate("/admin");
       else navigate("/user");
 
-      window.location.reload();
     } catch (err) {
       console.error("Error al conectar con el servidor:", err);
       errorToast("Error al conectar con el servidor.");

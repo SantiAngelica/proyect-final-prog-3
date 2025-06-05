@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
-import { CardContainer } from "../../styles/Cards.jsx";
+import { jwtDecode } from "jwt-decode";
 
 import UserItem from "./UserItem.jsx";
 
@@ -18,6 +18,8 @@ function UsersList() {
       setLoading(false);
       return;
     }
+    const decoded = jwtDecode(token);
+    const userId = decoded.id;
     fetch("http://localhost:8080/api/users", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -30,7 +32,9 @@ function UsersList() {
         return res.json();
       })
       .then((data) => {
-        setUsers(data);
+        const filteredUsers = data.filter((user) => user.rol === "player" && user.id !== userId);
+
+        setUsers(filteredUsers);
         setLoading(false);
       })
       .catch((err) => {
