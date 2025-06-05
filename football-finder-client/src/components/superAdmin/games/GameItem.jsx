@@ -7,7 +7,8 @@ import RedButton from "../../styles/RedButton.jsx";
 import {
   CardContainer,
   TittleCard,
-  SubTittleCard,
+  inputStyle,
+  colorStrong,
 } from "../../styles/Cards.jsx";
 
 const GameItem = ({ game }) => {
@@ -36,24 +37,29 @@ const GameItem = ({ game }) => {
   };
 
   return (
-    <div className={CardContainer}>
-      <label className="flex flex-col">
+    <div className="flex flex-col items-start justify-start w-full">
+      <div className="flex flex-col w-full">
         <span className={TittleCard}>{game.userCreator.name}</span>
-        <span className={SubTittleCard}>
-          {game.reservation.fieldType.property.name}
+        <span className={inputStyle}>
+          <strong className={inputStyle}>
+            {game.reservation.fieldType.property.name}
+          </strong>
         </span>
-      </label>
-      <div className="flex flex-col text-center justify-center">
-        <span className="mb-2">
-          Date:{game.reservation.date} - {game.reservation.schedule.schedule}
+      </div>
+      <div className="flex flex-col w-full">
+        <p className={inputStyle}>
+          <strong className={colorStrong}>Date:</strong>
+          {game.reservation.date} - {game.reservation.schedule.schedule}
           hs
-        </span>
-        <span className="mb-2">
-          Zone:{game.reservation.fieldType.property.zone}
-        </span>
-        <span className="mb-2">
-          Adress:{game.reservation.fieldType.property.adress}
-        </span>
+        </p>
+        <p className={inputStyle}>
+          <strong className={colorStrong}>Zone:</strong>
+          {game.reservation.fieldType.property.zone}
+        </p>
+        <p className={inputStyle}>
+          <strong className={colorStrong}>Adress:</strong>
+          {game.reservation.fieldType.property.adress}
+        </p>
       </div>
       <RedButton onClick={handleDelete}>Borrar</RedButton>
     </div>

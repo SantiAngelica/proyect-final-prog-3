@@ -32,11 +32,13 @@ function MyGames() {
       })
       .then((data) => {
         if (data) {
-          setGames(data)
-          const allApplications = data.flatMap(game => game.gameApplications);
-          const pendingApplications = allApplications.filter(app => app.state.trim().toLowerCase() === 'pendiente');
+          setGames(data);
+          const allApplications = data.flatMap((game) => game.gameApplications);
+          const pendingApplications = allApplications.filter(
+            (app) => app.state.trim().toLowerCase() === "pendiente"
+          );
           setApplications(pendingApplications);
-          const allUsersInGame = data.flatMap(game => game.players);
+          const allUsersInGame = data.flatMap((game) => game.players);
           setUsersInGame(allUsersInGame);
         }
         setLoading(false);
@@ -47,13 +49,12 @@ function MyGames() {
       });
   }, []);
 
-
   const onAcceptApplication = (applicationId, user) => {
     setApplications((prevApplications) =>
       prevApplications.filter((app) => app.id !== applicationId)
     );
     setUsersInGame((prevUsers) => [...prevUsers, { player: user }]);
-  }
+  };
 
   if (loading)
     return (
@@ -68,11 +69,11 @@ function MyGames() {
       </div>
     );
 
-
   return (
     <div className={ContainerStyle}>
       {loading && <p>Cargando juegos...</p>}
       {error && <p>Error al cargar los juegos.</p>}
+<<<<<<< HEAD
       {games.length === 0 && !loading ? <p>No tienes juegos creados.</p> :
         <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 h-1/2">
           <h2 className={TittleCard}>Mis partidos</h2>
@@ -127,6 +128,76 @@ function MyGames() {
 
         </div>
       }
+=======
+      {games.length === 0 && !loading && <p>No tienes juegos creados.</p>}
+      <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 h-1/2">
+        <h2 className={TittleCard}>Mis partidos</h2>
+        <ul className="flex flex-col w-full gap-12">
+          {games.map((game) => (
+            <li
+              className="border-2 border-gray-500 p-4 rounded-lg"
+              key={game.id}
+            >
+              <h2 className={inputStyle}>
+                <strong className={colorStrong}>Predio: </strong>
+                {game.reservation.fieldType.property.name}
+              </h2>
+              <p className={inputStyle}>
+                <strong className={colorStrong}>Descripción: </strong>
+                {game.description}
+              </p>
+              <p className={inputStyle}>
+                <strong className={colorStrong}>Fecha: </strong>
+                {game.reservation.date}
+              </p>
+              <p className={inputStyle}>
+                <strong className={colorStrong}>Hora: </strong>
+                {game.reservation.schedule.schedule}
+                <strong className={colorStrong}> hs</strong>
+              </p>
+              <p className={inputStyle}>
+                <strong className={colorStrong}>Jugadores restantes: </strong>
+                {game.missing_players}
+              </p>
+              <div className="mb-6">
+                <Button1>
+                  <a href={`/user/users-list/${game.id}`}>Invitar jugadores</a>
+                </Button1>
+              </div>
+
+              {usersInGame.length > 0 && (
+                <h2 className="text-lg text-blue-400 font-semibold mb-4">
+                  Jugadores confirmados:
+                </h2>
+              )}
+
+              <ul className="flex flex-col gap-2">
+                {usersInGame.map((user) => (
+                  <li key={user.id} className={inputStyle}>
+                    {user.player.name}{" "}
+                    <strong className={colorStrong}>
+                      ({user.player.email})
+                    </strong>
+                  </li>
+                ))}
+              </ul>
+              <h2 className="text-lg text-blue-400 font-semibold mb-4">
+                Postulaciones pendientes:
+              </h2>
+              <ul className="flex flex-col gap-2">
+                {applications.map((application) => (
+                  <AppItem
+                    key={application.id}
+                    application={application}
+                    onAcceptApplication={onAcceptApplication}
+                  />
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
+>>>>>>> 2ff0cfa847694a679086c0fe6e28bf6ea87616be
     </div>
   );
 }

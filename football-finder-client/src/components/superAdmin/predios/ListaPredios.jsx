@@ -1,19 +1,21 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
 import PropertyItem from "./PropertyItem";
+import { ContainerStyle } from "../../styles/Container.jsx";
+import { CardContainer, TittleCard } from "../../styles/Cards.jsx";
 
 const ListaPredios = () => {
   const [predios, setPredios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { token } = useContext(AuthenticationContext);
 
-  const {token} = useContext(AuthenticationContext)
   useEffect(() => {
     const fetchPredios = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/properties",{
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
+        const res = await fetch("http://localhost:8080/api/properties", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         if (!res.ok) throw new Error("No se pudieron cargar los predios");
 
@@ -29,29 +31,34 @@ const ListaPredios = () => {
     fetchPredios();
   }, []);
 
-
-  if (loading) return <p>Cargando predios...</p>;
+  if (loading)
+    return (
+      <div className={ContainerStyle}>
+        <p>Cargando predios...</p>
+      </div>
+    );
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Lista de Predios</h2>
-      {predios.length === 0 ? (
-        <p>No hay predios registrados.</p>
-      ) : (
-        <ul className="space-y-3">
-          {predios.map((predio) => (
-            <div
-              key={predio.id}
-              className="border p-4 rounded shadow-sm bg-white"
-            >
-              <PropertyItem property={predio} />
-            </div>
-          ))}
-        </ul>
-      )}
+    <div className={ContainerStyle}>
+      <div className={CardContainer}>
+        <h2 className={TittleCard}>Lista de Predios</h2>
+        {predios.length === 0 ? (
+          <p>No hay predios registrados.</p>
+        ) : (
+          <ul className="flex flex-col items-start justify-start w-full gap-6">
+            {predios.map((predio) => (
+              <li
+                key={predio.id}
+                className="flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
+              >
+                <PropertyItem property={predio} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
 
 export default ListaPredios;
-

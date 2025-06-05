@@ -20,7 +20,7 @@ const GameItem = ({ game }) => {
           if (response.status === 400) {
             return response.json().then((data) => {
               throw new Error(data.message || "Error al aplicar para el juego");
-            })
+            });
           }
           throw new Error("Error al aplicar para el juego");
         }
@@ -39,6 +39,7 @@ const GameItem = ({ game }) => {
       <h2 className={TittleCard}>Partidos disponibles</h2>
       <ul className="flex flex-col w-full gap-3 ">
         <li className="border-2 border-gray-500 p-4 rounded-lg">
+<<<<<<< HEAD
           <ul>
             <li className={inputStyle}>
               <strong className={colorStrong}>Creador: </strong>
@@ -66,6 +67,33 @@ const GameItem = ({ game }) => {
             </li>
             <Button1 onClick={handleApply}>Aplicar</Button1>
           </ul>
+=======
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Creador: </strong>
+            {game.userCreator.name}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Predio: </strong>
+            {game.reservation.fieldType.property.name}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Fecha: </strong>
+            {game.reservation.date}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Hora: </strong>
+            {game.reservation.schedule.schedule} hs
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Zona: </strong>
+            {game.reservation.fieldType.property.zone}
+          </li>
+          <li className={inputStyle}>
+            <strong className={colorStrong}>Dirección: </strong>
+            {game.reservation.fieldType.property.adress}
+          </li>
+          <Button1 onClick={handleApply}>Postularse</Button1>
+>>>>>>> 2ff0cfa847694a679086c0fe6e28bf6ea87616be
         </li>
       </ul>
     </div>

@@ -84,6 +84,7 @@ function Participations() {
 
   return (
     <div className={ContainerStyle}>
+<<<<<<< HEAD
       {applications.length === 0 && invitations.length === 0 ?
         <p className="text-white text-lg">No tienes postulaciones ni invitaciones</p>
         :
@@ -117,6 +118,38 @@ function Participations() {
 
         </div>
       }
+=======
+      <div className="flex flex-col mb-6 items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-1/2">
+        <h2 className={TittleCard}>Invitaciones</h2>
+        {invitations.length > 0 && (
+          <ul className="flex flex-col w-full">
+            {invitations.map((inv) => (
+              <li
+                className="flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
+                key={inv.id}
+              >
+                <InvItem inv={inv} onAccept={handleInvitationAccepted} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className={CardContainer}>
+        <h2 className={TittleCard}>Postulaciones</h2>
+        {applications.length > 0 && (
+          <ul className="flex flex-col items-start justify-start w-full gap-6">
+            {applications.map((app) => (
+              <li
+                key={app.id}
+                className="flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg"
+              >
+                <AppItem app={app} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+>>>>>>> 2ff0cfa847694a679086c0fe6e28bf6ea87616be
     </div>
   );s
 }

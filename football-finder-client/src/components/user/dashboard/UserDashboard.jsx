@@ -17,7 +17,7 @@ const UserDashboard = () => {
         links={[
           { item: "Crear juego", url: "/user" },
           { item: "Lista de partidos", url: "/user/availables-games" },
-          { item: "Invitaciones y Aplicaciones", url: "/user/participations" },
+          { item: "Invitaciones y Postulaciones", url: "/user/participations" },
           { item: "Mis partidos", url: "/user/my-games" },
           { item: "Lista de propiedades", url: "/user/properties" },
           { item: "Mi perfil", url: "/user/profile" },
