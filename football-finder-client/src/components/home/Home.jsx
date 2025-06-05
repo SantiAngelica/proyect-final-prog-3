@@ -70,7 +70,7 @@ const Home = () => {
           {isLogged ? (
             <p className="text-sm text-gray-200 px-12">
               Hola,{" "}
-              <span className="font-semibold text-2xl text-blue-400">
+              <span className="font-semibold text-2xl text-blue-600">
                 {username}
               </span>{" "}
               !

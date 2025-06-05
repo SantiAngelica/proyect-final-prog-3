@@ -58,6 +58,9 @@ const Profile = () => {
     );
   return (
     <div className={ContainerStyle}>
+      <div className="w-full mb-6">
+        <UpcomingGames />
+      </div>
       <div className={CardContainer}>
         <h2 className={TittleCard}>Perfil de Usuario</h2>
 
@@ -81,16 +84,13 @@ const Profile = () => {
             {user.positions.map((pos) => pos.position).join(", ")}
           </p>
           <p className={inputStyle}>
-            <strong className={colorStrong}>Canchas:</strong>{" "}
+            <strong className={colorStrong}>Canchas de:</strong>{" "}
             {user.fieldsType.map((field) => field.field).join(", ")}
           </p>
         </div>
         <Button1 className="mt-4">
           <a href={`/user/update/${user.id}`}>Actualizar perfil</a>
         </Button1>
-      </div>
-      <div className="mt-4">
-        <UpcomingGames />
       </div>
     </div>
   );

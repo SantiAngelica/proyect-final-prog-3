@@ -20,7 +20,7 @@ const GameItem = ({ game }) => {
           if (response.status === 400) {
             return response.json().then((data) => {
               throw new Error(data.message || "Error al aplicar para el juego");
-            })
+            });
           }
           throw new Error("Error al aplicar para el juego");
         }
@@ -63,7 +63,7 @@ const GameItem = ({ game }) => {
             <strong className={colorStrong}>Dirección: </strong>
             {game.reservation.fieldType.property.adress}
           </li>
-          <Button1 onClick={handleApply}>Aplicar</Button1>
+          <Button1 onClick={handleApply}>Postularse</Button1>
         </li>
       </ul>
     </div>
