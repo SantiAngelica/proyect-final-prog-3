@@ -16,6 +16,7 @@ router.post("/newproperty",verifyToken, authorize('admin') ,PropertyService.post
 //solo el admin dueño del predio
 router.post("/:rid/acepted",verifyToken, authorize('admin'), PropertyService.postAceptReservation)
 
+router.put("/update/:pid", verifyToken, authorize('admin'), PropertyService.updateProerty)
 
 
 router.delete("/:pid", verifyToken, authorize('admin'),PropertyService.deleteProperty)

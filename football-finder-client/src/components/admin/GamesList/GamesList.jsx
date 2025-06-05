@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthenticationContext } from '../../services/auth.context';
+import { ContainerStyle } from '../../styles/Container';
 
 const GamesList = () => {
   const [games, setGames] = useState([]);
@@ -9,11 +10,10 @@ const GamesList = () => {
   const { token } = useContext(AuthenticationContext)
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/property/games', {
-      method: 'GET',
+    fetch('http://localhost:8080/api/properties/games', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     }).then((res) => {
       if (!res.ok) {
@@ -27,7 +27,8 @@ const GamesList = () => {
       return res.json();
     }).then((data) => {
       if (data) {
-        setGames(data);
+        const filteredGames = data.filter(game => game.reservation.state === 'aceptada')
+        setGames(filteredGames);
         setLoading(false);
       }
     }).catch((err) => {
@@ -35,6 +36,7 @@ const GamesList = () => {
       setError(true);
     });
   }, [token])
+
 
   if (loading)
     return (
@@ -50,8 +52,7 @@ const GamesList = () => {
     );
 
   return (
-    <div>
-      <ToastContainer />
+    <div className='mt-5'>
       <h2>Partidos agendados</h2>
       {loading ? (
         <p>Cargando partidos...</p>
@@ -61,9 +62,13 @@ const GamesList = () => {
         <ul>
           {games.map((game) => (
             <li key={game.id}>
-              <strong>{game.name || 'partido sin nombre'}</strong> <br />
-              Fecha: {new Date(game.date).toLocaleString()} <br />
-              Estado: {game.state || 'pendiente'}
+              <strong>Dia y hora: {game.reservation.date} - {game.reservation.schedule.schedule}:00hs</strong>
+             <br />
+              Cancha: {game.reservation.fieldType.field_type} 
+              <br />
+              Estado: {game.reservation.state}
+              <br />
+              A nombre de: {game.userCreator.name}
             </li>
           ))}
         </ul>
