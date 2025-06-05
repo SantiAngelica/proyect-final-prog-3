@@ -27,7 +27,7 @@ const getPropertys = async (req, res) => {
 }
 
 const getPropertyByOwnerId = async (req, res) => {
-    const {id} =  req.user
+    const { id } = req.user
     try {
         const property = await Property.findOne({
             where: {
@@ -44,7 +44,7 @@ const getPropertyByOwnerId = async (req, res) => {
                 }
             ]
         })
-        if(!property) return res.status(404).json({message: 'Property not found'})
+        if (!property) return res.status(404).json({ message: 'Property not found' })
         console.log(property)
         return res.status(200).json(property)
     } catch (error) {
@@ -54,35 +54,42 @@ const getPropertyByOwnerId = async (req, res) => {
 }
 
 const getGamesByProperty = async (req, res) => {
-    const { uid } = req.user
+    const { id } = req.user
+    console.log(id)
     try {
-        const games = await User.findAll({
-            include: [{
-                model: Game,
-                as: 'createdGames',
-                attributes: ['missing_players'],
-                include: [{
+        const games = await Game.findAll({
+            include: [
+                {
                     model: Reservation,
                     as: 'reservation',
-                    where: {
-                        state: { [Op.in]: ["pendiente", "aceptada"] }
-                    },
-                    attributes: ['date', 'state'],
-                    include: [{
-                        model: PropertyTypeField,
-                        as: 'fieldType',
-                        where: {
-                            id_property: pid
+                    required: true,
+                    include: [
+                        {
+                            model: PropertyTypeField,
+                            as: 'fieldType'
+                        },
+                        {
+                            model: ScheduleProperty,
+                            as: 'schedule',
+                            required: true,
+                            include: [
+                                {
+                                    model: Property,
+                                    as: 'property',
+                                    where: {
+                                        id_user_owner: id
+                                    },
+                                    required: true
+                                }
+                            ]
                         }
-                    },
-                    {
-                        model: ScheduleProperty,
-                        as: 'schedule',
-                        attributes: ['schedule']
-                    }]
-                }]
-            }],
-            attributes: ['id', 'name', 'email']
+                    ]
+                },
+                {
+                    model: User,
+                    as: 'userCreator'
+                }
+            ]
         })
 
         if (!games) return res.status(404).json({ message: 'No games found in this property' })
@@ -101,10 +108,10 @@ const postProperty = async (req, res) => {
             return res.status(400).json({ message: "Missing data" })
 
         const userOwner = await User.findByPk(req.user.id)
-        if(!userOwner) return res.status(404).json({message: 'User not found'})
+        if (!userOwner) return res.status(404).json({ message: 'User not found' })
 
-        const existingProperty = await Property.findOne({where: {name: name.toLowerCase()}})
-        if(existingProperty) return res.status(400).json({message: 'Property name already taken'})
+        const existingProperty = await Property.findOne({ where: { name: name.toLowerCase() } })
+        if (existingProperty) return res.status(400).json({ message: 'Property name already taken' })
 
         const newProperty = await Property.create({
             id_user_owner: req.user.id,
@@ -177,6 +184,45 @@ const postAceptReservation = async (req, res) => {
     }
 }
 
+const updateProerty = async (req, res) => {
+    const { pid } = req.params
+    try {
+        const property = await Property.findByPk(pid)
+        if (!property) return res.status(404).json({ message: 'Property not found' })
+        if (!validateRoleAndId(req.user, property.dataValues.id_user_owner, true, 'admin'))
+            return res.status(403).json({ message: 'Unauthorized' })
+        const { name, adress, zone, schedule, fields_type } = req.body
+        if (!name || !adress || !zone || !schedule || !fields_type)
+            return res.status(400).json({ message: "Missing data" })
+        await ScheduleProperty.destroy({ where: { id_property: pid } })
+        await PropertyTypeField.destroy({ where: { id_property: pid } })
+        await property.update({
+            name: name.toLowerCase(),
+            adress,
+            zone
+        })
+        const propertySchedules = schedule.map(sch => ({ schedule: sch, id_property: pid }))
+        const propertyFields = fields_type.map(fty => ({ field_type: fty, id_property: pid }))
+        await ScheduleProperty.bulkCreate(propertySchedules)
+        await PropertyTypeField.bulkCreate(propertyFields)
+        const updatedProperty = await Property.findByPk(pid, {
+            include: [
+                {
+                    model: ScheduleProperty,
+                    as: 'schedules',
+                },
+                {
+                    model: PropertyTypeField,
+                    as: 'fields',
+                }
+            ],
+        });
+        res.status(200).json(updatedProperty)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Internal server error", error });
+    }
+}
 
 const deleteProperty = async (req, res) => {
     const { pid } = req.params
@@ -190,10 +236,10 @@ const deleteProperty = async (req, res) => {
         await ScheduleProperty.destroy({ where: { id_property: pid } })
         await Property.destroy({ where: { id: pid } })
 
-        res.status(204).json({message: 'Propert destroy'})
+        res.status(204).json({ message: 'Propert destroy' })
     } catch (error) {
         console.log(error)
-        res.status(500).json({message: 'Internal server error'})
+        res.status(500).json({ message: 'Internal server error' })
     }
 }
 
@@ -204,6 +250,7 @@ export default {
     getGamesByProperty,
     getPropertyByOwnerId,
     postAceptReservation,
+    updateProerty,
     postProperty,
     deleteProperty,
 }

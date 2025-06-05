@@ -1,7 +1,14 @@
 import React, { useEffect, useState, useContext, use } from 'react'
 import { AuthenticationContext } from '../../services/auth.context.jsx'
-import {ContainerStyle} from '../../styles/Container.jsx'
+import { ContainerStyle } from '../../styles/Container.jsx'
+import Button1 from '../../styles/Button1.jsx';
 
+import {
+    CardContainer,
+    TittleCard,
+    inputStyle,
+    colorStrong,
+} from "../../styles/Cards.jsx";
 
 function MyProperty({ setHasProperty }) {
     const [property, setProperty] = useState(null);
@@ -21,7 +28,7 @@ function MyProperty({ setHasProperty }) {
                 }
                 throw new Error('Error al obtener la propiedad');
             }
-  
+
             return res.json();
         }).then((data) => {
             if (data) {
@@ -47,8 +54,39 @@ function MyProperty({ setHasProperty }) {
             </div>
         );
 
+    console.log(property)
+
     return (
-        <div>MyProperty</div>
+        <div className={ContainerStyle}>
+            <div className={CardContainer}>
+                <h2 className={TittleCard}>Perfil de Usuario</h2>
+
+                <div className="flex flex-col items-start w-full">
+                    <p className={inputStyle}>
+                        {" "}
+                        <strong className={colorStrong}>Nombre:</strong> {property.name}
+                    </p>
+                    <p className={inputStyle}>
+                        <strong className={colorStrong}>Direccion:</strong> {property.adress}
+                    </p>
+                    <p className={inputStyle}>
+                        <strong className={colorStrong}>Zona:</strong> {property.zone}
+                    </p>
+                    <p className={inputStyle}>
+                        <strong className={colorStrong}>Canchas:</strong>{" "}
+                        {property.fields.map((typf) => typf.field_type).join(", ")}
+                    </p>
+                    <p className={inputStyle}>
+                        <strong className={colorStrong}>Horarios:</strong>{" "}
+                        {property.schedules.map((sch) => sch.schedule).join(", ")}
+                    </p>
+                </div>
+                <Button1 className="mt-4">
+                    <a href={`/admin/update/${property.id}`}>Actualizar propiedad</a>
+
+                </Button1>
+            </div>
+        </div>
     )
 }
 

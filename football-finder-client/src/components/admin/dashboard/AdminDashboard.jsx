@@ -4,12 +4,12 @@ import { useState } from "react";
 import MyProperty from "../myProperty/MyProperty";
 import CreateProperty from '../createProperty/CreateProperty.jsx'
 import GamesList from '../GamesList/GamesList.jsx'
-import PendignList from '../pendignList/PendingList.jsx'
+import PendingList from "../pendignList/PendingList.jsx";
 import UpdateForm from '../updateForm/UpdateForm.jsx'
 
 const AdminDashboard = () => {
   const [hasProperty, setHasProperty] = useState(true);
-  console.log(hasProperty)
+
   if (hasProperty) {
     return (
       <>
@@ -21,8 +21,8 @@ const AdminDashboard = () => {
 
         <Routes>
           <Route index element={<MyProperty setHasProperty={setHasProperty} />} />
-          <Route path="shcedule-games" element={<GamesList />} />
-          <Route path="pending-reservation" element={<PendignList />} />
+          <Route path="schedule-games" element={<GamesList />} />
+          <Route path="pending-reservations" element={<PendingList />} />
           <Route path="update/:pid" element={<UpdateForm />} />
         </Routes>
       </>
