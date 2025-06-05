@@ -110,7 +110,7 @@ function MyGames() {
               </div>
 
               {usersInGame.length > 0 && (
-                <h2 className="text-lg text-blue-400 font-semibold mb-4">
+                <h2 className="text-lg text-blue-400 font-semibold mb-1">
                   Jugadores confirmados:
                 </h2>
               )}
@@ -125,7 +125,7 @@ function MyGames() {
                   </li>
                 ))}
               </ul>
-              <h2 className="text-lg text-blue-400 font-semibold mb-4">
+              <h2 className="text-lg text-blue-400 font-semibold mb-1">
                 Postulaciones pendientes:
               </h2>
               <ul className="flex flex-col gap-2">

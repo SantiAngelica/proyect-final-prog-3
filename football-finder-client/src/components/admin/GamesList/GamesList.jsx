@@ -1,42 +1,48 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AuthenticationContext } from '../../services/auth.context';
-import { ContainerStyle } from '../../styles/Container';
+import React, { useEffect, useState, useContext } from "react";
+import { AuthenticationContext } from "../../services/auth.context";
+import { ContainerStyle } from "../../styles/Container";
+import { CardContainer, TittleCard } from "../../styles/Cards";
+import { inputStyle, colorStrong } from "../../styles/Cards";
 
 const GamesList = () => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const { token } = useContext(AuthenticationContext)
+  const { token } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/properties/games', {
+    fetch("http://localhost:8080/api/properties/games", {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    }).then((res) => {
-      if (!res.ok) {
-        if (res.status === 400) {
-          return res.json().then((data) => {
-            throw new Error(data.message || "Error al obtener los partidos");
-          });
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          if (res.status === 400) {
+            return res.json().then((data) => {
+              throw new Error(data.message || "Error al obtener los partidos");
+            });
+          }
+          throw new Error("Error al obtener los partidos");
         }
-        throw new Error('Error al obtener los partidos');
-      }
-      return res.json();
-    }).then((data) => {
-      if (data) {
-        const filteredGames = data.filter(game => game.reservation.state === 'aceptada')
-        setGames(filteredGames);
+        return res.json();
+      })
+      .then((data) => {
+        if (data) {
+          const filteredGames = data.filter(
+            (game) => game.reservation.state === "aceptada"
+          );
+          setGames(filteredGames);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
         setLoading(false);
-      }
-    }).catch((err) => {
-      setLoading(false);
-      setError(true);
-    });
-  }, [token])
-
+        setError(true);
+      });
+  }, [token]);
 
   if (loading)
     return (
@@ -52,27 +58,43 @@ const GamesList = () => {
     );
 
   return (
-    <div className='mt-5'>
-      <h2>Partidos agendados</h2>
-      {loading ? (
-        <p>Cargando partidos...</p>
-      ) : games.length === 0 ? (
-        <p>No hay partidos agendados para este predio</p>
-      ) : (
-        <ul>
-          {games.map((game) => (
-            <li key={game.id}>
-              <strong>Dia y hora: {game.reservation.date} - {game.reservation.schedule.schedule}:00hs</strong>
-             <br />
-              Cancha: {game.reservation.fieldType.field_type} 
-              <br />
-              Estado: {game.reservation.state}
-              <br />
-              A nombre de: {game.userCreator.name}
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className={ContainerStyle}>
+      <div className={CardContainer}>
+        <h2 className={TittleCard}>Partidos agendados</h2>
+        {loading ? (
+          <p>Cargando partidos...</p>
+        ) : games.length === 0 ? (
+          <p>No hay partidos agendados para este predio</p>
+        ) : (
+          <ul className="flex flex-col w-full gap-12">
+            {games.map((game) => (
+              <li
+                className="border-2 border-gray-500 p-4 rounded-lg"
+                key={game.id}
+              >
+                <h2 className={inputStyle}>
+                  <strong className={colorStrong}>A nombre de: </strong>
+                  {game.userCreator.name}
+                </h2>
+                <h2 className={inputStyle}>
+                  <strong className={colorStrong}>Dia y hora: </strong>{" "}
+                  {game.reservation.date} - {game.reservation.schedule.schedule}
+                  :00<strong className={colorStrong}> hs</strong>
+                </h2>
+                <h2 className={inputStyle}>
+                  <strong className={colorStrong}>Predio: </strong>
+                  {game.reservation.fieldType.field_type}
+                </h2>
+                <h2 className={inputStyle}>
+                  {" "}
+                  <strong className={colorStrong}>Estado: </strong>
+                  {game.reservation.state}
+                </h2>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
