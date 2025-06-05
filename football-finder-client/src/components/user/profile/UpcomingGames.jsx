@@ -9,7 +9,7 @@ import {
 } from "../../styles/Cards.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 
-function UpcomingGames() {
+function UpcomingGames({setHasGames}) {
   const { token } = useContext(AuthenticationContext);
   const [loading, setLoading] = React.useState(true);
   const [games, setGames] = React.useState([]);
@@ -36,6 +36,9 @@ function UpcomingGames() {
           const fechaJuego = new Date(game.game.reservation.date + "T00:00:00");
           return fechaJuego >= hoy;
         });
+        if (gamesFiltrados.length === 0) {
+          setHasGames(false);
+        }
         setGames(gamesFiltrados);
         setLoading(false);
       })
@@ -59,7 +62,6 @@ function UpcomingGames() {
       </div>
     );
 
-  console.log(games);
 
   return (
     <div className={CardContainer}>
