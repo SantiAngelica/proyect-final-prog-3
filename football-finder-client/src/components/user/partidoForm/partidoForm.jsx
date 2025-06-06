@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
 import Button1 from "../../styles/Button1.jsx";
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 
 const PartidoForm = () => {
   const [propertyName, setPropertyName] = useState("");
@@ -13,18 +13,30 @@ const PartidoForm = () => {
   const [date, setDate] = useState("");
   const [missingPlayers, setMissingPlayers] = useState("");
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleChange = (setter) => (e) => setter(e.target.value);
 
   const { token } = useContext(AuthenticationContext);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const resetForm = () => {
+    setPropertyName("");
+    setSchedule("");
+    setFieldType("");
+    setDate("");
+    setMissingPlayers("");
+  };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (!propertyName || !schedule || !fieldType || !missingPlayers || !date) {
-      errorToast("Please fill in all fields");
+      errorToast("Por favor completá todos los campos");
       return;
     }
+    setIsModalOpen(true);
+  };
 
+  const handleConfirmCreate = async () => {
     const game = {
       property_name: propertyName,
       schedule,
@@ -44,23 +56,33 @@ const PartidoForm = () => {
       });
 
       if (response.ok) {
-        successToast("Game created successfully");
-        setPropertyName("");
-        setSchedule("");
-        setFieldType("");
-        setDate("");
-        setMissingPlayers("");
+        successToast("Partido creado correctamente");
+        resetForm();
       } else {
         const err = await response.json();
-        errorToast("Error creating game: " + (err.message || "Unknown error"));
+        errorToast(
+          "Error al crear el partido: " + (err.message || "Error desconocido")
+        );
       }
     } catch (error) {
-      errorToast("Connection error: " + error.message);
+      errorToast("Error de conexión: " + error.message);
+    } finally {
+      setIsModalOpen(false);
     }
   };
 
   return (
     <div className={ContainerStyle}>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        title="¿Confirmar creación del partido?"
+        message="Estás a punto de crear un nuevo partido con los datos ingresados."
+        onCancel={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmCreate}
+        confirmText="Crear partido"
+        cancelText="Cancelar"
+      />
+
       <div className={CardContainer}>
         <h2 className={TittleCard}>Crear partido</h2>
         <form onSubmit={handleSubmit}>
@@ -93,14 +115,14 @@ const PartidoForm = () => {
 
           <input
             type="date"
-            name="Fecha"
+            name="date"
             value={date}
             onChange={handleChange(setDate)}
             className={inputStyle}
           />
 
           <input
-            type="text"
+            type="number"
             name="missing_players"
             value={missingPlayers}
             placeholder="Jugadores faltantes"

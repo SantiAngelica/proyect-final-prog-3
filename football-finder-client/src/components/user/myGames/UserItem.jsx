@@ -1,8 +1,8 @@
-import React from "react";
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 import Button from "../../styles/Button";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards";
 
@@ -10,8 +10,9 @@ function UserItem({ user }) {
   const { gid } = useParams();
   const { token } = useContext(AuthenticationContext);
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const handleInvite = () => {
-    console.log("first");
     fetch(
       `http://localhost:8080/api/participations/invitation/${gid}/${user.id}`,
       {
@@ -28,13 +29,19 @@ function UserItem({ user }) {
             throw new Error(data.message || "Error al obtener los partidos");
           });
         }
-        successToast("Invitacion enviada!");
+        successToast("¡Invitación enviada!");
       })
       .catch((err) => {
         console.log(err);
-        errorToast(err.message || "Error al enviar la invitacion");
+        errorToast(err.message || "Error al enviar la invitación");
       });
   };
+
+  const handleConfirm = () => {
+    handleInvite();
+    setShowConfirmModal(false);
+  };
+
   return (
     <div className="flex flex-col items-start w-full">
       <p className={TittleCard}>{user.name}</p>
@@ -60,9 +67,18 @@ function UserItem({ user }) {
         <strong className={colorStrong}>Zona:</strong>
         {user.zone}
       </p>
-      <Button className="text-blue-500 hover:underline" onClick={handleInvite}>
-        Invitar
-      </Button>
+
+      <Button onClick={() => setShowConfirmModal(true)}>Invitar</Button>
+
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        title={`¿Estás seguro que deseas invitar a ${user.name} a tu partido?`}
+        message="Se enviará una invitación al usuario para unirse al partido."
+        onCancel={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirm}
+        confirmText="Invitar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 }

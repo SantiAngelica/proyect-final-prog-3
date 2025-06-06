@@ -1,22 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
-import { useNavigate } from "react-router-dom";
-import RedButton from "../../styles/RedButton.jsx";
+import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 
 import PositionListForm from "./PositionsListForm.jsx";
 import FieldListForm from "./FieldListForm.jsx";
-import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
+
+import RedButton from "../../styles/RedButton.jsx";
 import Button from "../../styles/Button.jsx";
+import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 
 function UpdateForm() {
   const navigate = useNavigate();
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showConfirmUpdateModal, setShowConfirmUpdateModal] = useState(false);
-  const [pendingUpdate, setPendingUpdate] = useState(null);
-
   const { uid } = useParams();
   const { token } = useContext(AuthenticationContext);
 
@@ -30,20 +27,18 @@ function UpdateForm() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showConfirmUpdateModal, setShowConfirmUpdateModal] = useState(false);
+  const [pendingUpdate, setPendingUpdate] = useState(null);
+
   useEffect(() => {
     if (!token) {
       setError("No se encontró el token. Por favor inicia sesión.");
       setLoading(false);
       return;
     }
-    setName("");
-    setEmail("");
-    setAge("");
-    setZone("");
-    setPositions([]);
-    setFieldsType([]);
+
     setLoading(true);
-    setError(null);
     fetch(`http://localhost:8080/api/users/profile`, {
       headers: {
         "Content-Type": "application/json",
@@ -52,9 +47,7 @@ function UpdateForm() {
     })
       .then((res) => {
         if (!res.ok) {
-          errorToast("Error al obtener el perfil del usuario");
-          setError("Error al obtener el perfil del usuario");
-          setLoading(false);
+          throw new Error("Error al obtener el perfil del usuario");
         }
         return res.json();
       })
@@ -66,35 +59,29 @@ function UpdateForm() {
         setPositions(data.positions.map((pos) => pos.position));
         setFieldsType(data.fieldsType.map((field) => field.field));
         setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
       });
   }, [token]);
-
-  if (loading)
-    return (
-      <div className={ContainerStyle}>
-        <p>Cargando datos del usuario...</p>
-      </div>
-    );
-  if (error)
-    return (
-      <div className={ContainerStyle}>
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
 
   const onAddPosition = (newPos) => {
     if (newPos && !positions.includes(newPos)) {
       setPositions([...positions, newPos]);
     }
   };
+
   const onRemovePosition = (posToRemove) => {
     setPositions(positions.filter((p) => p !== posToRemove));
   };
+
   const onAddFields = (newField) => {
     if (newField && !fieldsType.includes(newField)) {
       setFieldsType([...fieldsType, newField]);
     }
   };
+
   const onRemoveField = (fieldToRemove) => {
     setFieldsType(fieldsType.filter((f) => f !== fieldToRemove));
   };
@@ -125,6 +112,7 @@ function UpdateForm() {
     setPendingUpdate(updatedProfile);
     setShowConfirmUpdateModal(true);
   };
+
   const confirmUpdate = () => {
     if (!pendingUpdate) return;
 
@@ -137,9 +125,7 @@ function UpdateForm() {
       body: JSON.stringify(pendingUpdate),
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al actualizar el perfil");
-        }
+        if (!res.ok) throw new Error("Error al actualizar el perfil");
         return res.json();
       })
       .then((data) => {
@@ -150,70 +136,88 @@ function UpdateForm() {
         successToast("Perfil actualizado correctamente");
         navigate("/user/profile");
       })
-      .catch((err) => {
-        errorToast(err.message);
-      })
+      .catch((err) => errorToast(err.message))
       .finally(() => {
         setShowConfirmUpdateModal(false);
         setPendingUpdate(null);
       });
   };
 
+  const confirmDelete = () => {
+    fetch("http://localhost:8080/api/users/delete", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        errorToast("Error al borrar el perfil");
+        return;
+      }
+      successToast("Perfil borrado correctamente");
+      navigate("/");
+    });
+    setShowConfirmModal(false);
+  };
+
+  if (loading)
+    return (
+      <div className={ContainerStyle}>
+        <p>Cargando datos del usuario...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className={ContainerStyle}>
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+
   return (
     <div className={ContainerStyle}>
       <div className={CardContainer}>
         <h2 className={TittleCard}>Actualizar Perfil</h2>
         <form className="w-full" onSubmit={handleSubmit}>
-          <div>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={inputStyle}
-              placeholder="Nombre completo"
-            />
-          </div>
-          <div>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={inputStyle}
-              placeholder="Email"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              className={inputStyle}
-              placeholder="Edad"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              value={zone}
-              onChange={(e) => setZone(e.target.value)}
-              className={inputStyle}
-              placeholder="Zona"
-            />
-          </div>
-          <div>
-            <PositionListForm
-              positions={positions}
-              onAddPosition={onAddPosition}
-              onRemovePosition={onRemovePosition}
-            />
-          </div>
-          <div>
-            <FieldListForm
-              fields={fieldsType}
-              onAddFields={onAddFields}
-              onRemoveField={onRemoveField}
-            />
-          </div>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={inputStyle}
+            placeholder="Nombre completo"
+          />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={inputStyle}
+            placeholder="Email"
+          />
+          <input
+            type="text"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            className={inputStyle}
+            placeholder="Edad"
+          />
+          <input
+            type="text"
+            value={zone}
+            onChange={(e) => setZone(e.target.value)}
+            className={inputStyle}
+            placeholder="Zona"
+          />
+
+          <PositionListForm
+            positions={positions}
+            onAddPosition={onAddPosition}
+            onRemovePosition={onRemovePosition}
+          />
+          <FieldListForm
+            fields={fieldsType}
+            onAddFields={onAddFields}
+            onRemoveField={onRemoveField}
+          />
+
           <Button type="submit">Guardar cambios</Button>
           <div className="mt-4">
             <RedButton type="button" onClick={() => setShowConfirmModal(true)}>
@@ -223,61 +227,25 @@ function UpdateForm() {
         </form>
       </div>
 
-      {showConfirmModal && (
-        <div className="fixed inset-0 bg-gradient-to-r from-black via-gray-900 to-black  bg-opacity-100  flex items-center justify-center z-50">
-          <div className="flex flex-col items-center bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-auto">
-            <h3 className="text-lg font-semibold mb-4">
-              ¿Estás seguro de que querés borrar tu perfil?
-            </h3>
-            <p className="text-sm text-gray-600 mb-6">
-              Se eliminara todo tu historial. Esta acción no se puede deshacer.
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button onClick={() => setShowConfirmModal(false)}>
-                Cancelar
-              </Button>
-              <RedButton
-                onClick={() => {
-                  fetch("http://localhost:8080/api/users/delete", {
-                    method: "DELETE",
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  }).then((res) => {
-                    if (!res.ok) {
-                      errorToast("Error al borrar el perfil");
-                      return;
-                    }
-                    successToast("Perfil borrado correctamente");
-                    navigate("/");
-                  });
-                  setShowConfirmModal(false);
-                }}
-              >
-                Borrar
-              </RedButton>
-            </div>
-          </div>
-        </div>
-      )}
-      {showConfirmUpdateModal && (
-        <div className="fixed inset-0 bg-gradient-to-r from-black via-gray-900 to-black bg-opacity-100 flex items-center justify-center z-50">
-          <div className="flex flex-col items-center bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-auto">
-            <h3 className="text-lg font-semibold mb-4">
-              ¿Confirmás la actualización del perfil?
-            </h3>
-            <p className="text-sm text-gray-600 mb-6">
-              Se guardarán los cambios realizados.
-            </p>
-            <div className="flex justify-center gap-4">
-              <RedButton onClick={() => setShowConfirmUpdateModal(false)}>
-                Cancelar
-              </RedButton>
-              <Button onClick={confirmUpdate}>Confirmar</Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={showConfirmUpdateModal}
+        title="¿Confirmás la actualización del perfil?"
+        message="Se guardarán los cambios realizados."
+        onCancel={() => setShowConfirmUpdateModal(false)}
+        onConfirm={confirmUpdate}
+        confirmText="Confirmar"
+        cancelText="Cancelar"
+      />
+
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        title="¿Estás seguro de que querés borrar tu perfil?"
+        message="Se eliminará todo tu historial. Esta acción no se puede deshacer."
+        onCancel={() => setShowConfirmModal(false)}
+        onConfirm={confirmDelete}
+        confirmText="Borrar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 }

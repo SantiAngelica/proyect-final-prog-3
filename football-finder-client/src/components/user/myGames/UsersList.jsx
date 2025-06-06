@@ -32,7 +32,9 @@ function UsersList() {
         return res.json();
       })
       .then((data) => {
-        const filteredUsers = data.filter((user) => user.rol === "player" && user.id !== userId);
+        const filteredUsers = data.filter(
+          (user) => user.rol === "player" && user.id !== userId
+        );
 
         setUsers(filteredUsers);
         setLoading(false);
