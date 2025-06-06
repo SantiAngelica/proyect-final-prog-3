@@ -59,9 +59,9 @@ const Profile = () => {
     );
   return (
     <div className={ContainerStyle}>
-      {!hasGames && (
+      {hasGames && (
         <div className="w-full mb-6">
-          <UpcomingGames />
+          <UpcomingGames setHasGames={setHasGames}/>
         </div>
       )}
 

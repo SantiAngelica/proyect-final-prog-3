@@ -13,6 +13,10 @@ import { ContainerStyle } from "../../styles/Container.jsx";
 
 function UpdateForm() {
   const navigate = useNavigate();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showConfirmUpdateModal, setShowConfirmUpdateModal] = useState(false);
+  const [pendingUpdate, setPendingUpdate] = useState(null);
+
   const { uid } = useParams();
   const { token } = useContext(AuthenticationContext);
 
@@ -108,6 +112,7 @@ function UpdateForm() {
       errorToast("Por favor, completa todos los campos");
       return;
     }
+
     const updatedProfile = {
       name,
       email,
@@ -117,18 +122,23 @@ function UpdateForm() {
       user_fields: fieldsType,
     };
 
+    setPendingUpdate(updatedProfile);
+    setShowConfirmUpdateModal(true);
+  };
+  const confirmUpdate = () => {
+    if (!pendingUpdate) return;
+
     fetch("http://localhost:8080/api/users/update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(updatedProfile),
+      body: JSON.stringify(pendingUpdate),
     })
       .then((res) => {
         if (!res.ok) {
-          errorToast("Error al actualizar el perfil");
-          return;
+          throw new Error("Error al actualizar el perfil");
         }
         return res.json();
       })
@@ -139,8 +149,16 @@ function UpdateForm() {
         setZone(data.zone);
         successToast("Perfil actualizado correctamente");
         navigate("/user/profile");
+      })
+      .catch((err) => {
+        errorToast(err.message);
+      })
+      .finally(() => {
+        setShowConfirmUpdateModal(false);
+        setPendingUpdate(null);
       });
   };
+
 
   const handleDelte = () => {
 
@@ -221,10 +239,69 @@ function UpdateForm() {
           </div>
           <Button type="submit">Guardar cambios</Button>
           <div className="mt-4">
+            <RedButton type="button" onClick={() => setShowConfirmModal(true)}>
+              Borrar perfil
+            </RedButton>
             <RedButton onClick={handleDelte}>Borrar perfil</RedButton>
           </div>
         </form>
       </div>
+
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-gradient-to-r from-black via-gray-900 to-black  bg-opacity-100  flex items-center justify-center z-50">
+          <div className="flex flex-col items-center bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-auto">
+            <h3 className="text-lg font-semibold mb-4">
+              ¿Estás seguro de que querés borrar tu perfil?
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Se eliminara todo tu historial. Esta acción no se puede deshacer.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button onClick={() => setShowConfirmModal(false)}>
+                Cancelar
+              </Button>
+              <RedButton
+                onClick={() => {
+                  fetch("http://localhost:8080/api/users/delete", {
+                    method: "DELETE",
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }).then((res) => {
+                    if (!res.ok) {
+                      errorToast("Error al borrar el perfil");
+                      return;
+                    }
+                    successToast("Perfil borrado correctamente");
+                    navigate("/");
+                  });
+                  setShowConfirmModal(false);
+                }}
+              >
+                Borrar
+              </RedButton>
+            </div>
+          </div>
+        </div>
+      )}
+      {showConfirmUpdateModal && (
+        <div className="fixed inset-0 bg-gradient-to-r from-black via-gray-900 to-black bg-opacity-100 flex items-center justify-center z-50">
+          <div className="flex flex-col items-center bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-1/2 mx-auto h-auto">
+            <h3 className="text-lg font-semibold mb-4">
+              ¿Confirmás la actualización del perfil?
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Se guardarán los cambios realizados.
+            </p>
+            <div className="flex justify-center gap-4">
+              <RedButton onClick={() => setShowConfirmUpdateModal(false)}>
+                Cancelar
+              </RedButton>
+              <Button onClick={confirmUpdate}>Confirmar</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
