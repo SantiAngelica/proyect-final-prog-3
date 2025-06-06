@@ -24,6 +24,10 @@ const Register = () => {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const nameRef = useRef(null);
+  const ageRef = useRef(null);
+  const zoneRef = useRef(null);
+  const positionsRef = useRef(null);
+  const fieldsRef = useRef(null);
 
   const [errors, setErrors] = useState({
     name: false,
@@ -67,6 +71,26 @@ const Register = () => {
       errorToast("Contraseña inválida");
       return;
     }
+    if (!age || isNaN(age) || age < 0 || age > 120) {
+      ageRef.current.focus();
+      errorToast("Edad inválida");
+      return;
+    }
+    if (!zone || zone.trim() === "") {
+      zoneRef.current.focus();
+      errorToast("Zona inválida");
+      return;
+    }
+    if (positions.length === 0 || positions.some((pos) => pos.trim() === "")) {
+      positionsRef.current.focus();
+      errorToast("Posiciones inválidas");
+      return;
+    }
+    if (fields.length === 0 || fields.some((field) => field.trim() === "")) {
+      fieldsRef.current.focus();
+      errorToast("Canchas inválidas");
+      return;
+    }
 
     const newUser = {
       name,
@@ -95,7 +119,7 @@ const Register = () => {
 
       const decoded = jwtDecode(token);
       const userRole = decoded.role;
-      
+
       successToast("Registro exitoso");
       if (userRole === "superadmin") navigate("/superadmin");
       else if (userRole === "admin") navigate("/admin");
@@ -161,6 +185,7 @@ const Register = () => {
             value={age}
             onChange={handleAgeChange}
             className={inputStyle}
+            ref={ageRef}
           />
           <input
             type="text"
@@ -168,6 +193,7 @@ const Register = () => {
             value={zone}
             onChange={handleZoneChange}
             className={inputStyle}
+            ref={zoneRef}
           />
           <input
             type="text"
@@ -175,6 +201,7 @@ const Register = () => {
             value={positions}
             onChange={handlePositionsChange}
             className={inputStyle}
+            ref={positionsRef}
           />
           <input
             type="text"
@@ -182,6 +209,7 @@ const Register = () => {
             value={fields}
             onChange={handleFieldsChange}
             className={inputStyle}
+            ref={fieldsRef}
           />
           <div className="flex justify-end">
             <Button1 type="submit">Registrarse</Button1>
