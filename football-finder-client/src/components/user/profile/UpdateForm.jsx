@@ -160,28 +160,6 @@ function UpdateForm() {
   };
 
 
-  const handleDelte = () => {
-
-    fetch(`http://localhost:8080/api/users/${uid}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          errorToast("Error al eliminar el perfil");
-          return;
-        }
-        successToast("Perfil eliminado correctamente");
-        navigate("/login");
-      })
-      .catch((err) => {
-        errorToast("Error al eliminar el perfil");
-      });
-
-  }
   return (
     <div className={ContainerStyle}>
       <div className={CardContainer}>
@@ -242,7 +220,6 @@ function UpdateForm() {
             <RedButton type="button" onClick={() => setShowConfirmModal(true)}>
               Borrar perfil
             </RedButton>
-            <RedButton onClick={handleDelte}>Borrar perfil</RedButton>
           </div>
         </form>
       </div>

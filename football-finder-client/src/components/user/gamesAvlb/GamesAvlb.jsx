@@ -3,9 +3,12 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import GameItem from "./GameItem.jsx";
 import { jwtDecode } from "jwt-decode";
 import { ContainerStyle } from "../../styles/Container.jsx";
+import SearchInput from '../../searchInput/SearchInput.jsx'
 
 function GamesAvlb() {
   const [games, setGames] = useState([]);
+  const [query, setQuery] = useState("");
+  const [filteredGames, setFilteredGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthenticationContext);
@@ -40,6 +43,7 @@ function GamesAvlb() {
           (game) => game.id_user_creator !== decoded.id
         );
         setGames(filteredGames);
+        setFilteredGames(filteredGames);
         setLoading(false);
       })
       .catch((err) => {
@@ -68,10 +72,29 @@ function GamesAvlb() {
       </div>
     );
 
+
+  const handleChangeQuery = (query) => {
+    setQuery(query);
+    if (!query) {
+      setFilteredGames(games);
+      return;
+    }
+    const filtered = games.filter((game) =>
+      game.userCreator.name.toLowerCase().includes(query.toLowerCase()) ||
+      game.reservation.fieldType.property.name.toLowerCase().includes(query.toLowerCase()) ||
+      game.reservation.fieldType.field_type.toLowerCase().includes(query.toLowerCase()) ||
+      game.reservation.date.toLowerCase().includes(query.toLowerCase()) ||
+      game.reservation.fieldType.property.zone.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredGames(filtered);
+
+  }
+
   return (
-    <div className={ContainerStyle}>
-      <div className="flex flex-col gap-8 w-full items-center">
-        {games.map((game) => (
+    <div className={ContainerStyle} >
+      <SearchInput query={query} setQuery={handleChangeQuery} />
+      <div className="flex flex-col gap-8 w-full items-center mt-15">
+        {filteredGames.map((game) => (
           <GameItem key={game.id} game={game} />
         ))}
       </div>

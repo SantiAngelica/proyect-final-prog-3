@@ -64,6 +64,10 @@ const GameItem = ({ game }) => {
               <strong className={colorStrong}>Dirección: </strong>
               {game.reservation.fieldType.property.adress}
             </li>
+            <li className={inputStyle}>
+              <strong className={colorStrong}>Cancha: </strong>
+              {game.reservation.fieldType.field_type}
+            </li>
             <Button1 onClick={handleApply}>Postularse</Button1>
           </ul>
         </li>

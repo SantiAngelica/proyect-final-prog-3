@@ -9,12 +9,19 @@ const postInvitation = async (req, res) => {
     try {
         const reciever = await User.findByPk(recieverId)
         const game = await Game.findByPk(gameId)
+        const gameUser = await GameUser.findOne({
+            where: {
+                id_game: gameId,
+                id_user: recieverId
+            }
+        })
         const exisitingInv = await GameInvitation.findOne({
             where: {
                 id_user_reciever: recieverId,
                 id_game: gameId
             }
         })
+        if (gameUser) return res.status(400).json({ message: 'El jugador ya esta en el partido' })
         if (!reciever) return res.status(404).json({ message: 'Usuario no encontrado' })
         if (!game) return res.status(404).json({ message: 'Juego no encontrado' })
         if (exisitingInv) return res.status(400).json({ message: 'Ya lo has invitado a tu partido' })
@@ -41,21 +48,29 @@ const postApplication = async (req, res) => {
     try {
         const applicant = await User.findByPk(applicantId)
         const game = await Game.findByPk(gameId)
+        const gameUser = await GameUser.findOne({
+            where: {
+                id_game: gameId,
+                id_user: applicantId
+            }
+        })
         const existingApp = await GameApplication.findOne({
             where: {
                 id_user_applicant: applicantId,
                 id_game: gameId
             }
         })
+        if (gameUser)return res.status(400).json({ message: 'Ya estas en este partido' })
+        
         if (!applicant) return res.status(404).json({ message: 'User not found' })
         if (!game) return res.status(404).json({ message: 'Game not found' })
         console.log(existingApp)
-        if (existingApp) return res.status(400).json({ message: 'You alredy applied to this game' })
+        if (existingApp) return res.status(400).json({ message: 'Ya te has postulado a este juego' })
         if (game.dataValues.id_user_creator == applicantId) {
-            return res.status(400).json({ message: 'You cannot apply to your own game' })
+            return res.status(400).json({ message: 'No puedes postularte a tu propio juego' })
         }
         if (game.dataValues.missing_players == 0) {
-            return res.status(400).json({ message: 'Game is full' })
+            return res.status(400).json({ message: 'El juego esta completo' })
         }
 
         if (!validateRoleAndId(req.user, applicant.dataValues.id, true))
@@ -67,6 +82,7 @@ const postApplication = async (req, res) => {
         })
         return res.status(201).json(application)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "Internal server error", error });
     }
 }
@@ -177,9 +193,9 @@ const postAceptInvitation = async (req, res) => {
 
         const game = await Game.findByPk(invitation.dataValues.id_game)
 
-        if (!game) return res.status(404).json({ message: "Game not found aaaaa" });
+        if (!game) return res.status(404).json({ message: "Game not found" });
         if (game.dataValues.missing_players == 0) {
-            return res.status(400).json({ message: 'Game is full' })
+            return res.status(400).json({ message: 'El juego esta completo' })
         }
 
         if (!validateRoleAndId(req.user, invitation.dataValues.id_user_reciever, true))
@@ -214,7 +230,7 @@ const postAceptApplication = async (req, res) => {
         if (!game) return res.status(404).json({ message: "Game not found" });
         if (game.dataValues.missing_players == 0) {
             console.log("first")
-            return res.status(400).json({ message: 'Game is full' })
+            return res.status(400).json({ message: 'El juego esta completo' })
         }
 
         if (!validateRoleAndId(req.user, game.dataValues.id_user_creator, true))
