@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
 import { inputStyle } from "../../styles/Cards";
 import Button1 from "../../styles/Button1";
-import ConfirmModal from "../../Modal/ConfirmModal";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 function AppItem({ application, onAcceptApplication }) {
   const { token } = useContext(AuthenticationContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { show, Modal } = useConfirmModal();
 
   const handleAcceptApp = async () => {
     try {
@@ -37,31 +37,29 @@ function AppItem({ application, onAcceptApplication }) {
       }
     } catch (err) {
       errorToast(err.message);
-    } finally {
-      setIsModalOpen(false);
     }
   };
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
   return (
     <div className="flex flex-col items-start w-full">
+      <Modal />
       <li key={application.id} className={inputStyle}>
         {application.userApplicant.name} ({application.userApplicant.email})
       </li>
 
-      <Button1 onClick={openModal}>Aceptar</Button1>
-
-      <ConfirmModal
-        isOpen={isModalOpen}
-        title="¿Aceptar solicitud?"
-        message={`¿Estás seguro de que querés aceptar a ${application.userApplicant.name}?`}
-        onConfirm={handleAcceptApp}
-        onCancel={closeModal}
-        confirmText="Aceptar"
-        cancelText="Cancelar"
-      />
+      <Button1
+        onClick={() =>
+          show({
+            title: "¿Aceptar solicitud?",
+            message: `¿Estás seguro de que querés aceptar a ${application.userApplicant.name}?`,
+            confirmText: "Aceptar",
+            cancelText: "Cancelar",
+            onConfirm: handleAcceptApp,
+          })
+        }
+      >
+        Aceptar
+      </Button1>
     </div>
   );
 }

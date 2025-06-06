@@ -1,13 +1,13 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
 import Button1 from "../../styles/Button1.jsx";
-import ConfirmModal from "../../Modal/ConfirmModal.jsx";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 const GameItem = ({ game }) => {
   const { token } = useContext(AuthenticationContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { show, Modal } = useConfirmModal();
 
   const handleApply = async () => {
     fetch(`http://localhost:8080/api/participations/application/${game.id}`, {
@@ -36,33 +36,11 @@ const GameItem = ({ game }) => {
       });
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const cancelModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const confirmModal = () => {
-    handleApply();
-    setIsModalOpen(false);
-  };
-
   return (
     <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-full max-w-2xl">
-      <ConfirmModal
-        isOpen={isModalOpen}
-        title={`¿Estás seguro que deseas postularte al partido de ${game.userCreator.name}?`}
-        message="Una vez enviado, el creador decidirá si aceptarte."
-        onCancel={cancelModal}
-        onConfirm={confirmModal}
-        confirmText="Postularme"
-        cancelText="Cancelar"
-      />
-
+      <Modal />
       <h2 className={TittleCard}>Partidos disponibles</h2>
-      <ul className="flex flex-col w-full gap-3 ">
+      <ul className="flex flex-col w-full gap-3">
         <li className="border-2 border-gray-500 p-4 rounded-lg">
           <ul>
             <li className={inputStyle}>
@@ -89,7 +67,19 @@ const GameItem = ({ game }) => {
               <strong className={colorStrong}>Dirección: </strong>
               {game.reservation.fieldType.property.adress}
             </li>
-            <Button1 onClick={openModal}>Postularse</Button1>
+            <Button1
+              onClick={() =>
+                show({
+                  title: `¿Estás seguro que deseas postularte al partido de ${game.userCreator.name}?`,
+                  message: "Una vez enviado, el creador decidirá si aceptarte.",
+                  confirmText: "Postularme",
+                  cancelText: "Cancelar",
+                  onConfirm: handleApply,
+                })
+              }
+            >
+              Postularse
+            </Button1>
           </ul>
         </li>
       </ul>

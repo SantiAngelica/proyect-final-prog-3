@@ -1,16 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
-import ConfirmModal from "../../Modal/ConfirmModal.jsx";
 import Button from "../../styles/Button";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 function UserItem({ user }) {
   const { gid } = useParams();
   const { token } = useContext(AuthenticationContext);
-
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const { show, Modal } = useConfirmModal();
 
   const handleInvite = () => {
     fetch(
@@ -37,13 +36,10 @@ function UserItem({ user }) {
       });
   };
 
-  const handleConfirm = () => {
-    handleInvite();
-    setShowConfirmModal(false);
-  };
-
   return (
     <div className="flex flex-col items-start w-full">
+      <Modal />
+
       <p className={TittleCard}>{user.name}</p>
       <p className={inputStyle}>
         <strong className={colorStrong}>Posiciones:</strong>
@@ -68,17 +64,20 @@ function UserItem({ user }) {
         {user.zone}
       </p>
 
-      <Button onClick={() => setShowConfirmModal(true)}>Invitar</Button>
-
-      <ConfirmModal
-        isOpen={showConfirmModal}
-        title={`¿Estás seguro que deseas invitar a ${user.name} a tu partido?`}
-        message="Se enviará una invitación al usuario para unirse al partido."
-        onCancel={() => setShowConfirmModal(false)}
-        onConfirm={handleConfirm}
-        confirmText="Invitar"
-        cancelText="Cancelar"
-      />
+      <Button
+        onClick={() =>
+          show({
+            title: `¿Estás seguro que deseas invitar a ${user.name} a tu partido?`,
+            message:
+              "Se enviará una invitación al usuario para unirse al partido.",
+            confirmText: "Invitar",
+            cancelText: "Cancelar",
+            onConfirm: handleInvite,
+          })
+        }
+      >
+        Invitar
+      </Button>
     </div>
   );
 }

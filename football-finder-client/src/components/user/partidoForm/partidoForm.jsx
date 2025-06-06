@@ -4,7 +4,7 @@ import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
 import Button1 from "../../styles/Button1.jsx";
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
-import ConfirmModal from "../../Modal/ConfirmModal.jsx";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 const PartidoForm = () => {
   const [propertyName, setPropertyName] = useState("");
@@ -13,11 +13,9 @@ const PartidoForm = () => {
   const [date, setDate] = useState("");
   const [missingPlayers, setMissingPlayers] = useState("");
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleChange = (setter) => (e) => setter(e.target.value);
-
   const { token } = useContext(AuthenticationContext);
+
+  const { Modal, show } = useConfirmModal();
 
   const resetForm = () => {
     setPropertyName("");
@@ -25,15 +23,6 @@ const PartidoForm = () => {
     setFieldType("");
     setDate("");
     setMissingPlayers("");
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!propertyName || !schedule || !fieldType || !missingPlayers || !date) {
-      errorToast("Por favor completá todos los campos");
-      return;
-    }
-    setIsModalOpen(true);
   };
 
   const handleConfirmCreate = async () => {
@@ -66,27 +55,39 @@ const PartidoForm = () => {
       }
     } catch (error) {
       errorToast("Error de conexión: " + error.message);
-    } finally {
-      setIsModalOpen(false);
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!propertyName || !schedule || !fieldType || !missingPlayers || !date) {
+      errorToast("Por favor completá todos los campos");
+      return;
+    }
+
+    show({
+      title: "¿Confirmar creación del partido?",
+      message:
+        "Estás a punto de crear un nuevo partido con los datos ingresados.",
+      confirmText: "Crear partido",
+      cancelText: "Cancelar",
+      onConfirm: () => {
+        handleConfirmCreate();
+      },
+    });
+  };
+
+  const handleChange = (setter) => (e) => setter(e.target.value);
+
   return (
     <div className={ContainerStyle}>
-      <ConfirmModal
-        isOpen={isModalOpen}
-        title="¿Confirmar creación del partido?"
-        message="Estás a punto de crear un nuevo partido con los datos ingresados."
-        onCancel={() => setIsModalOpen(false)}
-        onConfirm={handleConfirmCreate}
-        confirmText="Crear partido"
-        cancelText="Cancelar"
-      />
+      <Modal />
 
       <div className={CardContainer}>
         <h2 className={TittleCard}>Crear partido</h2>
         <form onSubmit={handleSubmit}>
           <input
+            autoFocus
             type="text"
             name="property_name"
             value={propertyName}

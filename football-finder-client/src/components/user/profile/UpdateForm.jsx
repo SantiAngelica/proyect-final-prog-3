@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
-import ConfirmModal from "../../Modal/ConfirmModal.jsx";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 import PositionListForm from "./PositionsListForm.jsx";
 import FieldListForm from "./FieldListForm.jsx";
@@ -27,9 +27,9 @@ function UpdateForm() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showConfirmUpdateModal, setShowConfirmUpdateModal] = useState(false);
   const [pendingUpdate, setPendingUpdate] = useState(null);
+
+  const { Modal, show } = useConfirmModal();
 
   useEffect(() => {
     if (!token) {
@@ -110,7 +110,16 @@ function UpdateForm() {
     };
 
     setPendingUpdate(updatedProfile);
-    setShowConfirmUpdateModal(true);
+
+    show({
+      title: "¿Confirmás la actualización del perfil?",
+      message: "Se guardarán los cambios realizados.",
+      confirmText: "Confirmar",
+      cancelText: "Cancelar",
+      onConfirm: () => {
+        confirmUpdate();
+      },
+    });
   };
 
   const confirmUpdate = () => {
@@ -138,7 +147,6 @@ function UpdateForm() {
       })
       .catch((err) => errorToast(err.message))
       .finally(() => {
-        setShowConfirmUpdateModal(false);
         setPendingUpdate(null);
       });
   };
@@ -157,7 +165,6 @@ function UpdateForm() {
       successToast("Perfil borrado correctamente");
       navigate("/");
     });
-    setShowConfirmModal(false);
   };
 
   if (loading)
@@ -220,32 +227,26 @@ function UpdateForm() {
 
           <Button type="submit">Guardar cambios</Button>
           <div className="mt-4">
-            <RedButton type="button" onClick={() => setShowConfirmModal(true)}>
+            <RedButton
+              type="button"
+              onClick={() =>
+                show({
+                  title: "¿Estás seguro de que querés borrar tu perfil?",
+                  message:
+                    "Se eliminará todo tu historial. Esta acción no se puede deshacer.",
+                  confirmText: "Borrar",
+                  cancelText: "Cancelar",
+                  onConfirm: () => confirmDelete(),
+                })
+              }
+            >
               Borrar perfil
             </RedButton>
           </div>
         </form>
       </div>
 
-      <ConfirmModal
-        isOpen={showConfirmUpdateModal}
-        title="¿Confirmás la actualización del perfil?"
-        message="Se guardarán los cambios realizados."
-        onCancel={() => setShowConfirmUpdateModal(false)}
-        onConfirm={confirmUpdate}
-        confirmText="Confirmar"
-        cancelText="Cancelar"
-      />
-
-      <ConfirmModal
-        isOpen={showConfirmModal}
-        title="¿Estás seguro de que querés borrar tu perfil?"
-        message="Se eliminará todo tu historial. Esta acción no se puede deshacer."
-        onCancel={() => setShowConfirmModal(false)}
-        onConfirm={confirmDelete}
-        confirmText="Borrar"
-        cancelText="Cancelar"
-      />
+      <Modal />
     </div>
   );
 }
