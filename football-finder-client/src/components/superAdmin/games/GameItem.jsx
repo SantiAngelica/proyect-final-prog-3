@@ -8,14 +8,14 @@ import useConfirmModal from "../../../hooks/useConfirmModal";
 
 const GameItem = ({ game }) => {
   const { token } = useContext(AuthenticationContext);
-  const { ConfirmModal, openConfirm } = useConfirmModal();
+  const { Modal, show } = useConfirmModal();
   const handleDelete = () => {
     if (!token) {
       errorToast("No token found, please Log in");
       return;
     }
 
-    openConfirm({
+    show({
       title: "¿Estás seguro de que querés borrar este juego?",
       message: "Esta acción no se puede deshacer.",
       confirmText: "Borrar",
@@ -71,7 +71,7 @@ const GameItem = ({ game }) => {
       </div>
       <RedButton onClick={handleDelete}>Borrar</RedButton>
 
-      <ConfirmModal />
+      <Modal />
     </div>
   );
 };

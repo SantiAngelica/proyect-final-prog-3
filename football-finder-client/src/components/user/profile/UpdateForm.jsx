@@ -27,8 +27,6 @@ function UpdateForm() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [pendingUpdate, setPendingUpdate] = useState(null);
-
   const { Modal, show } = useConfirmModal();
 
   useEffect(() => {
@@ -85,6 +83,31 @@ function UpdateForm() {
   const onRemoveField = (fieldToRemove) => {
     setFieldsType(fieldsType.filter((f) => f !== fieldToRemove));
   };
+  const confirmUpdate = (updatedProfile) => {
+   
+    if (!updatedProfile) return;
+    fetch("http://localhost:8080/api/users/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedProfile),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al actualizar el perfil");
+        return res.json();
+      })
+      .then((data) => {
+        setName(data.name);
+        setEmail(data.email);
+        setAge(data.age);
+        setZone(data.zone);
+        successToast("Perfil actualizado correctamente");
+        navigate("/user/profile");
+      })
+      .catch((err) => errorToast(err.message))
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,7 +132,9 @@ function UpdateForm() {
       user_fields: fieldsType,
     };
 
-    setPendingUpdate(updatedProfile);
+  
+  
+
 
     show({
       title: "¿Confirmás la actualización del perfil?",
@@ -117,39 +142,12 @@ function UpdateForm() {
       confirmText: "Confirmar",
       cancelText: "Cancelar",
       onConfirm: () => {
-        confirmUpdate();
+        confirmUpdate(updatedProfile);
       },
     });
   };
 
-  const confirmUpdate = () => {
-    if (!pendingUpdate) return;
 
-    fetch("http://localhost:8080/api/users/update", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(pendingUpdate),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al actualizar el perfil");
-        return res.json();
-      })
-      .then((data) => {
-        setName(data.name);
-        setEmail(data.email);
-        setAge(data.age);
-        setZone(data.zone);
-        successToast("Perfil actualizado correctamente");
-        navigate("/user/profile");
-      })
-      .catch((err) => errorToast(err.message))
-      .finally(() => {
-        setPendingUpdate(null);
-      });
-  };
 
   const confirmDelete = () => {
     fetch("http://localhost:8080/api/users/delete", {
