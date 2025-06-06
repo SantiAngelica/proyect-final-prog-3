@@ -11,18 +11,25 @@ import {
   inputStyle,
 } from "../../styles/Cards.jsx";
 
+import useConfirmModal from "../../../hooks/useConfirmModal"; // <-- importamos el hook
+
 const UserItem = ({ user, onUserDelete }) => {
   const [role, setRole] = useState(user.rol);
   const { token } = useContext(AuthenticationContext);
+
+  // Usamos el hook
+  const { Modal, show } = useConfirmModal();
+
   const handleChange = (e) => {
     setRole(e.target.value.toLowerCase());
   };
 
-  const handleClickRol = async () => {
+  const updateRole = () => {
     if (!token) {
       errorToast("No token found, please Log in");
+      return;
     }
-    if (role != "player" && role != "admin") {
+    if (role !== "player" && role !== "admin") {
       errorToast("Invalid role");
       return;
     }
@@ -40,7 +47,7 @@ const UserItem = ({ user, onUserDelete }) => {
         if (!res.ok) {
           throw new Error("Failed");
         }
-        return res.json;
+        return res.json(); // <-- corregí: falta paréntesis para llamar la función json
       })
       .then((data) => {
         successToast("Rol updated!");
@@ -48,11 +55,11 @@ const UserItem = ({ user, onUserDelete }) => {
       })
       .catch((err) => {
         console.log(err);
-        errorToast(err);
+        errorToast(err.message || err);
       });
   };
 
-  const handleClickDlt = async () => {
+  const deleteUser = () => {
     fetch(`http://localhost:8080/api/users/${user.id}`, {
       method: "DELETE",
       headers: {
@@ -66,12 +73,37 @@ const UserItem = ({ user, onUserDelete }) => {
         }
         successToast("User Deleted!");
         onUserDelete(user.id);
-        return res.json;
+        return res.json();
       })
       .catch((err) => {
         console.log(err);
-        errorToast(err);
+        errorToast(err.message || err);
       });
+  };
+
+  const handleClickRol = () => {
+    show({
+      title: "¿Estás seguro que deseas cambiar de rol?",
+      message: `Se cambiará el rol de ${user.name}.`,
+      confirmText: "Confirmar",
+      cancelText: "Cancelar",
+      onConfirm: () => {
+        updateRole();
+      },
+    });
+  };
+
+  const handleClickDlt = () => {
+    show({
+      title: "¿Estás seguro que deseas borrar este usuario?",
+      message:
+        "Esta acción no se puede deshacer y se eliminará todo su historial.",
+      confirmText: "Borrar",
+      cancelText: "Cancelar",
+      onConfirm: () => {
+        deleteUser();
+      },
+    });
   };
 
   return (
@@ -83,6 +115,8 @@ const UserItem = ({ user, onUserDelete }) => {
         <Button1 onClick={handleClickRol}>Cambiar rol</Button1>
         <RedButton onClick={handleClickDlt}>Borrar usuario</RedButton>
       </div>
+
+      <Modal />
     </div>
   );
 };

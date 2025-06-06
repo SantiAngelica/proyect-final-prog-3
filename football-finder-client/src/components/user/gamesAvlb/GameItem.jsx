@@ -3,9 +3,11 @@ import { AuthenticationContext } from "../../services/auth.context.jsx";
 import { errorToast, successToast } from "../../toast/NotificationToast.jsx";
 import { TittleCard, inputStyle, colorStrong } from "../../styles/Cards.jsx";
 import Button1 from "../../styles/Button1.jsx";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 const GameItem = ({ game }) => {
   const { token } = useContext(AuthenticationContext);
+  const { show, Modal } = useConfirmModal();
 
   const handleApply = async () => {
     fetch(`http://localhost:8080/api/participations/application/${game.id}`, {
@@ -36,8 +38,9 @@ const GameItem = ({ game }) => {
 
   return (
     <div className="flex flex-col items-start bg-white/10 backdrop-blur-md shadow-lg border border-white/20 rounded-xl p-6 w-full max-w-2xl">
+      <Modal />
       <h2 className={TittleCard}>Partidos disponibles</h2>
-      <ul className="flex flex-col w-full gap-3 ">
+      <ul className="flex flex-col w-full gap-3">
         <li className="border-2 border-gray-500 p-4 rounded-lg">
           <ul>
             <li className={inputStyle}>
@@ -64,11 +67,19 @@ const GameItem = ({ game }) => {
               <strong className={colorStrong}>Dirección: </strong>
               {game.reservation.fieldType.property.adress}
             </li>
-            <li className={inputStyle}>
-              <strong className={colorStrong}>Cancha: </strong>
-              {game.reservation.fieldType.field_type}
-            </li>
-            <Button1 onClick={handleApply}>Postularse</Button1>
+            <Button1
+              onClick={() =>
+                show({
+                  title: `¿Estás seguro que deseas postularte al partido de ${game.userCreator.name}?`,
+                  message: "Una vez enviado, el creador decidirá si aceptarte.",
+                  confirmText: "Postularme",
+                  cancelText: "Cancelar",
+                  onConfirm: handleApply,
+                })
+              }
+            >
+              Postularse
+            </Button1>
           </ul>
         </li>
       </ul>

@@ -85,7 +85,9 @@ function Participations() {
   return (
     <div className={ContainerStyle}>
       {applications.length === 0 && invitations.length === 0 ? (
-        <p className="text-white text-lg">No tienes postulaciones ni invitaciones</p>
+        <p className="text-white text-lg">
+          No tienes postulaciones ni invitaciones
+        </p>
       ) : (
         <div className={CardContainer}>
           {applications.length > 0 && (
@@ -106,7 +108,9 @@ function Participations() {
 
           {invitations.length > 0 && (
             <div className="w-full max-w-4xl mt-8">
-              <h2 className="text-xl font-bold text-white mb-4">Invitaciones</h2>
+              <h2 className="text-xl font-bold text-white mb-4">
+                Invitaciones
+              </h2>
               <ul className="flex flex-col gap-6">
                 {invitations.map((inv) => (
                   <li
@@ -121,9 +125,8 @@ function Participations() {
           )}
         </div>
       )}
-
     </div>
-  ); s
+  );
 }
 
 export default Participations;

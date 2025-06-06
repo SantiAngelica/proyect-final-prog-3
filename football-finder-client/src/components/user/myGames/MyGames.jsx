@@ -128,7 +128,7 @@ function MyGames() {
                   ))}
                 </ul>
                 {applications.length > 0 && (
-                  <h2 className="text-lg text-blue-400 font-semibold mb-1">
+                  <h2 className="text-lg text-blue-400 font-semibold mb-1 mt-6">
                     Postulaciones pendientes:
                   </h2>
                 )}

@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../services/auth.context";
 import { errorToast, successToast } from "../../toast/NotificationToast";
-import { useNavigate } from "react-router-dom";
 import RedButton from "../../styles/RedButton.jsx";
-import FieldListForm from './FieldListForm.jsx';
+import FieldListForm from "./FieldListForm.jsx";
 import SchedulesListForm from "./SchedulesListForm.jsx";
-
 
 import { CardContainer, TittleCard, inputStyle } from "../../styles/Cards.jsx";
 import Button from "../../styles/Button.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
+
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 function UpdateForm() {
   const navigate = useNavigate();
@@ -25,6 +25,8 @@ function UpdateForm() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { Modal, show } = useConfirmModal();
 
   useEffect(() => {
     if (!token) {
@@ -57,7 +59,6 @@ function UpdateForm() {
         setName(data.name);
         setAdress(data.adress);
         setZone(data.zone);
-
         setSchedules(data.schedules.map((sch) => sch.schedule));
         setFieldsType(data.fields.map((field) => field.field_type));
         setLoading(false);
@@ -94,19 +95,7 @@ function UpdateForm() {
     setFieldsType(fieldsType.filter((f) => f !== fieldToRemove));
   };
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      !name ||
-      !adress ||
-      !zone ||
-      schedules.length === 0 ||
-      fieldsType.length === 0
-    ) {
-      errorToast("Por favor, completa todos los campos");
-      return;
-    }
+  const updatePropertyRequest = () => {
     const updateProperty = {
       name,
       adress,
@@ -139,27 +128,63 @@ function UpdateForm() {
       });
   };
 
-  const handleDelete = () => {
-    fetch(`http://localhost:8080/api/properties/${pid}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          errorToast("Error al eliminar la propiedad");
-          return;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      !name ||
+      !adress ||
+      !zone ||
+      schedules.length === 0 ||
+      fieldsType.length === 0
+    ) {
+      errorToast("Por favor, completa todos los campos");
+      return;
+    }
+
+    show({
+      title: "Confirmar cambios",
+      message: "¿Querés guardar los cambios realizados?",
+      confirmText: "Guardar",
+      cancelText: "Cancelar",
+      onConfirm: updatePropertyRequest,
+    });
+  };
+
+  const handleDeleteProperty = () => {
+    if (!token) {
+      errorToast("No token found, please Log in");
+      return;
+    }
+
+    show({
+      title: "¿Estás seguro de que querés borrar esta propiedad?",
+      message: "Esta acción no se puede deshacer.",
+      confirmText: "Borrar",
+      cancelText: "Cancelar",
+      onConfirm: async () => {
+        try {
+          const res = await fetch(
+            `http://localhost:8080/api/properties/${pid}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (!res.ok) {
+            throw new Error("Error al borrar la propiedad");
+          }
+          successToast("Propiedad borrada correctamente");
+          navigate("/admin");
+        } catch (err) {
+          errorToast(err.message || "Error al borrar la propiedad");
         }
-        successToast("Propiedad eliminada correctamente");
-        navigate("/admin");
-      })
-      .catch((error) => {
-        console.error(error);
-        errorToast("Error al eliminar la propiedad");
-      });
-  }
+      },
+    });
+  };
+
   return (
     <div className={ContainerStyle}>
       <div className={CardContainer}>
@@ -208,10 +233,14 @@ function UpdateForm() {
           </div>
           <Button type="submit">Guardar cambios</Button>
           <div className="mt-4">
-            <RedButton onClick={handleDelete}>Borrar propiedad</RedButton>
+            <RedButton onClick={handleDeleteProperty}>
+              Borrar propiedad
+            </RedButton>
           </div>
         </form>
       </div>
+
+      <Modal />
     </div>
   );
 }
