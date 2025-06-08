@@ -8,7 +8,7 @@ const SearchInput = ({ query, setQuery }) => {
   return (
     <div className="relative flex items-center w-1/3 mx-auto">
       <svg
-        viewBox="0 0 24 24"
+        viewBox="0 0 22 22"
         aria-hidden="true"
         className="absolute left-4 w-4 h-4 fill-[#bdbecb] pointer-events-none z-10"
       >
