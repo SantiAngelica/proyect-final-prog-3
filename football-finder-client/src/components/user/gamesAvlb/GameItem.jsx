@@ -64,6 +64,10 @@ const GameItem = ({ game }) => {
               {game.reservation.fieldType.property.zone}
             </li>
             <li className={inputStyle}>
+              <strong className={colorStrong}>Cancha: </strong>
+              {game.reservation.fieldType.field_type}
+            </li>
+            <li className={inputStyle}>
               <strong className={colorStrong}>Dirección: </strong>
               {game.reservation.fieldType.property.adress}
             </li>

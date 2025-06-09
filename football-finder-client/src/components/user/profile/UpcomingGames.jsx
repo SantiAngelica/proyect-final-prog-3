@@ -31,7 +31,7 @@ function UpcomingGames({setHasGames}) {
       .then((data) => {
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
-
+        console.log(data)
         const gamesFiltrados = data.filter((game) => {
           const fechaJuego = new Date(game.game.reservation.date + "T00:00:00");
           return fechaJuego >= hoy;
@@ -43,7 +43,7 @@ function UpcomingGames({setHasGames}) {
         setLoading(false);
       })
       .catch((err) => {
-        errorToast("Error fetching upcoming games");
+        errorToast("Error cargando los partidos");
         setError(err);
         console.error("Error:", err);
       });
@@ -69,7 +69,7 @@ function UpcomingGames({setHasGames}) {
         <ul className="flex flex-col w-full">
           <h2 className={TittleCard}>Próximos Partidos</h2>
           {games.map((game) => (
-            <li key={game.game.id} className="mb-4">
+            <li key={game.game.id} className="mb-6 flex flex-col items-start justify-start w-full border-2 border-gray-500 p-4 rounded-lg">
               <p className={inputStyle}>
                 <strong className={colorStrong}>Fecha:</strong>{" "}
                 {game.game.reservation.date}

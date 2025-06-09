@@ -81,7 +81,7 @@ const postGame = async (req, res) => {
         const validation = await validateNewGame(req.user.id, schedule, field_type, date, property_name);
         if (validation.error) return res.status(validation.status).json({ message: validation.message });
 
-
+        console.log("first")
         const newGame = await Game.create({
             id_user_creator: validation.data.user.id,
             missing_players
@@ -96,8 +96,9 @@ const postGame = async (req, res) => {
 
         await t.commit()
 
+
         return res.status(201).json({
-            message: "Game created successfully",
+            message: "Juego creado correctamente",
             game: newGame, reservation: newReservation
         });
     } catch (error) {

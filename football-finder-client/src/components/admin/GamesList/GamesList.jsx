@@ -82,7 +82,7 @@ const GamesList = () => {
                   :00<strong className={colorStrong}> hs</strong>
                 </h2>
                 <h2 className={inputStyle}>
-                  <strong className={colorStrong}>Predio: </strong>
+                  <strong className={colorStrong}>Cancha: </strong>
                   {game.reservation.fieldType.field_type}
                 </h2>
                 <h2 className={inputStyle}>

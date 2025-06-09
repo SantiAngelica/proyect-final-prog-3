@@ -29,7 +29,7 @@ export const validateNewGame = async (uid, schedule, field_type, date, property_
         
     const property = await Property.findOne({where: {name: property_name.toLowerCase()}})
     if(!property)
-        return response = { error: true, status: 404, message: "Property not found" };
+        return response = { error: true, status: 404, message: "Propiedad invalida" };
 
     const scheduleProperty = await ScheduleProperty.findOne({
         where: {
@@ -38,7 +38,7 @@ export const validateNewGame = async (uid, schedule, field_type, date, property_
         }
     });
     if(!scheduleProperty)
-        return response = { error: true, status: 404, message: "Schedule not in property" };
+        return response = { error: true, status: 404, message: "Horario invalido" };
 
     const field = await PropertyTypeField.findOne({
         where: {
@@ -47,13 +47,13 @@ export const validateNewGame = async (uid, schedule, field_type, date, property_
         }
     });
     if(!field)
-        return response = { error: true, status: 404, message: "Field not in property" };
+        return response = { error: true, status: 404, message: "Cancha Invalida " };
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date))
-       return  response = { error: true, status: 400, message: "Invalid date format" }
+       return  response = { error: true, status: 400, message: "Fecha invalida" }
 
     if (!isInAWeek(date))
-        return response = { error: true, status: 400, message: "Date is not in a week" }
+        return response = { error: true, status: 400, message: "La fecha debe ser dentro de una semana" }
 
 
     const existingReservation = await Reservation.findOne({
@@ -64,7 +64,7 @@ export const validateNewGame = async (uid, schedule, field_type, date, property_
         }
     });
     if (existingReservation) 
-      return  response = { error: true, status: 400, message: "Field is already reserved" };
+      return  response = { error: true, status: 400, message: "Cancha y horario reservado" };
 
     response = {
         error: false,

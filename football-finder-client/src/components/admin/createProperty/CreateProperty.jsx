@@ -14,7 +14,7 @@ import Button from "../../styles/Button.jsx";
 import { ContainerStyle } from "../../styles/Container.jsx";
 
 
-function CreateProperty() {
+function CreateProperty({setHasProperty}) { 
   const navigate = useNavigate();
 
   const { token } = useContext(AuthenticationContext);
@@ -86,6 +86,7 @@ function CreateProperty() {
       })
       .then((data) => {
         successToast("Propiedad creada exitosamente");
+        setHasProperty(true);
         navigate("/admin");
       })
       .catch((error) => {
@@ -132,7 +133,7 @@ function CreateProperty() {
               value={adress}
               onChange={(e) => setAdress(e.target.value)}
               className={inputStyle}
-              placeholder="Adress"
+              placeholder="Direccion"
               ref={adressRef}
             />
           </div>

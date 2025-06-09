@@ -68,6 +68,7 @@ function MyGames() {
         <p className="text-red-500">{error}</p>;
       </div>
     );
+  console.log(applications)
 
   return (
     <div className={ContainerStyle}>
@@ -89,10 +90,6 @@ function MyGames() {
                   {game.reservation.fieldType.property.name}
                 </h2>
                 <p className={inputStyle}>
-                  <strong className={colorStrong}>Descripción: </strong>
-                  {game.description}
-                </p>
-                <p className={inputStyle}>
                   <strong className={colorStrong}>Fecha: </strong>
                   {game.reservation.date}
                 </p>
@@ -105,9 +102,16 @@ function MyGames() {
                   <strong className={colorStrong}>Jugadores restantes: </strong>
                   {game.missing_players}
                 </p>
-                <Button1>
-                  <a href={`/user/users-list/${game.id}`}>Invitar jugadores</a>
-                </Button1>
+                <p className={inputStyle}>
+                  <strong className={colorStrong}>Estado: </strong>
+                  {game.reservation.state}
+                </p>
+                {game.reservation.state == 'aceptada' &&
+                  <Button1>
+                    <a href={`/user/users-list/${game.id}`}>Invitar jugadores</a>
+                  </Button1>
+                }
+
                 {usersInGame.length > 0 && (
                   <h2 className="text-lg text-blue-400 font-semibold mb-1 mt-6">
                     Jugadores confirmados:

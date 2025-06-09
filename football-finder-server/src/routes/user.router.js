@@ -12,7 +12,7 @@ router.get("/play-in", verifyToken, authorize('player'),UserService.getGamesByUs
 router.post("/comment/:rid/:sid", verifyToken, authorize('player'),UserService.postComent)
 
 //si el rol es player, verificar que sea el mismo jugador que se esta borrando
-router.delete("/:id",verifyToken, authorize('player'), UserService.deleteUser)
+router.delete("/delete/:id",verifyToken, authorize('player'), UserService.deleteUser)
 
 
 router.delete("/comment/:cid",verifyToken, authorize('admin'),UserService.deleteComent)

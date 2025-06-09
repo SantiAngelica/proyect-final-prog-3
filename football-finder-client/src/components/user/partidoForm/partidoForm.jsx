@@ -50,7 +50,7 @@ const PartidoForm = () => {
       } else {
         const err = await response.json();
         errorToast(
-          "Error al crear el partido: " + (err.message || "Error desconocido")
+          (err.message || "Error desconocido")
         );
       }
     } catch (error) {

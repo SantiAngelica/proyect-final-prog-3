@@ -60,9 +60,7 @@ function InvItem({ inv, onAccept }) {
         {inv.gameInvited.reservation.schedule.property.zone} -{" "}
         {inv.gameInvited.reservation.schedule.property.adress}
       </p>
-      <p className={inputStyle}>
-        <strong className={colorStrong}>Estado:</strong> {inv.state}
-      </p>
+    
 
       <Button1
         onClick={() =>

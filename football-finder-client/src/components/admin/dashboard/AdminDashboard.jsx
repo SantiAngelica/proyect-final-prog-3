@@ -31,8 +31,9 @@ const AdminDashboard = () => {
   else {
     return (
       <>
+        <NavBar/>
         <Routes>
-          <Route index element={<CreateProperty />} />
+          <Route index element={<CreateProperty  setHasProperty={setHasProperty}/>} />
         </Routes>
       </>
     )

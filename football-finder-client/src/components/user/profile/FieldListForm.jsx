@@ -43,7 +43,7 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
       <ul className="min-h-[48px] flex flex-wrap gap-2 items-start">
         {fields.map((field, index) => (
           <li key={index} className="text-xs">
-            <button
+            <button type="button"
               onClick={() => handleRemove(field)}
               className="bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 hover:cursor-pointer transition-colors"
             >

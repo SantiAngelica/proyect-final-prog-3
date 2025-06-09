@@ -15,7 +15,7 @@ import { ContainerStyle } from "../../styles/Container.jsx";
 function UpdateForm() {
   const navigate = useNavigate();
   const { uid } = useParams();
-  const { token } = useContext(AuthenticationContext);
+  const { token, handleUserLogout } = useContext(AuthenticationContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -150,7 +150,7 @@ function UpdateForm() {
 
 
   const confirmDelete = () => {
-    fetch("http://localhost:8080/api/users/delete", {
+    fetch(`http://localhost:8080/api/users/delete/${uid}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -161,6 +161,7 @@ function UpdateForm() {
         return;
       }
       successToast("Perfil borrado correctamente");
+      handleUserLogout()
       navigate("/");
     });
   };

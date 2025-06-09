@@ -119,6 +119,7 @@ const getGamesByUserCreator = async (req, res) => {
             ],
             attributes: ['id', 'missing_players']
         })
+        console.log(games)
         res.status(200).json(games)
     } catch (error) {
         console.log(error)
@@ -180,8 +181,8 @@ const getGamesByUserParticipant = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     const { id } = req.params
+    console.log(id)
     try {
-        console.log("el id:",id)
         const user = await User.findByPk(id)
         if (!user) return res.status(404).json({ message: "User not found" })
         if (!validateRoleAndId(req.user, user.dataValues.id, false, 'admin'))
@@ -247,7 +248,7 @@ const updateUserRol = async (req, res) => {
             rol: role,
         }, { where: { id: id } })
 
-        res.status(200).json({ message: 'Rol updated!' })
+        res.status(200).json({ message: 'Rol Actualizado!' })
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message })

@@ -18,7 +18,7 @@ const SearchInput = ({ query, setQuery }) => {
       </svg>
       <input
         type="search"
-        placeholder="Buscar partido..."
+        placeholder="Buscar..."
         value={query}
         onChange={handleChange}
         className="text-xs text-white font-bold w-full  h-[40px] pl-10 pr-3 rounded-xl border-0 outline-none bg-[#16171d] placeholder-gray-500 shadow-[0_0_0_1.5px_#2b2c37,0_0_25px_-17px_black] transition-all duration-300 ease-out hover:shadow-[0_0_0_2.5px_#2f303d,0_0_25px_-15px_black] focus:shadow-[0_0_0_2.5px_#2f303d] font-montserrat"

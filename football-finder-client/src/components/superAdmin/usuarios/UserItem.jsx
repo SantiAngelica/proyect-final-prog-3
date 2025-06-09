@@ -30,7 +30,7 @@ const UserItem = ({ user, onUserDelete }) => {
       return;
     }
     if (role !== "player" && role !== "admin") {
-      errorToast("Invalid role");
+      errorToast("Rol invalido");
       return;
     }
     fetch(`http://localhost:8080/api/users/rolechange/${user.id}`, {
@@ -60,7 +60,7 @@ const UserItem = ({ user, onUserDelete }) => {
   };
 
   const deleteUser = () => {
-    fetch(`http://localhost:8080/api/users/${user.id}`, {
+    fetch(`http://localhost:8080/api/users/delete/${user.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -69,14 +69,14 @@ const UserItem = ({ user, onUserDelete }) => {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Failed");
+          throw new Error("Error al borrar el usuario");
         }
-        successToast("User Deleted!");
+        successToast("Usuario Borrado!");
         onUserDelete(user.id);
-        return res.json();
+      
       })
       .catch((err) => {
-        console.log(err);
+        console.log("first")
         errorToast(err.message || err);
       });
   };

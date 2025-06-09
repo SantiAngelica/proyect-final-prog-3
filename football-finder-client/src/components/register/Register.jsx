@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, use } from "react";
 import { useNavigate } from "react-router";
 
 import {
@@ -68,7 +68,9 @@ const Register = () => {
     }
     if (newErrors.password) {
       passwordRef.current.focus();
-      errorToast("Contraseña inválida");
+      errorToast(
+        "La contraseña debe tener entre 8 y 20 caracteres, al menos una mayúscula y un número."
+      );
       return;
     }
     if (!age || isNaN(age) || age < 0 || age > 120) {
@@ -114,16 +116,9 @@ const Register = () => {
         console.error("Error en registro:", data.message);
         throw new Error(data.message || "Error al registrar");
       }
-      const token = await res.json();
-      localStorage.setItem("football-finder-token", token);
+      
+      navigate("/login");
 
-      const decoded = jwtDecode(token);
-      const userRole = decoded.role;
-
-      successToast("Registro exitoso");
-      if (userRole === "superadmin") navigate("/superadmin");
-      else if (userRole === "admin") navigate("/admin");
-      else navigate("/user");
     } catch (err) {
       errorToast(err.message);
     }

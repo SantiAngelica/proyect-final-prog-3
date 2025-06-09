@@ -62,7 +62,7 @@ function MyProperty({ setHasProperty }) {
   return (
     <div className={ContainerStyle}>
       <div className={CardContainer}>
-        <h2 className={TittleCard}>Perfil de Usuario</h2>
+        <h2 className={TittleCard}>Datos de Mi Propiedad</h2>
 
         <div className="flex flex-col items-start w-full">
           <p className={inputStyle}>
