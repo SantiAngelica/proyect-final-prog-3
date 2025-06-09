@@ -197,7 +197,7 @@ const Register = () => {
           />
           <input
             type="text"
-            placeholder="Posiciones (ej: Arquero, Defensor)"
+            placeholder="Posiciones (Arquero, Defensor, Mediocampista, Delantero)"
             value={positions}
             onChange={handlePositionsChange}
             className={inputStyle}
@@ -205,7 +205,7 @@ const Register = () => {
           />
           <input
             type="text"
-            placeholder="Canchas (ej: 5, 7)"
+            placeholder="Canchas (5, 7, 9, 11)"
             value={fields}
             onChange={handleFieldsChange}
             className={inputStyle}
