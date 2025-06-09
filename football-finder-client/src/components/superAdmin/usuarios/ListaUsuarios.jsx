@@ -30,7 +30,9 @@ function ListaUsuarios() {
         return res.json();
       })
       .then((data) => {
-        setUsers(data);
+        const filteredUsers = data.filter(
+          (user) => user.rol != "superadmin")
+        setUsers(filteredUsers);
         setLoading(false);
       })
       .catch((err) => {
