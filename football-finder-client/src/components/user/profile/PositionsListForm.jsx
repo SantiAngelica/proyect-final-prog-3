@@ -7,8 +7,8 @@ function PositionsListForm({ positions, onAddPosition, onRemovePosition }) {
   const handleAdd = () => {
     const trimmed = newPosition.trim();
     if (trimmed !== "") {
-      onAddPosition(trimmed);
-      setNewPosition("");
+      const ok = onAddPosition(trimmed);
+      if(ok) setNewPosition("");
     }
   };
 

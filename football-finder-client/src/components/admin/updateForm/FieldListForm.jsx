@@ -45,7 +45,7 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
         {fields.map((field, index) => (
           <li key={index} className="text-xs">
             <button type="button"
-              onClick={() => handleRemove(field)}
+              onClick={() => handleRemove(index)}
               className="bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 hover:cursor-pointer transition-colors"
             >
               {field} <span className="ml-1 font-bold">✕</span>

@@ -1,6 +1,6 @@
 import { Property, PropertyTypeField, ScheduleProperty, Reservation, Game, User } from "../model/index.model.js";
 import { validateRoleAndId } from "../utils/validation.utils.js";
-import { Op } from "sequelize";
+
 
 const getPropertys = async (req, res) => {
     try {
@@ -243,6 +243,74 @@ const deleteProperty = async (req, res) => {
     }
 }
 
+const getSchedulesByProperty = async (req, res) => {
+    const pid = req.query.pid
+    const date = req.query.date
+    console.log(req.query)
+    try {
+
+        console.log("fecha:", date)
+        if (!pid || !date) return res.status(400).json({ message: 'Missing data' })
+
+        
+
+        const property = await Property.findByPk(pid)
+        if (!property) return res.status(404).json({ message: 'Property not found' })
+
+        const property_fields = await PropertyTypeField.findAll({
+            where: {
+                id_property: Number(pid)
+            }
+        })
+        const resevatios_date = await Reservation.findAll({
+            where: {
+                date: date
+            },
+            include: [
+                {
+                    model: ScheduleProperty,
+                    as: 'schedule',
+                    where: {
+                        id_property: Number(pid)
+                    },
+                    attributes: []
+                },
+            ]
+        })
+        const property_schedules = await ScheduleProperty.findAll({
+            where: {
+                id_property: Number(pid)
+            }
+        })
+        
+
+        const field_schedules = property_fields.map(fld => {
+            
+            const fld_plain = fld.toJSON()
+
+            const schedules_review = property_schedules.map(sch => {
+                const sch_plain = sch.toJSON()
+            
+                //ya tengo filtrado por fecha, ahora debo verificar que horarios estan disponibles, filtrando por cancha y horario
+                if(resevatios_date.some(reservation => reservation.id_field == fld.id && reservation.id_schedule == sch.id)){
+                    sch_plain.available = false
+                } else {
+                    sch_plain.available = true
+                }
+                return sch_plain
+            })
+         
+            fld_plain.schedule = schedules_review
+            return fld_plain
+        })
+
+        if(!field_schedules) throw new Error('Error al buscar los horarios ')
+        
+        res.status(200).json(field_schedules)
+    } catch (error) {
+        res.status(500).json(error || {message: 'Internal server error'})
+    }   
+}
 
 
 export default {
@@ -253,4 +321,5 @@ export default {
     updateProerty,
     postProperty,
     deleteProperty,
+    getSchedulesByProperty
 }

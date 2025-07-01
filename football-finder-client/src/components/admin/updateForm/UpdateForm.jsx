@@ -77,22 +77,31 @@ function UpdateForm() {
         <p className="text-red-500">{error}</p>
       </div>
     );
+  const onAddSchedule = (newSch) => {
 
-  const onAddPosition = (newSch) => {
-    if (newSch && !schedules.includes(newSch)) {
+    if (newSch) {
+      if(schedules.includes(newSch)){
+        errorToast('Horario ya registrado')
+        return false
+      }
       setSchedules([...schedules, newSch]);
+
+      return true
     }
   };
-  const onRemovePosition = (schToRemove) => {
-    setSchedules(schedules.filter((s) => s !== schToRemove));
+  const onRemoveSchedule = (schToRemove) => {
+    setSchedules(schedules.filter((s, index) => index !== schToRemove));
+ 
   };
   const onAddFields = (newField) => {
     if (newField) {
       setFieldsType([...fieldsType, newField]);
     }
+    console.log(fieldsType)
   };
   const onRemoveField = (fieldToRemove) => {
-    setFieldsType(fieldsType.filter((f) => f !== fieldToRemove));
+    console.log(fieldsType)
+    setFieldsType(fieldsType.filter((f, index) => index !== fieldToRemove));
   };
 
   const updatePropertyRequest = () => {
@@ -220,8 +229,8 @@ function UpdateForm() {
           <div>
             <SchedulesListForm
               schedules={schedules}
-              onAddSchedule={onAddPosition}
-              onRemoveSchedule={onRemovePosition}
+              onAddSchedule={onAddSchedule}
+              onRemoveSchedule={onRemoveSchedule}
             />
           </div>
           <div>

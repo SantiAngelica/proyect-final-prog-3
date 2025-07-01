@@ -1,4 +1,4 @@
-import {User, Reservation, ScheduleProperty, Property, PropertyTypeField } from "../model/index.model.js";
+import { User, Reservation, ScheduleProperty, Property, PropertyTypeField } from "../model/index.model.js";
 
 const isInAWeek = (dateStr) => {
     const today = new Date();
@@ -17,7 +17,7 @@ const isInAWeek = (dateStr) => {
     return cleanInput >= cleanToday && cleanInput <= aWeekLater;
 };
 
-export const validateNewGame = async (uid, schedule, field_type, date, property_name) => {
+export const validateNewGame = async (uid, schedule, field_type, date, property_id) => {
     let response = {
         error: false,
         status: '',
@@ -26,31 +26,36 @@ export const validateNewGame = async (uid, schedule, field_type, date, property_
     const user = await User.findByPk(uid);
     if (!user)
         return response = { error: true, status: 404, message: "User not found" };
-        
-    const property = await Property.findOne({where: {name: property_name.toLowerCase()}})
-    if(!property)
+
+    const property = await Property.findByPk(property_id)
+    if (!property)
         return response = { error: true, status: 404, message: "Propiedad invalida" };
 
+
+    console.log('TYPES', typeof schedule, typeof property_id);
+    console.log('VALUES', schedule, property_id);
     const scheduleProperty = await ScheduleProperty.findOne({
         where: {
-            schedule: schedule,
-            id_property: property.id
-        }
+            id: schedule,
+            id_property: property_id
+        },
+        logging: console.log
     });
-    if(!scheduleProperty)
+
+    if (!scheduleProperty)
         return response = { error: true, status: 404, message: "Horario invalido" };
 
     const field = await PropertyTypeField.findOne({
         where: {
-            field_type: field_type,
-            id_property: property.id
+            id: field_type,
+            id_property: property_id
         }
     });
-    if(!field)
+    if (!field)
         return response = { error: true, status: 404, message: "Cancha Invalida " };
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date))
-       return  response = { error: true, status: 400, message: "Fecha invalida" }
+        return response = { error: true, status: 400, message: "Fecha invalida" }
 
     if (!isInAWeek(date))
         return response = { error: true, status: 400, message: "La fecha debe ser dentro de una semana" }
@@ -63,8 +68,8 @@ export const validateNewGame = async (uid, schedule, field_type, date, property_
             date: date
         }
     });
-    if (existingReservation) 
-      return  response = { error: true, status: 400, message: "Cancha y horario reservado" };
+    if (existingReservation)
+        return response = { error: true, status: 400, message: "Cancha y horario reservado" };
 
     response = {
         error: false,

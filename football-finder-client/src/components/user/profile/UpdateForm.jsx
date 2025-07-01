@@ -65,8 +65,13 @@ function UpdateForm() {
   }, [token]);
 
   const onAddPosition = (newPos) => {
-    if (newPos && !positions.includes(newPos)) {
+    if (newPos) {
+      if(positions.includes(newPos)){
+        errorToast('Posicion ya registrada')
+        return false
+      }
       setPositions([...positions, newPos]);
+      return true
     }
   };
 
@@ -75,8 +80,13 @@ function UpdateForm() {
   };
 
   const onAddFields = (newField) => {
-    if (newField && !fieldsType.includes(newField)) {
+    if (newField) {
+      if(fieldsType.includes(newField)){
+        errorToast('Cancha ya registrada')
+        return false
+      }
       setFieldsType([...fieldsType, newField]);
+      return true
     }
   };
 

@@ -10,6 +10,7 @@ import { verifyToken, authorize } from "../middlewares/authorization.middlewares
 router.get('/', verifyToken, authorize('player'),PropertyService.getPropertys)
 router.get('/games',verifyToken, authorize('admin') ,PropertyService.getGamesByProperty)
 router.get('/my-property', verifyToken, authorize('admin'), PropertyService.getPropertyByOwnerId)
+router.get('/property-schedules', verifyToken, authorize('player') ,PropertyService.getSchedulesByProperty)
 
 
 router.post("/newproperty",verifyToken, authorize('admin') ,PropertyService.postProperty)

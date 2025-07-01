@@ -1,6 +1,9 @@
 import React from "react";
 import { inputStyle, colorStrong, TittleCard } from "../../styles/Cards.jsx";
 
+import Button1 from "../../styles/Button1.jsx";
+import { FaArrowRight } from "react-icons/fa";
+
 function PropertyItem({ property }) {
   return (
     <div className="flex flex-col items-start justify-start w-full">
@@ -14,13 +17,15 @@ function PropertyItem({ property }) {
         <strong className={colorStrong}>Dirección:</strong> {property.adress}
       </p>
       <p className={inputStyle}>
-        <strong className={colorStrong}>Horarios disponibles:</strong>{" "}
+        <strong className={colorStrong}>Horarios:</strong>{" "}
         {property.schedules.map((sch) => `${sch.schedule} hs`).join(" - ")}
       </p>
-
       <p className={inputStyle}>
         <strong className={colorStrong}>Canchas disponibles:</strong>{" "}
         {property.fields.map((fld) => fld.field_type).join(" - ")}
+      </p>
+      <p className={inputStyle}>
+        <Button1 children={<a className="flex" href={`/user/reservation/${property.id}`}>Ver disponibles <FaArrowRight className="ms-4" /></a>} />
       </p>
     </div>
   );

@@ -73,15 +73,17 @@ const getGameById = async (req, res) => {
 
 const postGame = async (req, res) => {
     //date debe ser en formato YYYY-MM-DD
-    const { property_name, schedule, field_type, date, missing_players } = req.body;
-    if (!property_name || !schedule || !field_type || !missing_players || !date)
+    const { property_id, schedule, field_type, date, missing_players } = req.body;
+    if (!property_id || !schedule || !field_type || !missing_players || !date)
         return res.status(400).json({ message: "Missing data" })
     const t = await sequelize.transaction()
+ 
     try {
-        const validation = await validateNewGame(req.user.id, schedule, field_type, date, property_name);
+        const validation = await validateNewGame(req.user.id, schedule, field_type, date, Number(property_id));
+ 
         if (validation.error) return res.status(validation.status).json({ message: validation.message });
 
-        console.log("first")
+
         const newGame = await Game.create({
             id_user_creator: validation.data.user.id,
             missing_players

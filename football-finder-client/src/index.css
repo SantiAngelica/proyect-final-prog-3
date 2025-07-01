@@ -93,3 +93,8 @@ select:-webkit-autofill {
   justify-content: space-between;
   align-items: center;
 }
+
+.field-container{
+  justify-content: space-between;
+  width: 100%;
+}

@@ -7,8 +7,8 @@ function FieldListForm({ fields, onAddFields, onRemoveField }) {
   const handleAdd = () => {
     const trimmed = newField.trim();
     if (trimmed !== "") {
-      onAddFields(trimmed);
-      setNewField("");
+      const ok = onAddFields(trimmed);
+      if (ok) setNewField("");
     }
   };
 
