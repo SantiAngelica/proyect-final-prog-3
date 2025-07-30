@@ -118,7 +118,7 @@ function PropertySchedules() {
             {fieldSchedules.map((field) => (
               <div key={field.id} className="mb-8">
                 <span className="text-sm font-semibold text-white bg-gray-700 px-3 py-1 rounded-md">
-                  {field.field_type}
+                  F{field.field_type}
                 </span>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
                   <ul className="flex flex-wrap items-center gap-2">
@@ -157,6 +157,7 @@ function PropertySchedules() {
                               <RxCross1 />
                             </span>
                           )}
+                          hs
                         </li>
                       );
                     })}
