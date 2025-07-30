@@ -1,5 +1,4 @@
-import React from "react";
-import { inputStyle, colorStrong, TittleCard } from "../../styles/Cards.jsx";
+import { inputStyle, colorStrong } from "../../styles/Cards.jsx";
 
 import Button1 from "../../styles/Button1.jsx";
 import { FaArrowRight } from "react-icons/fa";
@@ -25,7 +24,16 @@ function PropertyItem({ property }) {
         {property.fields.map((fld) => fld.field_type).join(" - ")}
       </p>
       <p className={inputStyle}>
-        <Button1 children={<a className="flex" href={`/user/reservation/${property.id}`}>Ver disponibles <FaArrowRight className="ms-4" /></a>} />
+        <Button1
+          children={
+            <a
+              className="flex items-center"
+              href={`/user/reservation/${property.id}`}
+            >
+              Ver disponibilidad <FaArrowRight className="ms-2" />
+            </a>
+          }
+        />
       </p>
     </div>
   );

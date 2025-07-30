@@ -2,7 +2,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import { AuthenticationContext } from "../services/auth.context";
 import { useContext, useState } from "react";
-import ConfirmModal from "../Modal/ConfirmModal.jsx";
+import ConfirmModal from "../modal/ConfirmModal.jsx";
 
 const NavBar = ({ links = [] }) => {
   const navigate = useNavigate();
